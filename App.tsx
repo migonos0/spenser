@@ -1,15 +1,12 @@
-import {SafeAreaView} from 'react-native';
-import {useIsDarkMode} from './src/stores/theme.store';
-import {DARK_COLORS, LIGHT_COLORS} from './src/constants/colors';
+import {Text} from 'react-native-paper';
+import {ReactNativePaperProvider} from './src/app/providers/react-native-paper.provider';
 
 function App(): JSX.Element {
-  const isDarkMode = useIsDarkMode();
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? DARK_COLORS.surface : LIGHT_COLORS.surface,
-  };
-
-  return <SafeAreaView style={backgroundStyle} />;
+  return (
+    <ReactNativePaperProvider>
+      <Text>Hi</Text>
+    </ReactNativePaperProvider>
+  );
 }
 
 export default App;
