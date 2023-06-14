@@ -1,10 +1,10 @@
-import {Text} from 'react-native-paper';
 import {ReactNativePaperProvider} from './src/app/providers/react-native-paper.provider';
+import {ChatScreen} from './src/app/screens/chat.screen';
 
 function App(): JSX.Element {
   return (
     <ReactNativePaperProvider>
-      <Text>Hi</Text>
+      <ChatScreen />
     </ReactNativePaperProvider>
   );
 }
