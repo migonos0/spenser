@@ -5,6 +5,7 @@ import classNames from 'classnames';
 interface AppbarProps {
   backgroundColor?: string;
   foregroundColor?: string;
+  actionBackgroundColor?: string;
   avatarBackgroundColor?: string;
   twClass?: string;
 }
@@ -12,7 +13,7 @@ interface AppbarProps {
 export const Appbar = (props: AppbarProps) => {
   return (
     <PaperAppbar.Header
-      className={classNames(props.twClass)}
+      className={classNames('pl-5', props.twClass)}
       style={{backgroundColor: props.backgroundColor}}>
       <Avatar.Text
         className="mr-2"
@@ -26,6 +27,7 @@ export const Appbar = (props: AppbarProps) => {
       />
 
       <PaperAppbar.Action
+        containerColor={props.actionBackgroundColor}
         color={props.foregroundColor}
         icon="theme-light-dark"
         onPress={themeStoreActions.switchTheme}
