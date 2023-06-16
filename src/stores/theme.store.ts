@@ -14,3 +14,9 @@ const useThemeStore = create<ThemeState>()(
   }),
 );
 export const useIsDarkMode = () => useThemeStore(state => state.isDarkMode);
+
+export const themeStoreActions = {
+  switchTheme() {
+    useThemeStore.setState({isDarkMode: !useThemeStore.getState().isDarkMode});
+  },
+};
