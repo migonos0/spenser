@@ -5,7 +5,6 @@ export const MessageSchema = object({
   isIncome: boolean(),
   amount: number(),
   description: string(),
-  tags: string().array(),
 });
 
 export type Message = TypeOf<typeof MessageSchema>;
