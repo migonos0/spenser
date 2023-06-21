@@ -2598,6 +2598,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native-sqlite-storage@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@types/react-native-sqlite-storage@npm:6.0.0"
+  checksum: a028d6787199eb04f44ae8eeecdd107e4fa50dac32fd6bf2517c940ec15dc3a58270c454e10cb098f21e8fcd39413ba351dc89ca2f93b274f266e68b939f8a89
+  languageName: node
+  linkType: hard
+
 "@types/react-test-renderer@npm:^18.0.0":
   version: 18.0.0
   resolution: "@types/react-test-renderer@npm:18.0.0"
@@ -8870,6 +8877,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-sqlite-storage@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "react-native-sqlite-storage@npm:6.0.1"
+  peerDependencies:
+    react-native: ">=0.14.0"
+  checksum: 79bd454682beb22cdfb5a234b9d52b454d0451dccf03a3c15b70b9c331b32cf0066703652b0d23707bda9b9b4c8063e92d31084171af3ea647855b5d727746e0
+  languageName: node
+  linkType: hard
+
 "react-native-vector-icons@npm:^9.2.0":
   version: 9.2.0
   resolution: "react-native-vector-icons@npm:9.2.0"
@@ -9728,6 +9744,7 @@ __metadata:
     "@tsconfig/react-native": ^2.0.2
     "@types/jest": ^29.2.1
     "@types/react": ^18.0.24
+    "@types/react-native-sqlite-storage": ^6.0.0
     "@types/react-test-renderer": ^18.0.0
     babel-jest: ^29.2.1
     classnames: ^2.3.2
@@ -9740,6 +9757,7 @@ __metadata:
     react-native: 0.71.10
     react-native-paper: ^5.8.0
     react-native-safe-area-context: ^4.5.3
+    react-native-sqlite-storage: ^6.0.1
     react-native-vector-icons: ^9.2.0
     react-test-renderer: 18.2.0
     tailwindcss: ^3.3.2
