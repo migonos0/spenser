@@ -1,6 +1,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {MESSAGES_TABLE_NAME} from '../constants/db';
 import {Message} from '../schemas/message.schema';
+import {getInsertId} from '../lib/sqlite';
 
 export const createMessagesTable = async (db: SQLiteDatabase) => {
   const query = `CREATE TABLE IF NOT EXISTS ${MESSAGES_TABLE_NAME}(
@@ -25,18 +26,18 @@ export const findAllMessages = async (db: SQLiteDatabase) => {
   return messages;
 };
 
-export const createMessage = async (
-  db: SQLiteDatabase,
-  message: Omit<Message, 'id'>,
-) => {
-  const insertQuery = `INSERT OR REPLACE INTO 
+export const createMessage =
+  (message: Omit<Message, 'id'>) => async (db: SQLiteDatabase) => {
+    const insertQuery = `INSERT OR REPLACE INTO 
     ${MESSAGES_TABLE_NAME}(is_income, amount, description) values (
     ${+message.isIncome}, 
     ${message.amount}, 
     '${message.description}')`;
 
-  return db.executeSql(insertQuery);
-};
+    const result = await db.executeSql(insertQuery);
+
+    return {...message, id: getInsertId(result)};
+  };
 
 export const deleteMessage = async (db: SQLiteDatabase, id: number) => {
   const deleteQuery = `DELETE from ${MESSAGES_TABLE_NAME} where rowid = ${id}`;
