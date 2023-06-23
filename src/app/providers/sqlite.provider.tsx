@@ -17,11 +17,7 @@ export const SQLiteProvider = (props: SQLiteProviderProps) => {
       return;
     }
 
-    try {
-      await createMessagesTable(sqliteDatabase);
-    } catch (error) {
-      console.error(error);
-    }
+    await createMessagesTable(sqliteDatabase);
   }, [sqliteDatabase]);
 
   useEffect(() => {
@@ -32,9 +28,9 @@ export const SQLiteProvider = (props: SQLiteProviderProps) => {
   }, []);
 
   useEffect(() => {
-    createTables().then(() =>
-      sqliteStoreActions.updateAreTablesCreatedAsTrue(),
-    );
+    createTables()
+      .then(() => sqliteStoreActions.updateAreTablesCreatedAsTrue())
+      .catch(error => console.error(error));
   }, [createTables]);
 
   return <>{props.children}</>;
