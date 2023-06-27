@@ -4,6 +4,7 @@ import {Surface} from 'react-native-paper';
 import {Appbar} from '../components/app-bar';
 import {View} from 'react-native';
 import {Colors} from '../../types/colors';
+import {DEVELOPER_MENU_ITEMS} from '../../constants/menu-items';
 
 interface ScreenLayoutProps {
   children?: ReactNode;
@@ -18,6 +19,7 @@ export const ScreenLayout = (props: ScreenLayoutProps) => (
       avatarBackgroundColor={props.colors.primaryContainer}
       foregroundColor={props.colors.inverseOnSurface}
       backgroundColor={props.colors.primary}
+      developerMenuItems={DEVELOPER_MENU_ITEMS}
     />
 
     <View className="flex-1">{props.children}</View>
