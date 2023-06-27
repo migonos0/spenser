@@ -1,3 +1,4 @@
 {
-  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "twClass"]
+  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "twClass"],
+  "cSpell.words": ["Flatlist", "rowid", "SWRSQ"]
 }
