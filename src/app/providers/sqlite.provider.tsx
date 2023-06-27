@@ -3,7 +3,10 @@ import {sqliteStoreActions} from '../../stores/sqlite.store';
 import {getSQLiteDatabase} from '../../lib/sqlite';
 import {DB_NAME} from '../../constants/db';
 import {enablePromise} from 'react-native-sqlite-storage';
-import {useSQLiteDatabase} from '../../state/sqlite.state';
+import {
+  useSQLiteDatabase,
+  useWithSQLiteDatabase,
+} from '../../state/sqlite.state';
 import {createMessagesTable} from '../../service/message.service';
 
 interface SQLiteProviderProps {
@@ -12,6 +15,8 @@ interface SQLiteProviderProps {
 
 export const SQLiteProvider = (props: SQLiteProviderProps) => {
   const sqliteDatabase = useSQLiteDatabase();
+  const withSQLiteDatabase = useWithSQLiteDatabase();
+
   const createTables = useCallback(async () => {
     if (!sqliteDatabase) {
       return;
@@ -32,6 +37,13 @@ export const SQLiteProvider = (props: SQLiteProviderProps) => {
       .then(() => sqliteStoreActions.updateAreTablesCreatedAsTrue())
       .catch(error => console.error(error));
   }, [createTables]);
+
+  useEffect(() => {
+    if (!withSQLiteDatabase || !sqliteDatabase) {
+      return;
+    }
+    withSQLiteDatabase(sqliteDatabase);
+  }, [withSQLiteDatabase, sqliteDatabase]);
 
   return <>{props.children}</>;
 };
