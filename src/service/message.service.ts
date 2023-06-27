@@ -13,18 +13,22 @@ export const createMessagesTable = async (db: SQLiteDatabase) => {
   await db.executeSql(query);
 };
 
-export const findAllMessages = async (db: SQLiteDatabase) => {
-  const messages: Message[] = [];
-  const results = await db.executeSql(
-    `SELECT rowid as id, is_income as isIncome, amount, description FROM ${MESSAGES_TABLE_NAME}`,
-  );
-  results.forEach(result => {
-    for (let index = 0; index < result.rows.length; index++) {
-      messages.push(result.rows.item(index));
-    }
-  });
-  return messages;
-};
+export const findAllMessages =
+  ({ascendant}: {ascendant?: boolean}) =>
+  async (db: SQLiteDatabase) => {
+    const messages: Message[] = [];
+    const results = await db.executeSql(
+      `SELECT rowid as id, is_income as isIncome, amount, description FROM ${MESSAGES_TABLE_NAME}${
+        ascendant ? ' ORDER BY id asc' : ' ORDER BY id desc'
+      }`,
+    );
+    results.forEach(result => {
+      for (let index = 0; index < result.rows.length; index++) {
+        messages.push(result.rows.item(index));
+      }
+    });
+    return messages;
+  };
 
 export const createMessage =
   (message: Omit<Message, 'id'>) => async (db: SQLiteDatabase) => {
