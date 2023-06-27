@@ -1,5 +1,10 @@
 {
   "common": {
     "send": "Send"
+  },
+  "inputSchemas": {
+    "messages": {
+      "pleaseProvideValidMessage": "Please provide a valid message."
+    }
   }
 }
