@@ -4,12 +4,12 @@ import {Surface} from 'react-native-paper';
 import {Appbar} from '../components/app-bar';
 import {View} from 'react-native';
 import {Colors} from '../../types/colors';
-import {ChatBox} from '../components/chat-box';
 
 interface ScreenLayoutProps {
   children?: ReactNode;
   twClass?: string;
   colors: Colors;
+  footer?: ReactNode;
 }
 
 export const ScreenLayout = (props: ScreenLayoutProps) => (
@@ -20,8 +20,8 @@ export const ScreenLayout = (props: ScreenLayoutProps) => (
       backgroundColor={props.colors.primary}
     />
 
-    <View className="flex-1 p-5">{props.children}</View>
+    <View className="flex-1">{props.children}</View>
 
-    <ChatBox />
+    <View>{props.footer}</View>
   </Surface>
 );
