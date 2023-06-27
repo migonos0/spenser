@@ -48,8 +48,8 @@ export const deleteMessage = async (db: SQLiteDatabase, id: number) => {
   await db.executeSql(deleteQuery);
 };
 
-export const deleteMessagesTable = async (db: SQLiteDatabase) => {
-  const query = `drop table ${MESSAGES_TABLE_NAME}`;
+export const dropMessagesTable = async (db: SQLiteDatabase) => {
+  const query = `DROP TABLE ${MESSAGES_TABLE_NAME}`;
 
   await db.executeSql(query);
 };
