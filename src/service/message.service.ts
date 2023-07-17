@@ -5,7 +5,7 @@ import {getInsertId} from '../lib/sqlite';
 
 export const createMessagesTable = async (db: SQLiteDatabase) => {
   const query = `CREATE TABLE IF NOT EXISTS ${MESSAGES_TABLE_NAME}(
-        is_income INTEGER NOT NULL,
+        is_expense INTEGER NOT NULL,
         amount NUMERIC NOT NULL,
         description TEXT NOT NULL
     );`;
@@ -18,7 +18,7 @@ export const findAllMessages =
   async (db: SQLiteDatabase) => {
     const messages: Message[] = [];
     const results = await db.executeSql(
-      `SELECT rowid as id, is_income as isIncome, amount, description FROM ${MESSAGES_TABLE_NAME}${
+      `SELECT rowid as id, is_expense as isIncome, amount, description FROM ${MESSAGES_TABLE_NAME}${
         ascendant ? ' ORDER BY id asc' : ' ORDER BY id desc'
       }`,
     );
@@ -33,8 +33,8 @@ export const findAllMessages =
 export const createMessage =
   (message: Omit<Message, 'id'>) => async (db: SQLiteDatabase) => {
     const insertQuery = `INSERT OR REPLACE INTO 
-    ${MESSAGES_TABLE_NAME}(is_income, amount, description) values (
-    ${+message.isIncome}, 
+    ${MESSAGES_TABLE_NAME}(is_expense, amount, description) values (
+    ${+message.isExpense}, 
     ${message.amount}, 
     '${message.description}')`;
 
