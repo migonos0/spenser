@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "spenser.app"
-               BlueprintName = "spenser"
-               ReferencedContainer = "container:spenser.xcodeproj">
+               BuildableName = "spencer.app"
+               BlueprintName = "spencer"
+               ReferencedContainer = "container:spencer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "spenserTests.xctest"
-               BlueprintName = "spenserTests"
-               ReferencedContainer = "container:spenser.xcodeproj">
+               BuildableName = "spencerTests.xctest"
+               BlueprintName = "spencerTests"
+               ReferencedContainer = "container:spencer.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "spenser.app"
-            BlueprintName = "spenser"
-            ReferencedContainer = "container:spenser.xcodeproj">
+            BuildableName = "spencer.app"
+            BlueprintName = "spencer"
+            ReferencedContainer = "container:spencer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "spenser.app"
-            BlueprintName = "spenser"
-            ReferencedContainer = "container:spenser.xcodeproj">
+            BuildableName = "spencer.app"
+            BlueprintName = "spencer"
+            ReferencedContainer = "container:spencer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

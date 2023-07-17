@@ -1,4 +1,4 @@
-package com.spenser;
+package com.spencer;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
