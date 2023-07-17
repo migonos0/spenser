@@ -18,7 +18,7 @@ export const findAllMessages =
   async (db: SQLiteDatabase) => {
     const messages: Message[] = [];
     const results = await db.executeSql(
-      `SELECT rowid as id, is_expense as isIncome, amount, description FROM ${MESSAGES_TABLE_NAME}${
+      `SELECT rowid as id, is_expense as isExpense, amount, description FROM ${MESSAGES_TABLE_NAME}${
         ascendant ? ' ORDER BY id asc' : ' ORDER BY id desc'
       }`,
     );
