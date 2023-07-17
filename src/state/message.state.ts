@@ -10,7 +10,7 @@ export const useMessages = (params?: {ascendant?: boolean}) => {
 };
 
 export const useMutateMessages = (params?: {ascendant?: boolean}) => {
-  const {trigger} = useSWRSQLiteMutation(
+  const {trigger, error} = useSWRSQLiteMutation(
     MESSAGES_TABLE_NAME,
     createMessage,
     (result, currentData) => {
@@ -24,5 +24,5 @@ export const useMutateMessages = (params?: {ascendant?: boolean}) => {
     },
   );
 
-  return {trigger};
+  return {trigger, error};
 };
