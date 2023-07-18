@@ -17,7 +17,7 @@ export interface MenuItem {
   onTouch?: () => void;
 }
 
-interface AppbarProps {
+export interface AppbarProps {
   backgroundColor?: string;
   foregroundColor?: string;
   actionBackgroundColor?: string;
@@ -25,6 +25,7 @@ interface AppbarProps {
   twClass?: string;
   userMenuItems?: MenuItem[];
   developerMenuItems?: MenuItem[];
+  amountSummatory?: number;
 }
 
 export const Appbar = (props: AppbarProps) => {
@@ -46,7 +47,7 @@ export const Appbar = (props: AppbarProps) => {
         />
         <PaperAppbar.Content
           titleStyle={{color: props.foregroundColor}}
-          title="500.35$"
+          title={(props.amountSummatory ?? '').toString()}
         />
 
         <PaperAppbar.Action
