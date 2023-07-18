@@ -10,12 +10,11 @@ import {
   findTags,
   validateExpense,
 } from '../../utilities/message-pattern-finders';
-import {useEffect} from 'react';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
   const {messages} = useMessages();
-  const {trigger, error} = useMutateMessages();
+  const {trigger} = useMutateMessages();
 
   const onSendButtonPress = (message: string) => {
     const isExpense = validateExpense(message);
@@ -35,12 +34,6 @@ export const ChatScreen = () => {
       isExpense,
     });
   };
-
-  useEffect(() => {
-    if (!error) {
-      return;
-    }
-  }, [error]);
 
   return (
     <ScreenLayout
