@@ -22,7 +22,7 @@ export const useSWR = <Data>(
   config?: SWRConfiguration<Data, Error, BareFetcher<Data>>,
 ) => {
   const result = swrHook(key, fetcher, config);
-  result.error && console.log(result.error);
+  result.error && console.error(result.error);
   return result;
 };
 export const useSWRSQLite = <Data>(
