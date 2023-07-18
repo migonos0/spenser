@@ -2,6 +2,7 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {MESSAGES_TABLE_NAME} from '../constants/db';
 import {Message} from '../schemas/message.schema';
 import {getInsertId} from '../lib/sqlite';
+import {number} from 'zod';
 
 export const createMessagesTable = async (db: SQLiteDatabase) => {
   const query = `CREATE TABLE IF NOT EXISTS ${MESSAGES_TABLE_NAME}(
@@ -52,4 +53,14 @@ export const dropMessagesTable = async (db: SQLiteDatabase) => {
   const query = `DROP TABLE ${MESSAGES_TABLE_NAME}`;
 
   await db.executeSql(query);
+};
+
+export const findMessageAmountSummatory = async (db: SQLiteDatabase) => {
+  const query = `SELECT SUM(amount) as messageAmountSummatory FROM ${MESSAGES_TABLE_NAME}`;
+
+  const results = await db.executeSql(query);
+
+  return +number()
+    .parse(results[0].rows.item(0).messageAmountSummatory)
+    .toFixed(2);
 };
