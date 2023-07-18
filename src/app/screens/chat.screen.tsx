@@ -1,6 +1,10 @@
 import {ScreenLayout} from '../layouts/screen.layout';
 import {useAppTheme} from '../../hooks/use-app-theme';
-import {useMessages, useMutateMessages} from '../../state/message.state';
+import {
+  useMessageAmountSummatory,
+  useMessages,
+  useMutateMessages,
+} from '../../state/message.state';
 import {ChatBox} from '../components/chat-box';
 import {FlatList} from 'react-native';
 import {MessageCard} from '../components/message-card';
@@ -10,11 +14,13 @@ import {
   findTags,
   validateExpense,
 } from '../../utilities/message-pattern-finders';
+import {DEVELOPER_MENU_ITEMS} from '../../constants/menu-items';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
   const {messages} = useMessages();
   const {trigger} = useMutateMessages();
+  const {messageAmountSummatory, updateWithValue} = useMessageAmountSummatory();
 
   const onSendButtonPress = (message: string) => {
     const isExpense = validateExpense(message);
@@ -33,10 +39,18 @@ export const ChatScreen = () => {
       description,
       isExpense,
     });
+    updateWithValue(amount);
   };
 
   return (
     <ScreenLayout
+      appbar={{
+        avatarBackgroundColor: colors.primaryContainer,
+        foregroundColor: colors.inverseOnSurface,
+        backgroundColor: colors.primary,
+        developerMenuItems: DEVELOPER_MENU_ITEMS,
+        amountSummatory: messageAmountSummatory,
+      }}
       footer={<ChatBox onSendButtonPress={onSendButtonPress} />}
       colors={colors}>
       <FlatList
