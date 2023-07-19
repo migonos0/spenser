@@ -15,6 +15,7 @@ import {
   validateExpense,
 } from '../../utilities/message-pattern-finders';
 import {DEVELOPER_MENU_ITEMS} from '../../constants/menu-items';
+import {NODE_ENV} from '../../constants/environment';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
@@ -48,7 +49,8 @@ export const ChatScreen = () => {
         avatarBackgroundColor: colors.primaryContainer,
         foregroundColor: colors.inverseOnSurface,
         backgroundColor: colors.primary,
-        developerMenuItems: DEVELOPER_MENU_ITEMS,
+        developerMenuItems:
+          NODE_ENV === 'development' ? DEVELOPER_MENU_ITEMS : undefined,
         amountSummatory: messageAmountSummatory,
       }}
       footer={<ChatBox onSendButtonPress={onSendButtonPress} />}
