@@ -58,21 +58,13 @@ export const Appbar = (props: AppbarProps) => {
         />
       </PaperAppbar.Header>
 
-      <Portal>
-        <Dialog visible={isUserMenuVisible} onDismiss={onUserMenuDismiss}>
-          <Dialog.Title>User Menu</Dialog.Title>
+      {(props.userMenuItems || props.developerMenuItems) && (
+        <Portal>
+          <Dialog visible={isUserMenuVisible} onDismiss={onUserMenuDismiss}>
+            <Dialog.Title>User Menu</Dialog.Title>
 
-          <Dialog.Content>
-            {props.userMenuItems?.map((menuItem, index) => (
-              <List.Item
-                key={index}
-                title={menuItem.label}
-                description={menuItem.description}
-                onTouchEnd={menuItem.onTouch}
-              />
-            ))}
-            {NODE_ENV === 'development' &&
-              props.developerMenuItems?.map((menuItem, index) => (
+            <Dialog.Content>
+              {props.userMenuItems?.map((menuItem, index) => (
                 <List.Item
                   key={index}
                   title={menuItem.label}
@@ -80,9 +72,19 @@ export const Appbar = (props: AppbarProps) => {
                   onTouchEnd={menuItem.onTouch}
                 />
               ))}
-          </Dialog.Content>
-        </Dialog>
-      </Portal>
+              {NODE_ENV === 'development' &&
+                props.developerMenuItems?.map((menuItem, index) => (
+                  <List.Item
+                    key={index}
+                    title={menuItem.label}
+                    description={menuItem.description}
+                    onTouchEnd={menuItem.onTouch}
+                  />
+                ))}
+            </Dialog.Content>
+          </Dialog>
+        </Portal>
+      )}
     </>
   );
 };
