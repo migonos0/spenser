@@ -60,7 +60,13 @@ export const findMessageAmountSummatory = async (db: SQLiteDatabase) => {
 
   const results = await db.executeSql(query);
 
-  return +number()
-    .parse(results[0].rows.item(0).messageAmountSummatory)
-    .toFixed(2);
+  const parsedMessageAmountSummatory = number().safeParse(
+    results[0].rows.item(0).messageAmountSummatory,
+  );
+
+  if (!parsedMessageAmountSummatory.success) {
+    return 0;
+  }
+
+  return +parsedMessageAmountSummatory.data.toFixed(2);
 };
