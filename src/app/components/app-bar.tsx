@@ -47,7 +47,7 @@ export const Appbar = (props: AppbarProps) => {
         />
         <PaperAppbar.Content
           titleStyle={{color: props.foregroundColor}}
-          title={(props.amountSummatory ?? '').toString()}
+          title={(props.amountSummatory ?? '').toString() + ' $'}
         />
 
         <PaperAppbar.Action

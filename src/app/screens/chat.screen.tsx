@@ -66,7 +66,9 @@ export const ChatScreen = () => {
                 ? colors.tertiaryContainer
                 : colors.surfaceVariant
             }
-            cardTitle={message.amount.toString()}
+            cardTitle={
+              (!message.isExpense ? '+' : '') + message.amount.toString()
+            }
             body={message.description}
           />
         )}
