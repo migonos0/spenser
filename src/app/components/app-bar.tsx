@@ -42,7 +42,7 @@ export const Appbar = (props: AppbarProps) => {
           className="mr-2"
           style={{backgroundColor: props.avatarBackgroundColor}}
           size={42}
-          label="MR"
+          label="U"
           onTouchEnd={() => setIsUserMenuVisible(true)}
         />
         <PaperAppbar.Content
