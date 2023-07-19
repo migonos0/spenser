@@ -4,7 +4,9 @@ import {
 } from '../constants/message-patterns';
 
 export const validateExpense = (message: string) =>
-  EXPENSE_MESSAGE_PATTERNS.some(pattern => message.includes(pattern));
+  EXPENSE_MESSAGE_PATTERNS.some(pattern =>
+    message.toLowerCase().includes(pattern),
+  );
 
 export const findAmount = (message: string) =>
   message.match(/([1-9]\d*(\.\d+)?)|(\.[1-9]\d*)/)?.find(match => match);
