@@ -19,13 +19,15 @@ export const MessageCard = (props: MessageCardProps) => {
       )}>
       <Card style={{backgroundColor: props.backgroundColor}}>
         {props.cardTitle && (
-          <Card.Content>
+          <Card.Content className={classNames({'mb-4': !props.body})}>
             <Text variant="titleMedium">{props.cardTitle}</Text>
           </Card.Content>
         )}
-        <Card.Content>
-          <Text variant="bodyMedium">{props.body}</Text>
-        </Card.Content>
+        {props.body && (
+          <Card.Content>
+            <Text variant="bodyMedium">{props.body}</Text>
+          </Card.Content>
+        )}
       </Card>
     </View>
   );
