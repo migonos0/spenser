@@ -1,6 +1,7 @@
 {
   "common": {
-    "send": "Send"
+    "send": "Send",
+    "delete": "Delete"
   },
   "inputSchemas": {
     "messages": {
