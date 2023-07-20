@@ -44,9 +44,11 @@ export const createMessage =
     return {...message, id: getInsertId(result)};
   };
 
-export const deleteMessage = async (db: SQLiteDatabase, id: number) => {
+export const deleteMessage = (id: number) => async (db: SQLiteDatabase) => {
   const deleteQuery = `DELETE from ${MESSAGES_TABLE_NAME} where rowid = ${id}`;
-  await db.executeSql(deleteQuery);
+  const response = await db.executeSql(deleteQuery);
+  console.log(response);
+  return id;
 };
 
 export const dropMessagesTable = async (db: SQLiteDatabase) => {

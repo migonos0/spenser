@@ -3,9 +3,11 @@ import {MESSAGES_TABLE_NAME} from '../constants/db';
 import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/swr';
 import {
   createMessage,
+  deleteMessage,
   findAllMessages,
   findMessageAmountSummatory,
 } from '../service/message.service';
+import {Message} from '../schemas/message.schema';
 
 export const useMessages = (params?: {ascendant?: boolean}) => {
   const fetcher = findAllMessages({ascendant: params?.ascendant});
@@ -14,7 +16,7 @@ export const useMessages = (params?: {ascendant?: boolean}) => {
   return {messages: data, mutateMessages: mutate};
 };
 
-export const useMutateMessages = (params?: {ascendant?: boolean}) => {
+export const useCreateMessage = (params?: {ascendant?: boolean}) => {
   const {trigger, error} = useSWRSQLiteMutation(
     MESSAGES_TABLE_NAME,
     createMessage,
@@ -46,4 +48,21 @@ export const useMessageAmountSummatory = () => {
   );
 
   return {messageAmountSummatory: data, updateWithValue};
+};
+
+export const useDeleteMessage = () => {
+  const {trigger, error} = useSWRSQLiteMutation(
+    MESSAGES_TABLE_NAME,
+    deleteMessage,
+    (result, currentData) => {
+      if (!result) {
+        return currentData;
+      }
+      return (currentData as Message[] | undefined)?.filter(
+        message => message.id !== result,
+      );
+    },
+  );
+
+  return {trigger, error};
 };
