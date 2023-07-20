@@ -9,7 +9,7 @@ export const validateExpense = (message: string) =>
   );
 
 export const findAmount = (message: string) =>
-  message.match(/([1-9]\d*(\.\d+)?)|(\.[1-9]\d*)/)?.find(match => match);
+  message.match(/([0-9]\d*(\.\d+)?)|(\.[0-9]\d*)/)?.find(match => match);
 
 export const findTags = (message: string) =>
   message.match(/#([A-z])\w*/g)?.map(tag => tag.replace('#', ''));
@@ -38,7 +38,7 @@ export const cleanMessageDescription = (
 };
 
 export const cleanPatterns = (message: string, patterns: string[]) => {
-  let cleanMessage = message.slice();
+  let cleanMessage = message.slice().toLowerCase();
   for (const expensePattern of patterns) {
     cleanMessage = cleanMessage.replace(expensePattern, '');
   }
