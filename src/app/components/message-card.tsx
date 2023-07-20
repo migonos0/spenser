@@ -71,8 +71,9 @@ export const MessageCard = (props: MessageCardProps) => {
             onDismiss={onMessageCardLongPressDialogDismiss}
             visible={isMessageCardLongPressDialogVisible}>
             <Dialog.Content>
-              {props.longPressDialogItems.map(item => (
+              {props.longPressDialogItems.map((item, index) => (
                 <List.Item
+                  key={index}
                   onPress={item.onPress}
                   title={item.title}
                   left={props2 =>
