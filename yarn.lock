@@ -8858,6 +8858,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-haptic-feedback@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "react-native-haptic-feedback@npm:2.0.3"
+  peerDependencies:
+    react-native: ">=0.60.0"
+  checksum: c0952135c54535439b3b307f4ecc11721eb208ef7210f56becd5471488d5ee130d78cdf0c8515aa80097ba284347925d2df3f402a09200e645522fe99fad3d64
+  languageName: node
+  linkType: hard
+
 "react-native-paper@npm:^5.8.0":
   version: 5.8.0
   resolution: "react-native-paper@npm:5.8.0"
@@ -9763,6 +9772,7 @@ __metadata:
     prettier: ^2.4.1
     react: 18.2.0
     react-native: 0.71.10
+    react-native-haptic-feedback: ^2.0.3
     react-native-paper: ^5.8.0
     react-native-safe-area-context: ^4.5.3
     react-native-sqlite-storage: ^6.0.1
