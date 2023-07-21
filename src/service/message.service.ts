@@ -1,7 +1,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {MESSAGES_TABLE_NAME} from '../constants/db';
 import {Message} from '../schemas/message.schema';
-import {getInsertId, wereRowsAffected} from '../lib/sqlite';
+import {getInsertId, validateRowAffectation} from '../lib/sqlite';
 import {number} from 'zod';
 
 export const createMessagesTable = async (db: SQLiteDatabase) => {
@@ -47,9 +47,7 @@ export const createMessage =
 export const deleteMessage = (id: number) => async (db: SQLiteDatabase) => {
   const deleteQuery = `DELETE from ${MESSAGES_TABLE_NAME} where rowid = ${id}`;
   const response = await db.executeSql(deleteQuery);
-  if (!wereRowsAffected(response)) {
-    return;
-  }
+  validateRowAffectation(response);
 
   return id;
 };

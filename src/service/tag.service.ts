@@ -1,7 +1,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {TAGS_TABLE_NAME} from '../constants/db';
 import {Tag} from '../schemas/tag.schema';
-import {getInsertId, wereRowsAffected} from '../lib/sqlite';
+import {getInsertId, validateRowAffectation} from '../lib/sqlite';
 
 export const createTagsTable = async (db: SQLiteDatabase) => {
   const query = `CREATE TABLE IF NOT EXISTS ${TAGS_TABLE_NAME}(
@@ -38,9 +38,8 @@ export const createTag =
 export const deleteTag = (id: number) => async (db: SQLiteDatabase) => {
   const deleteQuery = `DELETE from ${TAGS_TABLE_NAME} where rowid = ${id}`;
   const response = await db.executeSql(deleteQuery);
-  if (!wereRowsAffected(response)) {
-    return;
-  }
+  validateRowAffectation(response);
+
   return id;
 };
 
