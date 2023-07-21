@@ -5,7 +5,7 @@ import {getInsertId, wereRowsAffected} from '../lib/sqlite';
 
 export const createTagsTable = async (db: SQLiteDatabase) => {
   const query = `CREATE TABLE IF NOT EXISTS ${TAGS_TABLE_NAME}(
-          name TEXT NOT NULL
+          name TEXT NOT NULL UNIQUE
       );`;
 
   await db.executeSql(query);
