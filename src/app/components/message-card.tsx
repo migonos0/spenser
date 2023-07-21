@@ -16,7 +16,7 @@ interface MessageCardProps {
     iconName?: string;
     onPress: () => void;
   }[];
-  tags: {label: string; onPress?: () => void}[];
+  tags?: {label: string; onPress?: () => void}[];
 }
 
 export const MessageCard = (props: MessageCardProps) => {
