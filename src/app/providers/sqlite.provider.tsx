@@ -8,6 +8,7 @@ import {
   useWithSQLiteDatabase,
 } from '../../state/sqlite.state';
 import {createMessagesTable} from '../../service/message.service';
+import {createTagsTable} from '../../service/tag.service';
 
 interface SQLiteProviderProps {
   children?: ReactNode;
@@ -23,6 +24,7 @@ export const SQLiteProvider = (props: SQLiteProviderProps) => {
     }
 
     await createMessagesTable(sqliteDatabase);
+    await createTagsTable(sqliteDatabase);
   }, [sqliteDatabase]);
 
   useEffect(() => {
