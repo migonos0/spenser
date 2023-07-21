@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import {StyleProp, TextStyle, View} from 'react-native';
-import {Card, Dialog, List, Portal, Text} from 'react-native-paper';
+import {Card, Chip, Dialog, List, Portal, Text} from 'react-native-paper';
 import {trigger} from 'react-native-haptic-feedback';
 import {useCallback, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,6 +16,7 @@ interface MessageCardProps {
     iconName?: string;
     onPress: () => void;
   }[];
+  tags: {label: string; onPress?: () => void}[];
 }
 
 export const MessageCard = (props: MessageCardProps) => {
@@ -53,16 +54,27 @@ export const MessageCard = (props: MessageCardProps) => {
         <Card
           onLongPress={localOnLongPress}
           style={{backgroundColor: props.backgroundColor}}>
-          {props.cardTitle && (
-            <Card.Content className={classNames({'mb-4': !props.body})}>
-              <Text variant="titleMedium">{props.cardTitle}</Text>
-            </Card.Content>
-          )}
-          {props.body && (
-            <Card.Content>
-              <Text variant="bodyMedium">{props.body}</Text>
-            </Card.Content>
-          )}
+          <View className="py-4">
+            {props.cardTitle && (
+              <Card.Content>
+                <Text variant="titleMedium">{props.cardTitle}</Text>
+              </Card.Content>
+            )}
+            {props.body && (
+              <Card.Content>
+                <Text variant="bodyMedium">{props.body}</Text>
+              </Card.Content>
+            )}
+            {props.tags && (
+              <Card.Content className="flex flex-row flow flex-wrap gap-1">
+                {props.tags.map((tag, index) => (
+                  <Chip icon={'pound'} key={index} onPress={tag.onPress}>
+                    {tag.label}
+                  </Chip>
+                ))}
+              </Card.Content>
+            )}
+          </View>
         </Card>
       </View>
       {props.longPressDialogItems && (
