@@ -1,7 +1,7 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {TAGS_TABLE_NAME} from '../constants/db';
 import {Tag} from '../schemas/tag.schema';
-import {getInsertId, validateRowAffectation} from '../lib/sqlite';
+import {getInsertId, getInsertIds, validateRowAffectation} from '../lib/sqlite';
 
 export const createTagsTable = async (db: SQLiteDatabase) => {
   const query = `CREATE TABLE IF NOT EXISTS ${TAGS_TABLE_NAME}(
@@ -25,14 +25,30 @@ export const findAllTags = async (db: SQLiteDatabase) => {
 };
 
 export const createTag =
-  (tag: Omit<Tag, 'id'>) => async (db: SQLiteDatabase) => {
+  (tagName: Tag['name']) => async (db: SQLiteDatabase) => {
     const insertQuery = `INSERT OR REPLACE INTO 
     ${TAGS_TABLE_NAME}(name) values ( 
-    '${tag.name}')`;
+    '${tagName}')`;
 
     const result = await db.executeSql(insertQuery);
 
-    return {...tag, id: getInsertId(result)};
+    return {id: getInsertId(result), name: tagName};
+  };
+
+export const createTags =
+  (tagNames: Tag['name'][]) => async (db: SQLiteDatabase) => {
+    const insertQuery = `INSERT OR REPLACE INTO 
+    ${TAGS_TABLE_NAME}(name) values ${tagNames
+      .map(tagName => `('${tagName}')`)
+      .join(',')}`;
+    console.log(insertQuery);
+
+    const result = await db.executeSql(insertQuery);
+
+    console.log(result);
+    console.log(getInsertIds(result));
+
+    return getInsertIds(result);
   };
 
 export const deleteTag = (id: number) => async (db: SQLiteDatabase) => {
