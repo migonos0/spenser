@@ -2,9 +2,9 @@ import {ScreenLayout} from '../layouts/screen.layout';
 import {useAppTheme} from '../../hooks/use-app-theme';
 import {
   useMessageAmountSummatory,
-  useMessages,
   useCreateMessage,
   useDeleteMessage,
+  useMessagesWithTags,
 } from '../../state/message.state';
 import {ChatBox} from '../components/chat-box';
 import {FlatList} from 'react-native';
@@ -18,31 +18,54 @@ import {
 import {DEVELOPER_MENU_ITEMS} from '../../constants/menu-items';
 import {NODE_ENV} from '../../constants/environment';
 import {LOCALE} from '../../constants/locale';
+import {useCreateTags, useTags} from '../../state/tag.state';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
-  const {messages} = useMessages();
   const {trigger: triggerMessageCreation} = useCreateMessage();
   const {messageAmountSummatory, updateWithValue} = useMessageAmountSummatory();
   const {trigger: triggerMessageDeletion} = useDeleteMessage();
+  const {tags} = useTags();
+  const {createTagsTrigger} = useCreateTags();
+  const {messagesWithTags} = useMessagesWithTags();
 
   const onSendButtonPress = (message: string) => {
     const isExpense = validateExpense(message);
     const stringifiedAmount = findAmount(message);
-    const tags = findTags(message);
+    const tagNames = findTags(message);
     const description = cleanMessageDescription(
       message,
       isExpense,
       stringifiedAmount,
-      tags,
+      tagNames,
     );
     const amount = Number(stringifiedAmount) * (isExpense ? -1 : 1);
 
-    triggerMessageCreation({
-      amount,
-      description,
-      isExpense,
-    });
+    triggerMessageCreation(
+      {
+        amount,
+        description,
+        isExpense,
+      },
+      {
+        onSuccess(createdMessage) {
+          if (!createdMessage) {
+            return;
+          }
+          const newTagNames = tagNames?.filter(
+            tagName => !tags?.map(tag => tag.name).includes(tagName),
+          );
+          createTagsTrigger(newTagNames ?? []);
+          // const messageTags = tags?.filter(tag => tagNames?.includes(tag.name));
+          // for (const messageTag of messageTags ?? []) {
+          //   createMessageTagTrigger({
+          //     messageId: createdMessage.id,
+          //     tagId: messageTag.id,
+          //   });
+          // }
+        },
+      },
+    );
     updateWithValue(amount);
   };
 
@@ -61,7 +84,7 @@ export const ChatScreen = () => {
       <FlatList
         inverted
         className="px-4"
-        data={messages}
+        data={messagesWithTags}
         keyExtractor={item => item.id.toString()}
         renderItem={({item: message}) => (
           <MessageCard
@@ -85,6 +108,7 @@ export const ChatScreen = () => {
               (!message.isExpense ? '+' : '') + message.amount.toString()
             }
             body={message.description}
+            tags={message.tags.map(tag => ({label: tag.name}))}
           />
         )}
       />
