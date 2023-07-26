@@ -17,9 +17,3 @@ export const getInsertId = (result: [ResultSet]) => {
 
   return result[0].insertId;
 };
-
-export const getInsertIds = (results: [ResultSet]) => {
-  validateRowAffectation(results);
-
-  return results.map(result => result.insertId);
-};
