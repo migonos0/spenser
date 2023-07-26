@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import {useCallback, useMemo} from 'react';
 import {MESSAGES_TABLE_NAME} from '../constants/db';
 import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/swr';
 import {
@@ -8,6 +8,9 @@ import {
   findMessageAmountSummatory,
 } from '../service/message.service';
 import {Message} from '../schemas/message.schema';
+import {useTags} from './tag.state';
+import {useMessagesTags} from './message-tag.state';
+import {Tag} from '../schemas/tag.schema';
 
 export const useMessages = (params?: {ascendant?: boolean}) => {
   const fetcher = findAllMessages({ascendant: params?.ascendant});
@@ -65,4 +68,26 @@ export const useDeleteMessage = () => {
   );
 
   return {trigger, error};
+};
+
+export const useMessagesWithTags = (params?: {ascendant?: boolean}) => {
+  const {messages} = useMessages(params);
+  const {tags} = useTags();
+  const {messagesTags} = useMessagesTags();
+
+  const messagesWithTags = useMemo(() => {
+    const localMessagesWithTags: (Message & {tags: Tag[]})[] = [];
+
+    for (const message of messages ?? []) {
+      const messageTagIds = messagesTags
+        ?.filter(messageTag => messageTag.messageId === message.id)
+        .map(messageTag => messageTag.id);
+      const messageTags = tags?.filter(tag => messageTagIds?.includes(tag.id));
+      localMessagesWithTags.push({...message, tags: messageTags ?? []});
+    }
+
+    return localMessagesWithTags;
+  }, [messages, tags, messagesTags]);
+
+  return {messagesWithTags};
 };
