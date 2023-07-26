@@ -51,7 +51,7 @@ export const deleteMessageTag = (id: number) => async (db: SQLiteDatabase) => {
   return id;
 };
 
-export const dropMessagesTable = async (db: SQLiteDatabase) => {
+export const dropMessagesTagsTable = async (db: SQLiteDatabase) => {
   const query = `DROP TABLE ${MESSAGES_TAGS_TABLE_NAME}`;
 
   await db.executeSql(query);
