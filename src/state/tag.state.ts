@@ -1,5 +1,5 @@
 import {TAGS_TABLE_NAME} from '../constants/db';
-import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/swr';
+import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/use-swr';
 import {Tag} from '../schemas/tag.schema';
 import {createTags, findAllTags} from '../services/tag.service';
 

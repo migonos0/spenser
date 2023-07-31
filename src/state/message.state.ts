@@ -1,6 +1,6 @@
 import {useCallback, useMemo} from 'react';
 import {MESSAGES_TABLE_NAME} from '../constants/db';
-import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/swr';
+import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/use-swr';
 import {
   createMessage,
   deleteMessage,

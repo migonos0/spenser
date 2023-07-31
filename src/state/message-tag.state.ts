@@ -1,5 +1,5 @@
 import {MESSAGES_TAGS_TABLE_NAME} from '../constants/db';
-import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/swr';
+import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/use-swr';
 import {MessageTag} from '../schemas/message-tag.schema';
 import {
   createMessagesTags,
