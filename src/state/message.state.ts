@@ -77,12 +77,18 @@ export const useMessagesWithTags = (params?: {ascendant?: boolean}) => {
 
   const messagesWithTags = useMemo(() => {
     const localMessagesWithTags: (Message & {tags: Tag[]})[] = [];
-
     for (const message of messages ?? []) {
       const messageTagIds = messagesTags
         ?.filter(messageTag => messageTag.messageId === message.id)
-        .map(messageTag => messageTag.id);
-      const messageTags = tags?.filter(tag => messageTagIds?.includes(tag.id));
+        .map(messageTag => messageTag.tagId);
+      const messageTags: Tag[] = [];
+      for (const tagId of messageTagIds ?? []) {
+        const foundTag = tags?.find(tag => tag.id === tagId);
+        if (!foundTag) {
+          continue;
+        }
+        messageTags.push(foundTag);
+      }
       localMessagesWithTags.push({...message, tags: messageTags ?? []});
     }
 
