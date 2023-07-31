@@ -66,7 +66,7 @@ export const MessageCard = (props: MessageCardProps) => {
               </Card.Content>
             )}
             {props.tags && (
-              <Card.Content className="flex flex-row flow flex-wrap gap-1">
+              <Card.Content className="flex flex-row flow flex-wrap gap-1 mt-1">
                 {props.tags.map((tag, index) => (
                   <Chip icon={'pound'} key={index} onPress={tag.onPress}>
                     {tag.label}
