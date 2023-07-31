@@ -24,9 +24,10 @@ import {useCreateMessagesTags} from '../../state/message-tag.state';
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
   const {trigger: triggerMessageCreation} = useCreateMessage();
-  const {messageAmountSummatory, updateWithValue} = useMessageAmountSummatory();
+  const {messageAmountSummatory, increaseOrDecreaseMessageAmountSummatory} =
+    useMessageAmountSummatory();
   const {trigger: triggerMessageDeletion} = useDeleteMessage();
-  const {messagesWithTags} = useMessagesWithTags();
+  const {messagesWithTags, addMessageWithTags} = useMessagesWithTags();
   const {tags} = useTags();
   const {createMessagesTagsTrigger} = useCreateMessagesTags();
   const {createTagsTrigger} = useCreateTags();
@@ -74,12 +75,19 @@ export const ChatScreen = () => {
                   tagId: tag.id,
                 })),
               );
+              if (!createdMessage || !createdTags || !alreadyCreatedTags) {
+                return;
+              }
+              addMessageWithTags(createdMessage, [
+                ...alreadyCreatedTags,
+                ...createdTags,
+              ]);
             },
           });
         },
       },
     );
-    updateWithValue(amount);
+    increaseOrDecreaseMessageAmountSummatory(amount);
   };
 
   return (
@@ -107,7 +115,7 @@ export const ChatScreen = () => {
                 iconName: 'delete',
                 onPress: () => {
                   triggerMessageDeletion(message.id);
-                  updateWithValue(message.amount * -1);
+                  increaseOrDecreaseMessageAmountSummatory(message.amount * -1);
                 },
               },
             ]}
