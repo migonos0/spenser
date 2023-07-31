@@ -14,7 +14,7 @@ export const useCreateTags = () => {
     TAGS_TABLE_NAME,
     createTags,
     (result, currentData: Tag[] | undefined) => {
-      if (!result || result.length < 1) {
+      if (!result) {
         return currentData;
       }
       return [...(currentData ?? []), ...result];
