@@ -7,9 +7,9 @@ import {
   useSQLiteDatabase,
   useWithSQLiteDatabase,
 } from '../../state/sqlite.state';
-import {createMessagesTable} from '../../service/message.service';
-import {createTagsTable} from '../../service/tag.service';
-import {createMessagesTagsTable} from '../../service/message-tag.service';
+import {createMessagesTable} from '../../services/message.service';
+import {createTagsTable} from '../../services/tag.service';
+import {createMessagesTagsTable} from '../../services/message-tag.service';
 
 interface SQLiteProviderProps {
   children?: ReactNode;

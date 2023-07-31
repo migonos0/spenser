@@ -1,7 +1,7 @@
 import {MenuItem} from '../app/components/app-bar';
-import {dropMessagesTagsTable} from '../service/message-tag.service';
-import {dropMessagesTable} from '../service/message.service';
-import {dropTagsTable} from '../service/tag.service';
+import {dropMessagesTagsTable} from '../services/message-tag.service';
+import {dropMessagesTable} from '../services/message.service';
+import {dropTagsTable} from '../services/tag.service';
 import {sqliteStoreActions} from '../stores/sqlite.store';
 
 export const DEVELOPER_MENU_ITEMS: MenuItem[] = [

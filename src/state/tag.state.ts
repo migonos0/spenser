@@ -1,7 +1,7 @@
 import {TAGS_TABLE_NAME} from '../constants/db';
 import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/swr';
 import {Tag} from '../schemas/tag.schema';
-import {createTags, findAllTags} from '../service/tag.service';
+import {createTags, findAllTags} from '../services/tag.service';
 
 export const useTags = () => {
   const {data} = useSWRSQLite(TAGS_TABLE_NAME, findAllTags);

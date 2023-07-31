@@ -4,7 +4,7 @@ import {MessageTag} from '../schemas/message-tag.schema';
 import {
   createMessagesTags,
   findAllMessagesTags,
-} from '../service/message-tag.service';
+} from '../services/message-tag.service';
 
 export const useMessagesTags = () => {
   const {data} = useSWRSQLite(MESSAGES_TAGS_TABLE_NAME, findAllMessagesTags);

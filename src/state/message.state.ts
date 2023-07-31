@@ -6,7 +6,7 @@ import {
   deleteMessage,
   findAllMessages,
   findMessageAmountSummatory,
-} from '../service/message.service';
+} from '../services/message.service';
 import {Message} from '../schemas/message.schema';
 import {useTags} from './tag.state';
 import {useMessagesTags} from './message-tag.state';
