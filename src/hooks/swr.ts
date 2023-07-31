@@ -1,11 +1,12 @@
 import swrImmutableHook from 'swr/immutable';
-import swrHook, {BareFetcher, Key, SWRConfiguration} from 'swr';
+import swrHook, {BareFetcher, Key, SWRConfiguration, useSWRConfig} from 'swr';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {useAreTablesCreated, useSQLiteDatabase} from '../state/sqlite.state';
 import swrMutationHook, {
   MutationFetcher,
   SWRMutationConfiguration,
 } from 'swr/mutation';
+import {useEffect} from 'react';
 
 export const useSWRImmutable = <Data>(
   key: Key,
@@ -39,8 +40,8 @@ export const useSWRSQLite = <Data>(
 };
 export const useSWRMutation = <Data, ExtraArg = never>(
   key: Key,
-  fetcher: MutationFetcher<Data, ExtraArg, Key>,
-  options: SWRMutationConfiguration<Data, Error, ExtraArg, Key>,
+  fetcher: MutationFetcher<Data, Key, ExtraArg>,
+  options?: SWRMutationConfiguration<Data, Error, Key, ExtraArg>,
 ) => {
   const result = swrMutationHook(key, fetcher, options);
   result.error && console.error(result.error);
@@ -53,6 +54,7 @@ export const useSWRSQLiteMutation = <T, U, V = any>(
 ) => {
   const sqliteDatabase = useSQLiteDatabase();
   const areTablesCreated = useAreTablesCreated();
+  const {mutate} = useSWRConfig();
 
   const key2 = areTablesCreated ? key : undefined;
   const fetcher2 = async (_: unknown, {arg}: {arg: T}) => {
@@ -62,8 +64,25 @@ export const useSWRSQLiteMutation = <T, U, V = any>(
     return await fetcher(arg)(sqliteDatabase);
   };
 
-  return useSWRMutation(key2, fetcher2, {
+  const result = useSWRMutation(key2, fetcher2, {
     revalidate: false,
-    populateCache: populateCache,
   });
+
+  useEffect(() => {
+    if (!result.data || result.error || result.isMutating) {
+      return;
+    }
+    mutate(
+      key,
+      currentData => {
+        return populateCache
+          ? populateCache(result.data, currentData)
+          : currentData;
+      },
+      {revalidate: false},
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result.data, result.error, result.isMutating]);
+
+  return result;
 };
