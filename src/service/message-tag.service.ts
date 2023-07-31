@@ -27,20 +27,24 @@ export const findAllMessagesTags = async (db: SQLiteDatabase) => {
   return messagesTags;
 };
 
-export const createMessageTag =
-  (input: {messageId: Message['id']; tagId: Tag['id']}) =>
-  async (db: SQLiteDatabase) => {
+export const createMessagesTags =
+  (input: {messageId: Message['id']; tagId: Tag['id']}[]) =>
+  async (db: SQLiteDatabase): Promise<MessageTag[]> => {
+    if (input.length < 1) {
+      return [];
+    }
     const insertQuery = `INSERT OR REPLACE INTO 
-    ${MESSAGES_TAGS_TABLE_NAME}(message_id, tag_id) values (
-    ${input.messageId}, 
-    ${input.tagId})`;
+    ${MESSAGES_TAGS_TABLE_NAME}(message_id, tag_id) values ${input
+      .map(messageTag => `(${messageTag.messageId}, ${messageTag.tagId})`)
+      .join(',')}`;
 
     const result = await db.executeSql(insertQuery);
+    const lastInsertedTagId = getInsertId(result);
 
-    return {
-      id: getInsertId(result),
-      ...input,
-    };
+    return input.map((messageTag, index) => ({
+      ...messageTag,
+      id: lastInsertedTagId - input.length + index + 1,
+    }));
   };
 
 export const deleteMessageTag = (id: number) => async (db: SQLiteDatabase) => {
