@@ -60,3 +60,17 @@ export const dropMessagesTagsTable = async (db: SQLiteDatabase) => {
 
   await db.executeSql(query);
 };
+
+export const findAllMessagesTagsByMessageId =
+  (messageId: Message['id']) => async (db: SQLiteDatabase) => {
+    const messagesTags: MessageTag[] = [];
+    const results = await db.executeSql(
+      `SELECT rowid as id, message_id as messageId, tag_id as tagId FROM ${MESSAGES_TAGS_TABLE_NAME} WHERE messageId = ${messageId}`,
+    );
+    results.forEach(result => {
+      for (let index = 0; index < result.rows.length; index++) {
+        messagesTags.push(result.rows.item(index));
+      }
+    });
+    return messagesTags;
+  };
