@@ -2,7 +2,7 @@ import {MESSAGES_TAGS_TABLE_NAME} from '../constants/db';
 import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/swr';
 import {MessageTag} from '../schemas/message-tag.schema';
 import {
-  createMessageTag,
+  createMessagesTags,
   findAllMessagesTags,
 } from '../service/message-tag.service';
 
@@ -12,17 +12,17 @@ export const useMessagesTags = () => {
   return {messagesTags: data};
 };
 
-export const useCreateMessageTag = () => {
+export const useCreateMessagesTags = () => {
   const {trigger} = useSWRSQLiteMutation(
     MESSAGES_TAGS_TABLE_NAME,
-    createMessageTag,
+    createMessagesTags,
     (result, currentData: MessageTag[] | undefined) => {
       if (!result) {
         return currentData;
       }
-      return [...(currentData ?? []), ...[result]];
+      return [...(currentData ?? []), ...result];
     },
   );
 
-  return {createMessageTagTrigger: trigger};
+  return {createMessagesTagsTrigger: trigger};
 };
