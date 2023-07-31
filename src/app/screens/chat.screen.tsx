@@ -19,15 +19,17 @@ import {DEVELOPER_MENU_ITEMS} from '../../constants/menu-items';
 import {NODE_ENV} from '../../constants/environment';
 import {LOCALE} from '../../constants/locale';
 import {useCreateTags, useTags} from '../../state/tag.state';
+import {useCreateMessagesTags} from '../../state/message-tag.state';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
   const {trigger: triggerMessageCreation} = useCreateMessage();
   const {messageAmountSummatory, updateWithValue} = useMessageAmountSummatory();
   const {trigger: triggerMessageDeletion} = useDeleteMessage();
-  const {tags} = useTags();
-  const {createTagsTrigger} = useCreateTags();
   const {messagesWithTags} = useMessagesWithTags();
+  const {tags} = useTags();
+  const {createMessagesTagsTrigger} = useCreateMessagesTags();
+  const {createTagsTrigger} = useCreateTags();
 
   const onSendButtonPress = (message: string) => {
     const isExpense = validateExpense(message);
@@ -52,17 +54,28 @@ export const ChatScreen = () => {
           if (!createdMessage) {
             return;
           }
+          const alreadyCreatedTags = tags?.filter(tag =>
+            tagNames?.includes(tag.name),
+          );
+          createMessagesTagsTrigger(
+            (alreadyCreatedTags ?? []).map(tag => ({
+              messageId: createdMessage.id,
+              tagId: tag.id,
+            })),
+          );
           const newTagNames = tagNames?.filter(
             tagName => !tags?.map(tag => tag.name).includes(tagName),
           );
-          createTagsTrigger(newTagNames ?? []);
-          // const messageTags = tags?.filter(tag => tagNames?.includes(tag.name));
-          // for (const messageTag of messageTags ?? []) {
-          //   createMessageTagTrigger({
-          //     messageId: createdMessage.id,
-          //     tagId: messageTag.id,
-          //   });
-          // }
+          createTagsTrigger(newTagNames ?? [], {
+            onSuccess(createdTags) {
+              createMessagesTagsTrigger(
+                (createdTags ?? []).map(tag => ({
+                  messageId: createdMessage.id,
+                  tagId: tag.id,
+                })),
+              );
+            },
+          });
         },
       },
     );
