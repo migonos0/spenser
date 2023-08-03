@@ -3,6 +3,14 @@ import {MESSAGES_TABLE_NAME} from '../constants/db';
 import {Message} from '../schemas/message.schema';
 import {getInsertId, validateRowAffectation} from '../lib/sqlite';
 import {number} from 'zod';
+import {
+  createMessagesTags,
+  deleteMessagesTagsByMessageId,
+  findAllMessagesTagsByMessageId,
+  findAllMessagesTagsByTagId,
+} from './message-tag.service';
+import {Tag} from '../schemas/tag.schema';
+import {deleteTagById, findTagById} from './tag.service';
 
 export const createMessagesTable = async (db: SQLiteDatabase) => {
   const query = `CREATE TABLE IF NOT EXISTS ${MESSAGES_TABLE_NAME}(
@@ -23,11 +31,11 @@ export const findAllMessages =
         ascendant ? ' ORDER BY id asc' : ' ORDER BY id desc'
       }`,
     );
-    results.forEach(result => {
+    for (const result of results) {
       for (let index = 0; index < result.rows.length; index++) {
         messages.push(result.rows.item(index));
       }
-    });
+    }
     return messages;
   };
 
@@ -44,7 +52,7 @@ export const createMessage =
     return {...message, id: getInsertId(result)};
   };
 
-export const deleteMessage = (id: number) => async (db: SQLiteDatabase) => {
+export const deleteMessageById = (id: number) => async (db: SQLiteDatabase) => {
   const deleteQuery = `DELETE from ${MESSAGES_TABLE_NAME} where rowid = ${id}`;
   const response = await db.executeSql(deleteQuery);
   validateRowAffectation(response);
@@ -71,5 +79,63 @@ export const findMessageAmountSummatory = async (db: SQLiteDatabase) => {
     return 0;
   }
 
-  return +parsedMessageAmountSummatory.data.toFixed(2);
+  return parsedMessageAmountSummatory.data;
 };
+
+export const findAllMessagesWithTags =
+  ({ascendant}: {ascendant?: boolean}) =>
+  async (db: SQLiteDatabase) => {
+    const messagesWithTags: (Message & {tags: Tag[]})[] = [];
+
+    const messages = await findAllMessages({ascendant: ascendant})(db);
+    for (const message of messages) {
+      const messageTagIds = (
+        await findAllMessagesTagsByMessageId(message.id)(db)
+      ).map(messageTag => messageTag.tagId);
+
+      const tags: Tag[] = [];
+      for (const messageTagId of messageTagIds) {
+        const foundTag = await findTagById(messageTagId)(db);
+        if (!foundTag) {
+          continue;
+        }
+        tags.push(foundTag);
+      }
+      messagesWithTags.push({...message, tags});
+    }
+
+    return messagesWithTags;
+  };
+
+export const createMessageWithTags =
+  (input: {message: Omit<Message, 'id'>; tags: Tag[]}) =>
+  async (db: SQLiteDatabase) => {
+    const createdMessage = await createMessage(input.message)(db);
+    await createMessagesTags(
+      input.tags.map(tag => ({tagId: tag.id, messageId: createdMessage.id})),
+    )(db);
+
+    return {...createdMessage, tags: input.tags};
+  };
+
+export const deleteMessageWithTagsById =
+  (input: {messageId: Message['id']; tags: Tag[]}) =>
+  async (db: SQLiteDatabase) => {
+    const deletedMessageId = await deleteMessageById(input.messageId)(db);
+    const deletedTagIds: Tag['id'][] = [];
+    for (const tag of input.tags) {
+      const foundMessagesTags = await findAllMessagesTagsByTagId(tag.id)(db);
+      if (foundMessagesTags.length > 0) {
+        continue;
+      }
+      const deletedTagId = await deleteTagById(tag.id)(db);
+      deletedTagIds.push(deletedTagId);
+    }
+
+    if (input.tags.length < 1) {
+      return {deletedMessageId, deletedTagIds};
+    }
+
+    await deleteMessagesTagsByMessageId(input.messageId)(db);
+    return {deletedMessageId, deletedTagIds};
+  };
