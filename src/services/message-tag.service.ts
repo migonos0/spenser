@@ -19,11 +19,12 @@ export const findAllMessagesTags = async (db: SQLiteDatabase) => {
   const results = await db.executeSql(
     `SELECT rowid as id, message_id as messageId, tag_id as tagId FROM ${MESSAGES_TAGS_TABLE_NAME}`,
   );
-  results.forEach(result => {
+  for (const result of results) {
     for (let index = 0; index < result.rows.length; index++) {
       messagesTags.push(result.rows.item(index));
     }
-  });
+  }
+
   return messagesTags;
 };
 
@@ -67,10 +68,34 @@ export const findAllMessagesTagsByMessageId =
     const results = await db.executeSql(
       `SELECT rowid as id, message_id as messageId, tag_id as tagId FROM ${MESSAGES_TAGS_TABLE_NAME} WHERE messageId = ${messageId}`,
     );
-    results.forEach(result => {
+    for (const result of results) {
       for (let index = 0; index < result.rows.length; index++) {
         messagesTags.push(result.rows.item(index));
       }
-    });
+    }
+    return messagesTags;
+  };
+
+export const deleteMessagesTagsByMessageId =
+  (messageId: number) => async (db: SQLiteDatabase) => {
+    const deleteQuery = `DELETE from ${MESSAGES_TAGS_TABLE_NAME} WHERE message_id = ${messageId}`;
+    const response = await db.executeSql(deleteQuery);
+    validateRowAffectation(response);
+
+    return messageId;
+  };
+
+export const findAllMessagesTagsByTagId =
+  (tagId: Tag['id']) => async (db: SQLiteDatabase) => {
+    const messagesTags: MessageTag[] = [];
+    const results = await db.executeSql(
+      `SELECT rowid as id, message_id as messageId, tag_id as tagId FROM ${MESSAGES_TAGS_TABLE_NAME} WHERE tag_id = ${tagId}`,
+    );
+
+    for (const result of results) {
+      for (let index = 0; index < result.rows.length; index++) {
+        messagesTags.push(result.rows.item(index));
+      }
+    }
     return messagesTags;
   };
