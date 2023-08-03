@@ -47,7 +47,10 @@ export const Appbar = (props: AppbarProps) => {
         />
         <PaperAppbar.Content
           titleStyle={{color: props.foregroundColor}}
-          title={(props.amountSummatory ?? '').toString() + ' $'}
+          title={new Intl.NumberFormat('en-us', {
+            style: 'currency',
+            currency: 'USD',
+          }).format(props.amountSummatory ?? 0)}
         />
 
         <PaperAppbar.Action
