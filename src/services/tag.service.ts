@@ -16,11 +16,11 @@ export const findAllTags = async (db: SQLiteDatabase) => {
   const results = await db.executeSql(
     `SELECT rowid as id, name FROM ${TAGS_TABLE_NAME}`,
   );
-  results.forEach(result => {
+  for (const result of results) {
     for (let index = 0; index < result.rows.length; index++) {
       tags.push(result.rows.item(index));
     }
-  });
+  }
   return tags;
 };
 
@@ -44,7 +44,7 @@ export const createTags =
     }));
   };
 
-export const deleteTag = (id: number) => async (db: SQLiteDatabase) => {
+export const deleteTagById = (id: number) => async (db: SQLiteDatabase) => {
   const deleteQuery = `DELETE from ${TAGS_TABLE_NAME} where rowid = ${id}`;
   const response = await db.executeSql(deleteQuery);
   validateRowAffectation(response);
@@ -56,4 +56,17 @@ export const dropTagsTable = async (db: SQLiteDatabase) => {
   const query = `DROP TABLE ${TAGS_TABLE_NAME}`;
 
   await db.executeSql(query);
+};
+
+export const findTagById = (tagId: Tag['id']) => async (db: SQLiteDatabase) => {
+  const tags: Tag[] = [];
+  const results = await db.executeSql(
+    `SELECT rowid as id, name FROM ${TAGS_TABLE_NAME} WHERE id = ${tagId}`,
+  );
+  for (const result of results) {
+    for (let index = 0; index < result.rows.length; index++) {
+      tags.push(result.rows.item(index));
+    }
+  }
+  return tags.shift();
 };
