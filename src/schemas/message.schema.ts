@@ -1,4 +1,5 @@
 import {TypeOf, boolean, number, object, string} from 'zod';
+import {Tag} from './tag.schema';
 
 export const MessageSchema = object({
   id: number(),
@@ -8,3 +9,4 @@ export const MessageSchema = object({
 });
 
 export type Message = TypeOf<typeof MessageSchema>;
+export type MessageWithTags = Message & {tags: Tag[]};
