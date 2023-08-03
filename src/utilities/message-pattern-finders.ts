@@ -2,6 +2,7 @@ import {
   EXPENSE_MESSAGE_PATTERNS,
   INCOME_MESSAGE_PATTERNS,
 } from '../constants/message-patterns';
+import {Message} from '../schemas/message.schema';
 
 export const validateExpense = (message: string) =>
   EXPENSE_MESSAGE_PATTERNS.some(pattern =>
@@ -9,7 +10,7 @@ export const validateExpense = (message: string) =>
   );
 
 export const findAmount = (message: string) =>
-  message.match(/([0-9]\d*(\.\d+)?)|(\.[0-9]\d*)/)?.find(match => match);
+  message.match(/(\d+(\.\d{1,2}))|(\.\d{1,2})|(\d+)/)?.find(match => match);
 
 export const findTags = (message: string) =>
   message.match(/#([A-z])\w*/g)?.map(tag => tag.replace('#', ''));
@@ -47,4 +48,21 @@ export const cleanPatterns = (message: string, patterns: string[]) => {
 
 export const cleanPattern = (message: string, pattern: string) => {
   return cleanPatterns(message, [pattern]);
+};
+
+export const getCreatableMessageFromString = (
+  message: string,
+  tagNames?: string[],
+): Omit<Message, 'id'> => {
+  const isExpense = validateExpense(message);
+  const stringifiedAmount = findAmount(message);
+  const description = cleanMessageDescription(
+    message,
+    isExpense,
+    stringifiedAmount,
+    tagNames,
+  );
+  const amount = Number(stringifiedAmount) * (isExpense ? -1 : 1);
+
+  return {amount, description, isExpense};
 };
