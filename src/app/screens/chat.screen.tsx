@@ -13,15 +13,13 @@ import {
   findTags,
   getCreatableMessageFromString,
 } from '../../utilities/message-pattern-finders';
-import {DEVELOPER_MENU_ITEMS} from '../../constants/menu-items';
-import {NODE_ENV} from '../../constants/environment';
 import {LOCALE} from '../../constants/locale';
 import {useCreateTags, useTags} from '../../state/tag.state';
 import {MessageWithTags} from '../../schemas/message.schema';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
-  const {messageAmountSummatory, increaseOrDecreaseMessageAmountSummatory} =
+  const {increaseOrDecreaseMessageAmountSummatory} =
     useMessageAmountSummatory();
   const {messagesWithTags} = useMessagesWithTags();
   const {tags} = useTags();
@@ -60,14 +58,6 @@ export const ChatScreen = () => {
 
   return (
     <ScreenLayout
-      appbar={{
-        avatarBackgroundColor: colors.primaryContainer,
-        foregroundColor: colors.inverseOnSurface,
-        backgroundColor: colors.primary,
-        developerMenuItems:
-          NODE_ENV === 'development' ? DEVELOPER_MENU_ITEMS : undefined,
-        amountSummatory: messageAmountSummatory,
-      }}
       footer={<ChatBox onSendButtonPress={onSendButtonPress} />}
       colors={colors}>
       <FlatList
