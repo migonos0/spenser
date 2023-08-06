@@ -139,3 +139,36 @@ export const deleteMessageWithTagsById =
     await deleteMessagesTagsByMessageId(input.messageId)(db);
     return {deletedMessageId, deletedTagIds};
   };
+
+export const findMessageById =
+  (messageId: Message['id']) => async (db: SQLiteDatabase) => {
+    const messages: Message[] = [];
+    const results = await db.executeSql(
+      `SELECT rowid as id, is_expense as isExpense, amount, description FROM ${MESSAGES_TABLE_NAME} WHERE id = ${messageId}`,
+    );
+    for (const result of results) {
+      for (let index = 0; index < result.rows.length; index++) {
+        messages.push(result.rows.item(index));
+      }
+    }
+    return messages.shift();
+  };
+
+export const findAllMessagesByTagId =
+  (tagId: Tag['id']) => async (db: SQLiteDatabase) => {
+    const messageIds = (await findAllMessagesTagsByTagId(tagId)(db)).map(
+      messageTag => messageTag.messageId,
+    );
+
+    const messages: Message[] = [];
+
+    for (const messageId of messageIds) {
+      const foundMessage = await findMessageById(messageId)(db);
+      if (!foundMessage) {
+        continue;
+      }
+      messages.push(foundMessage);
+    }
+
+    return messages;
+  };
