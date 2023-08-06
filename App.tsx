@@ -1,14 +1,17 @@
+import {NavigationContainer} from '@react-navigation/native';
 import {ReactNativePaperProvider} from './src/app/providers/react-native-paper.provider';
 import {SnackbarProvider} from './src/app/providers/snackbar.provider';
 import {SQLiteProvider} from './src/app/providers/sqlite.provider';
-import {ChatScreen} from './src/app/screens/chat.screen';
+import {StackNavigator} from './src/app/navigators/stack.navigator';
 
 function App(): JSX.Element {
   return (
     <SQLiteProvider>
       <ReactNativePaperProvider>
         <SnackbarProvider>
-          <ChatScreen />
+          <NavigationContainer>
+            <StackNavigator />
+          </NavigationContainer>
         </SnackbarProvider>
       </ReactNativePaperProvider>
     </SQLiteProvider>

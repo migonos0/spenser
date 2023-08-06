@@ -36,6 +36,18 @@ export const useSWRSQLite = <Data>(
   const key2 = areTablesCreated ? key : undefined;
   const fetcher2 = () => sqliteDatabase && fetcher(sqliteDatabase);
 
+  return useSWR(key2, fetcher2);
+};
+export const useSWRImmutableSQLite = <Data>(
+  key: Key,
+  fetcher: (sqliteDatabase: SQLiteDatabase) => Data | Promise<Data>,
+) => {
+  const sqliteDatabase = useSQLiteDatabase();
+  const areTablesCreated = useAreTablesCreated();
+
+  const key2 = areTablesCreated ? key : undefined;
+  const fetcher2 = () => sqliteDatabase && fetcher(sqliteDatabase);
+
   return useSWRImmutable(key2, fetcher2);
 };
 export const useSWRMutation = <Data, ExtraArg = never>(

@@ -13,21 +13,22 @@ import {
   findTags,
   getCreatableMessageFromString,
 } from '../../utilities/message-pattern-finders';
-import {DEVELOPER_MENU_ITEMS} from '../../constants/menu-items';
-import {NODE_ENV} from '../../constants/environment';
 import {LOCALE} from '../../constants/locale';
 import {useCreateTags, useTags} from '../../state/tag.state';
 import {MessageWithTags} from '../../schemas/message.schema';
+import {useLooseNavigation} from '../../hooks/use-loose-navigation';
+import {STACK_NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
-  const {messageAmountSummatory, increaseOrDecreaseMessageAmountSummatory} =
+  const {increaseOrDecreaseMessageAmountSummatory} =
     useMessageAmountSummatory();
   const {messagesWithTags} = useMessagesWithTags();
   const {tags} = useTags();
   const {createTagsTrigger} = useCreateTags();
   const {createMessageWithTagsTrigger} = useCreateMessageWithTags();
   const {deleteMessageWithTagsTrigger} = useDeleteMessageWithTags();
+  const {navigate} = useLooseNavigation();
 
   const onSendButtonPress = (message: string) => {
     const tagNames = findTags(message);
@@ -59,17 +60,7 @@ export const ChatScreen = () => {
   };
 
   return (
-    <ScreenLayout
-      appbar={{
-        avatarBackgroundColor: colors.primaryContainer,
-        foregroundColor: colors.inverseOnSurface,
-        backgroundColor: colors.primary,
-        developerMenuItems:
-          NODE_ENV === 'development' ? DEVELOPER_MENU_ITEMS : undefined,
-        amountSummatory: messageAmountSummatory,
-      }}
-      footer={<ChatBox onSendButtonPress={onSendButtonPress} />}
-      colors={colors}>
+    <ScreenLayout footer={<ChatBox onSendButtonPress={onSendButtonPress} />}>
       <FlatList
         inverted
         className="px-4"
@@ -94,7 +85,14 @@ export const ChatScreen = () => {
               (!message.isExpense ? '+' : '') + message.amount.toString()
             }
             body={message.description}
-            tags={message.tags.map(tag => ({label: tag.name}))}
+            tags={message.tags.map(tag => ({
+              label: tag.name,
+              onPress: () => {
+                navigate(STACK_NAVIGATOR_SCREEN_NAMES.MESSAGES_BY_TAG_ID, {
+                  tagId: tag.id,
+                });
+              },
+            }))}
           />
         )}
       />
