@@ -1,17 +1,13 @@
 import 'reflect-metadata';
 import {DataSource} from 'typeorm';
 import {User} from '../entities/User';
+import {typeORMDriver} from 'react-native-quick-sqlite';
 
 export const AppDataSource = new DataSource({
-  type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'test',
-  password: 'test',
-  database: 'test',
-  synchronize: true,
-  logging: false,
+  type: 'react-native',
+  database: 'typeormdb',
+  location: '.',
+  driver: typeORMDriver,
   entities: [User],
-  migrations: [],
-  subscribers: [],
+  synchronize: true,
 });
