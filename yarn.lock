@@ -3356,6 +3356,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-module-resolver@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "babel-plugin-module-resolver@npm:5.0.0"
+  dependencies:
+    find-babel-config: ^2.0.0
+    glob: ^8.0.3
+    pkg-up: ^3.1.0
+    reselect: ^4.1.7
+    resolve: ^1.22.1
+  checksum: d6880e49fc8e7bac509a2c183b4303ee054a47a80032a59a6f7844bb468ebe5e333b5dc5378443afdab5839e2da2b31a6c8d9a985a0047cd076b82bb9161cc78
+  languageName: node
+  linkType: hard
+
 "babel-plugin-polyfill-corejs2@npm:^0.4.3":
   version: 0.4.3
   resolution: "babel-plugin-polyfill-corejs2@npm:0.4.3"
@@ -5192,6 +5205,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"find-babel-config@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "find-babel-config@npm:2.0.0"
+  dependencies:
+    json5: ^2.1.1
+    path-exists: ^4.0.0
+  checksum: d110308b02fe6a6411a0cfb7fd50af6740fbf5093eada3d6ddacf99b07fc8eea4aa3475356484710a0032433029a21ce733bb3ef88fda1d6e35c29a3e4983014
+  languageName: node
+  linkType: hard
+
 "find-cache-dir@npm:^2.0.0":
   version: 2.1.0
   resolution: "find-cache-dir@npm:2.1.0"
@@ -5529,7 +5552,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^8.1.0":
+"glob@npm:^8.0.3, glob@npm:^8.1.0":
   version: 8.1.0
   resolution: "glob@npm:8.1.0"
   dependencies:
@@ -6044,6 +6067,15 @@ __metadata:
   dependencies:
     has: ^1.0.3
   checksum: f04ea30533b5e62764e7b2e049d3157dc0abd95ef44275b32489ea2081176ac9746ffb1cdb107445cf1ff0e0dfcad522726ca27c27ece64dadf3795428b8e468
+  languageName: node
+  linkType: hard
+
+"is-core-module@npm:^2.13.0":
+  version: 2.13.0
+  resolution: "is-core-module@npm:2.13.0"
+  dependencies:
+    has: ^1.0.3
+  checksum: 053ab101fb390bfeb2333360fd131387bed54e476b26860dc7f5a700bbf34a0ec4454f7c8c4d43e8a0030957e4b3db6e16d35e1890ea6fb654c833095e040355
   languageName: node
   linkType: hard
 
@@ -7062,7 +7094,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:^2.2.2":
+"json5@npm:^2.1.1, json5@npm:^2.2.2":
   version: 2.2.3
   resolution: "json5@npm:2.2.3"
   bin:
@@ -8767,6 +8799,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pkg-up@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "pkg-up@npm:3.1.0"
+  dependencies:
+    find-up: ^3.0.0
+  checksum: 5bac346b7c7c903613c057ae3ab722f320716199d753f4a7d053d38f2b5955460f3e6ab73b4762c62fd3e947f58e04f1343e92089e7bb6091c90877406fcd8c8
+  languageName: node
+  linkType: hard
+
 "posix-character-classes@npm:^0.1.0":
   version: 0.1.1
   resolution: "posix-character-classes@npm:0.1.1"
@@ -9449,6 +9490,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"reselect@npm:^4.1.7":
+  version: 4.1.8
+  resolution: "reselect@npm:4.1.8"
+  checksum: a4ac87cedab198769a29be92bc221c32da76cfdad6911eda67b4d3e7136dca86208c3b210e31632eae31ebd2cded18596f0dd230d3ccc9e978df22f233b5583e
+  languageName: node
+  linkType: hard
+
 "resolve-cwd@npm:^3.0.0":
   version: 3.0.0
   resolution: "resolve-cwd@npm:3.0.0"
@@ -9519,6 +9567,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"resolve@npm:^1.22.1":
+  version: 1.22.4
+  resolution: "resolve@npm:1.22.4"
+  dependencies:
+    is-core-module: ^2.13.0
+    path-parse: ^1.0.7
+    supports-preserve-symlinks-flag: ^1.0.0
+  bin:
+    resolve: bin/resolve
+  checksum: 23f25174c2736ce24c6d918910e0d1f89b6b38fefa07a995dff864acd7863d59a7f049e691f93b4b2ee29696303390d921552b6d1b841ed4a8101f517e1d0124
+  languageName: node
+  linkType: hard
+
 "resolve@npm:^2.0.0-next.4":
   version: 2.0.0-next.4
   resolution: "resolve@npm:2.0.0-next.4"
@@ -9555,6 +9616,19 @@ __metadata:
   bin:
     resolve: bin/resolve
   checksum: 66cc788f13b8398de18eb4abb3aed90435c84bb8935953feafcf7231ba4cd191b2c10b4a87b1e9681afc34fb138c705f91f7330ff90bfa36f457e5584076a2b8
+  languageName: node
+  linkType: hard
+
+"resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>":
+  version: 1.22.4
+  resolution: "resolve@patch:resolve@npm%3A1.22.4#~builtin<compat/resolve>::version=1.22.4&hash=c3c19d"
+  dependencies:
+    is-core-module: ^2.13.0
+    path-parse: ^1.0.7
+    supports-preserve-symlinks-flag: ^1.0.0
+  bin:
+    resolve: bin/resolve
+  checksum: c45f2545fdc4d21883861b032789e20aa67a2f2692f68da320cc84d5724cd02f2923766c5354b3210897e88f1a7b3d6d2c7c22faeead8eed7078e4c783a444bc
   languageName: node
   linkType: hard
 
@@ -10058,6 +10132,7 @@ __metadata:
     "@types/react-native-vector-icons": ^6.4.13
     "@types/react-test-renderer": ^18.0.0
     babel-jest: ^29.2.1
+    babel-plugin-module-resolver: ^5.0.0
     classnames: ^2.3.2
     eslint: ^8.19.0
     jest: ^29.2.1
