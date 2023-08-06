@@ -55,5 +55,8 @@
   "jest": {
     "preset": "react-native"
   },
-  "packageManager": "yarn@3.6.0"
+  "packageManager": "yarn@3.6.0",
+  "resolutions": {
+    "typeorm@^0.3.17": "patch:typeorm@npm%3A0.3.17#./.yarn/patches/typeorm-npm-0.3.17-f8c2578e7f.patch"
+  }
 }
