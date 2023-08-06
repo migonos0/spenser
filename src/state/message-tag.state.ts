@@ -1,5 +1,5 @@
 import {MESSAGES_TAGS_TABLE_NAME} from '../constants/db';
-import {useSWRSQLite, useSWRSQLiteMutation} from '../hooks/use-swr';
+import {useSWRImmutableSQLite, useSWRSQLiteMutation} from '../hooks/use-swr';
 import {MessageTag} from '../schemas/message-tag.schema';
 import {
   createMessagesTags,
@@ -7,7 +7,10 @@ import {
 } from '../services/message-tag.service';
 
 export const useMessagesTags = () => {
-  const {data} = useSWRSQLite(MESSAGES_TAGS_TABLE_NAME, findAllMessagesTags);
+  const {data} = useSWRImmutableSQLite(
+    MESSAGES_TAGS_TABLE_NAME,
+    findAllMessagesTags,
+  );
 
   return {messagesTags: data};
 };
