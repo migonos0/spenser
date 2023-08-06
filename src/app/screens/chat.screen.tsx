@@ -16,6 +16,8 @@ import {
 import {LOCALE} from '../../constants/locale';
 import {useCreateTags, useTags} from '../../state/tag.state';
 import {MessageWithTags} from '../../schemas/message.schema';
+import {useLooseNavigation} from '../../hooks/use-loose-navigation';
+import {STACK_NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
@@ -26,6 +28,7 @@ export const ChatScreen = () => {
   const {createTagsTrigger} = useCreateTags();
   const {createMessageWithTagsTrigger} = useCreateMessageWithTags();
   const {deleteMessageWithTagsTrigger} = useDeleteMessageWithTags();
+  const {navigate} = useLooseNavigation();
 
   const onSendButtonPress = (message: string) => {
     const tagNames = findTags(message);
@@ -57,9 +60,7 @@ export const ChatScreen = () => {
   };
 
   return (
-    <ScreenLayout
-      footer={<ChatBox onSendButtonPress={onSendButtonPress} />}
-      colors={colors}>
+    <ScreenLayout footer={<ChatBox onSendButtonPress={onSendButtonPress} />}>
       <FlatList
         inverted
         className="px-4"
@@ -84,7 +85,14 @@ export const ChatScreen = () => {
               (!message.isExpense ? '+' : '') + message.amount.toString()
             }
             body={message.description}
-            tags={message.tags.map(tag => ({label: tag.name}))}
+            tags={message.tags.map(tag => ({
+              label: tag.name,
+              onPress: () => {
+                navigate(STACK_NAVIGATOR_SCREEN_NAMES.MESSAGES_BY_TAG_ID, {
+                  tagId: tag.id,
+                });
+              },
+            }))}
           />
         )}
       />
