@@ -70,3 +70,7 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Added by `typeorm init`
+tmp/
+temp/
