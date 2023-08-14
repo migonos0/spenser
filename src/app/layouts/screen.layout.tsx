@@ -2,12 +2,10 @@ import classNames from 'classnames';
 import {ReactNode} from 'react';
 import {Surface} from 'react-native-paper';
 import {View} from 'react-native';
-import {Colors} from '../../types/colors';
 
 interface ScreenLayoutProps {
   children?: ReactNode;
   twClass?: string;
-  colors: Colors;
   footer?: ReactNode;
 }
 
