@@ -1,20 +1,21 @@
 import {useCallback} from 'react';
+import {useSWRConfig} from 'swr';
+
+import {
+  MESSAGES_KEY,
+  MESSAGE_AMOUNT_SUMMATORY_KEY,
+} from '../constants/swr-keys';
+import {Message} from '../entities/message';
+import {
+  useSWRDataSourceMutation,
+  useSWRImmutableDataSource,
+} from '../hooks/use-swr';
 import {
   createMessage,
   deleteMessageById,
   findAllMessages,
   findMessageAmountSummatory,
 } from '../services/message.service';
-import {
-  MESSAGES_KEY,
-  MESSAGE_AMOUNT_SUMMATORY_KEY,
-} from '../constants/swr-keys';
-import {useSWRConfig} from 'swr';
-import {
-  useSWRDataSourceMutation,
-  useSWRImmutableDataSource,
-} from '../hooks/use-swr';
-import {Message} from '../entities/message';
 
 export const useMessageAmountSummatory = () => {
   const {data, mutate} = useSWRImmutableDataSource(
@@ -24,7 +25,9 @@ export const useMessageAmountSummatory = () => {
 
   const increaseOrDecreaseMessageAmountSummatory = useCallback(
     (number: number) => {
-      mutate(state => (state ?? 0) + number, {revalidate: false});
+      mutate((state: number | undefined) => (state ?? 0) + number, {
+        revalidate: false,
+      });
     },
     [mutate],
   );
@@ -56,7 +59,7 @@ export const useCreateMessage = (params?: {ascendant?: boolean}) => {
       /**
        * Adding created message to MessagesByTag state
        */
-      for (const tag of result.tags) {
+      for (const tag of result.tags ?? []) {
         mutate([MESSAGES_KEY, tag.id], (messages: Message[] | undefined) => {
           return [...(messages ?? []), ...[result]];
         });

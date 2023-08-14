@@ -1,19 +1,16 @@
-module.exports = {
-  presets: ['module:metro-react-native-babel-preset'],
-  plugins: [
-    'nativewind/babel',
-    [
-      'module-resolver',
-      {
-        alias: {
-          'react-native-sqlite-storage': 'react-native-quick-sqlite',
-        },
-      },
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    plugins: [
+      'nativewind/babel',
+      'babel-plugin-transform-typescript-metadata',
+      ['@babel/plugin-proposal-decorators', {legacy: true}],
     ],
-  ],
-  env: {
-    production: {
-      plugins: ['react-native-paper/babel'],
+    presets: ['babel-preset-expo'],
+    env: {
+      production: {
+        plugins: ['react-native-paper/babel'],
+      },
     },
-  },
+  };
 };

@@ -1,5 +1,6 @@
-import {number} from 'zod';
 import {DataSource} from 'typeorm';
+import {number} from 'zod';
+
 import {Message} from '../entities/message';
 
 export const findAllMessages =

@@ -1,4 +1,5 @@
 import {DataSource} from 'typeorm';
+
 import {Tag} from '../entities/tag';
 
 export const findAllTags = async (dataSource: DataSource) =>
@@ -20,4 +21,9 @@ export const findTagById =
 
 export const findMessagesByTagId =
   (tagId: Tag['id']) => async (dataSource: DataSource) =>
-    (await dataSource.manager.findOneBy(Tag, {id: tagId}))?.messages;
+    (
+      await dataSource.manager.findOne(Tag, {
+        where: {id: tagId},
+        relations: {messages: true},
+      })
+    )?.messages;

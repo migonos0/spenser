@@ -1,11 +1,12 @@
-import swrImmutableHook from 'swr/immutable';
+import {useEffect} from 'react';
 import swrHook, {BareFetcher, Key, SWRConfiguration, useSWRConfig} from 'swr';
+import swrImmutableHook from 'swr/immutable';
 import swrMutationHook, {
   MutationFetcher,
   SWRMutationConfiguration,
 } from 'swr/mutation';
-import {useEffect} from 'react';
 import {DataSource} from 'typeorm';
+
 import {useDataSource} from '../state/data-source.state';
 
 export const useSWRImmutable = <Data>(

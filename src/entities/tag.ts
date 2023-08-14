@@ -1,4 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToMany} from 'typeorm';
+
 import {Message} from './message';
 
 @Entity()

@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+import {useState} from 'react';
 import {
   Avatar,
   Dialog,
@@ -5,10 +7,9 @@ import {
   Appbar as PaperAppbar,
   Portal,
 } from 'react-native-paper';
-import {themeStoreActions} from '../../stores/theme.store';
-import classNames from 'classnames';
-import {useState} from 'react';
+
 import {NODE_ENV} from '../../constants/environment';
+import {themeStoreActions} from '../../stores/theme.store';
 
 export interface MenuItem {
   label: string;

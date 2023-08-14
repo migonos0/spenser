@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import {ReactNode} from 'react';
-import {Surface} from 'react-native-paper';
 import {View} from 'react-native';
+import {Surface} from 'react-native-paper';
 
 interface ScreenLayoutProps {
   children?: ReactNode;

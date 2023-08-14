@@ -1,13 +1,14 @@
 import 'reflect-metadata';
 import {DataSource} from 'typeorm';
-import {User} from '../entities/User';
-import {typeORMDriver} from 'react-native-quick-sqlite';
 
-export const AppDataSource = new DataSource({
-  type: 'react-native',
-  database: 'typeormdb',
-  location: '.',
-  driver: typeORMDriver,
-  entities: [User],
+import {DB_NAME} from '../constants/db';
+import {Message} from '../entities/message';
+import {Tag} from '../entities/tag';
+
+export const dataSource = new DataSource({
+  type: 'expo',
+  database: DB_NAME,
+  entities: [Message, Tag],
   synchronize: true,
+  driver: require('expo-sqlite'),
 });

@@ -1,9 +1,9 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
-    "types": ["node"],
-    "emitDecoratorMetadata": true,
+    "strict": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false
-  }
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true
+  },
+  "extends": "expo/tsconfig.base"
 }

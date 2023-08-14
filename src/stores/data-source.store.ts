@@ -9,6 +9,6 @@ export const useDataSourceStore = create<DataSourceState>(() => ({}));
 
 export const dataSourceStoreActions = {
   setDataSource(dataSource?: DataSource) {
-    useDataSourceStore.setState({dataSource: dataSource});
+    useDataSourceStore.setState({dataSource});
   },
 };

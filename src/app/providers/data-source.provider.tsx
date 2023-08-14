@@ -1,6 +1,7 @@
 import {ReactNode, useEffect} from 'react';
-import {dataSource} from '../../utilities/data-source';
+
 import {dataSourceStoreActions} from '../../stores/data-source.store';
+import {dataSource} from '../../utilities/data-source';
 
 interface DataSourceProviderProps {
   children?: ReactNode;
