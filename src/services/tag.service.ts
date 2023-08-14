@@ -27,3 +27,16 @@ export const findMessagesByTagId =
         relations: {messages: true},
       })
     )?.messages;
+
+export const createTag = (tag: Tag) => async (dataSource: DataSource) =>
+  await dataSource.manager.save(tag);
+
+export const createTags = (tags: Tag[]) => async (dataSource: DataSource) => {
+  const createdTags: Tag[] = [];
+
+  for (const tag of tags) {
+    createdTags.push(await createTag(tag));
+  }
+
+  return createdTags;
+};
