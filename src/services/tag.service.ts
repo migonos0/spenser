@@ -35,7 +35,7 @@ export const createTags = (tags: Tag[]) => async (dataSource: DataSource) => {
   const createdTags: Tag[] = [];
 
   for (const tag of tags) {
-    createdTags.push(await createTag(tag));
+    createdTags.push(await createTag(tag)(dataSource));
   }
 
   return createdTags;
