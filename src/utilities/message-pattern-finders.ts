@@ -2,7 +2,7 @@ import {
   EXPENSE_MESSAGE_PATTERNS,
   INCOME_MESSAGE_PATTERNS,
 } from '../constants/message-patterns';
-import {Message} from '../schemas/message.schema';
+import {Message} from '../entities/message';
 
 export const validateExpense = (message: string) =>
   EXPENSE_MESSAGE_PATTERNS.some(pattern =>
@@ -53,7 +53,7 @@ export const cleanPattern = (message: string, pattern: string) => {
 export const getCreatableMessageFromString = (
   message: string,
   tagNames?: string[],
-): Omit<Message, 'id'> => {
+): Omit<Message, 'id' | 'tags'> => {
   const isExpense = validateExpense(message);
   const stringifiedAmount = findAmount(message);
   const description = cleanMessageDescription(
