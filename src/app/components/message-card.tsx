@@ -41,7 +41,7 @@ export const MessageCard = (props: MessageCardProps) => {
       style: StyleProp<TextStyle>;
     },
     iconName?: string,
-  ) => iconName && <></>;
+  ) => iconName && <List.Icon {...props2} icon={iconName} />;
 
   return (
     <>
@@ -85,7 +85,10 @@ export const MessageCard = (props: MessageCardProps) => {
               {props.longPressDialogItems.map((item, index) => (
                 <List.Item
                   key={index}
-                  onPress={item.onPress}
+                  onPress={() => {
+                    item.onPress();
+                    onMessageCardLongPressDialogDismiss();
+                  }}
                   title={item.title}
                   left={props2 =>
                     longPressMessageIconItemRenderer(props2, item.iconName)
