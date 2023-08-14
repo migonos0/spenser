@@ -1,12 +1,5 @@
-import {TypeOf, boolean, number, object, string} from 'zod';
-import {Tag} from './tag.schema';
+import {object, string} from 'zod';
 
 export const MessageSchema = object({
-  id: number(),
-  isExpense: boolean(),
-  amount: number(),
-  description: string(),
+  message: string({required_error: 'Please provide a valid message.'}),
 });
-
-export type Message = TypeOf<typeof MessageSchema>;
-export type MessageWithTags = Message & {tags: Tag[]};
