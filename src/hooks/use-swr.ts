@@ -1,12 +1,12 @@
 import swrImmutableHook from 'swr/immutable';
 import swrHook, {BareFetcher, Key, SWRConfiguration, useSWRConfig} from 'swr';
-import {SQLiteDatabase} from 'react-native-sqlite-storage';
-import {useAreTablesCreated, useSQLiteDatabase} from '../state/sqlite.state';
 import swrMutationHook, {
   MutationFetcher,
   SWRMutationConfiguration,
 } from 'swr/mutation';
 import {useEffect} from 'react';
+import {DataSource} from 'typeorm';
+import {useDataSource} from '../state/data-source.state';
 
 export const useSWRImmutable = <Data>(
   key: Key,
@@ -17,6 +17,7 @@ export const useSWRImmutable = <Data>(
   result.error && console.error(result.error);
   return result;
 };
+
 export const useSWR = <Data>(
   key: Key,
   fetcher: BareFetcher<Data>,
@@ -26,30 +27,7 @@ export const useSWR = <Data>(
   result.error && console.error(result.error);
   return result;
 };
-export const useSWRSQLite = <Data>(
-  key: Key,
-  fetcher: (sqliteDatabase: SQLiteDatabase) => Data | Promise<Data>,
-) => {
-  const sqliteDatabase = useSQLiteDatabase();
-  const areTablesCreated = useAreTablesCreated();
 
-  const key2 = areTablesCreated ? key : undefined;
-  const fetcher2 = () => sqliteDatabase && fetcher(sqliteDatabase);
-
-  return useSWR(key2, fetcher2);
-};
-export const useSWRImmutableSQLite = <Data>(
-  key: Key,
-  fetcher: (sqliteDatabase: SQLiteDatabase) => Data | Promise<Data>,
-) => {
-  const sqliteDatabase = useSQLiteDatabase();
-  const areTablesCreated = useAreTablesCreated();
-
-  const key2 = areTablesCreated ? key : undefined;
-  const fetcher2 = () => sqliteDatabase && fetcher(sqliteDatabase);
-
-  return useSWRImmutable(key2, fetcher2);
-};
 export const useSWRMutation = <Data, ExtraArg = never>(
   key: Key,
   fetcher: MutationFetcher<Data, Key, ExtraArg>,
@@ -59,21 +37,45 @@ export const useSWRMutation = <Data, ExtraArg = never>(
   result.error && console.error(result.error);
   return result;
 };
-export const useSWRSQLiteMutation = <T, U, V = any>(
+
+export const useSWRDataSource = <Data>(
   key: Key,
-  fetcher: (input: T) => (sqliteDatabase: SQLiteDatabase) => U | Promise<U>,
+  fetcher: (dataSource: DataSource) => Data | Promise<Data>,
+) => {
+  const dataSource = useDataSource();
+
+  const key2 = dataSource ? key : undefined;
+  const fetcher2 = () => dataSource && fetcher(dataSource);
+
+  return useSWR(key2, fetcher2);
+};
+
+export const useSWRImmutableDataSource = <Data>(
+  key: Key,
+  fetcher: (dataSource: DataSource) => Data | Promise<Data>,
+) => {
+  const dataSource = useDataSource();
+
+  const key2 = dataSource ? key : undefined;
+  const fetcher2 = () => dataSource && fetcher(dataSource);
+
+  return useSWRImmutable(key2, fetcher2);
+};
+
+export const useSWRDataSourceMutation = <T, U, V = any>(
+  key: Key,
+  fetcher: (input: T) => (dataSource: DataSource) => U | Promise<U>,
   populateCache?: (result: U | undefined, currentData: V) => V,
 ) => {
-  const sqliteDatabase = useSQLiteDatabase();
-  const areTablesCreated = useAreTablesCreated();
+  const dataSource = useDataSource();
   const {mutate} = useSWRConfig();
 
-  const key2 = areTablesCreated ? key : undefined;
+  const key2 = dataSource ? key : undefined;
   const fetcher2 = async (_: unknown, {arg}: {arg: T}) => {
-    if (!sqliteDatabase) {
+    if (!dataSource) {
       return;
     }
-    return await fetcher(arg)(sqliteDatabase);
+    return await fetcher(arg)(dataSource);
   };
 
   const result = useSWRMutation(key2, fetcher2, {
