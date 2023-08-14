@@ -26,7 +26,7 @@ export const deleteMessageById =
       return;
     }
 
-    return await dataSource.manager.remove(foundMessage);
+    return {...(await dataSource.manager.remove(foundMessage)), id: messageId};
   };
 
 export const findMessageAmountSummatory = async (dataSource: DataSource) => {
