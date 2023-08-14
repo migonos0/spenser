@@ -12,7 +12,7 @@ import {
   useCreateMessage,
   useDeleteMessage,
 } from '../../state/message.state';
-import {useTags} from '../../state/tag.state';
+import {useCreateTags, useTags} from '../../state/tag.state';
 import {
   findTags,
   getCreatableMessageFromString,
@@ -30,28 +30,33 @@ export const ChatScreen = () => {
   const {createMessageTrigger} = useCreateMessage();
   const {deleteMessageTrigger} = useDeleteMessage();
   const {navigate} = useLooseNavigation();
+  const {createTagsTrigger} = useCreateTags();
 
   const onSendButtonPress = (message: string) => {
     const tagNames = findTags(message);
-    const creatableMessage = getCreatableMessageFromString(message, tagNames);
-
     const alreadyCreatedTags = tags?.filter(
       tag => tagNames?.includes(tag.name),
     );
-    const newTags = tagNames
+    const creatableTags = tagNames
       ?.filter(tagName => !tags?.map(tag => tag.name).includes(tagName))
       .map(tagName => new Tag(tagName));
-
-    createMessageTrigger(
-      new Message(
-        creatableMessage.isExpense,
-        creatableMessage.amount,
-        creatableMessage.description,
-        [...(alreadyCreatedTags ?? []), ...(newTags ?? [])],
-      ),
-    );
-
-    increaseOrDecreaseMessageAmountSummatory(creatableMessage.amount);
+    createTagsTrigger(creatableTags ?? [], {
+      onSuccess(createdTags) {
+        const creatableMessage = getCreatableMessageFromString(
+          message,
+          tagNames,
+        );
+        createMessageTrigger(
+          new Message(
+            creatableMessage.isExpense,
+            creatableMessage.amount,
+            creatableMessage.description,
+            [...(alreadyCreatedTags ?? []), ...(createdTags ?? [])],
+          ),
+        );
+        increaseOrDecreaseMessageAmountSummatory(creatableMessage.amount);
+      },
+    });
   };
 
   const getOnDeletePressHandler = (message: Message) => () => {
