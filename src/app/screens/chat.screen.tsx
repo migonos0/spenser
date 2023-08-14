@@ -2,9 +2,9 @@ import {ScreenLayout} from '../layouts/screen.layout';
 import {useAppTheme} from '../../hooks/use-app-theme';
 import {
   useMessageAmountSummatory,
-  useMessagesWithTags,
-  useCreateMessageWithTags,
-  useDeleteMessageWithTags,
+  useMessages,
+  useCreateMessage,
+  useDeleteMessage,
 } from '../../state/message.state';
 import {ChatBox} from '../components/chat-box';
 import {FlatList} from 'react-native';
@@ -14,49 +14,46 @@ import {
   getCreatableMessageFromString,
 } from '../../utilities/message-pattern-finders';
 import {LOCALE} from '../../constants/locale';
-import {useCreateTags, useTags} from '../../state/tag.state';
-import {MessageWithTags} from '../../schemas/message.schema';
+import {useTags} from '../../state/tag.state';
 import {useLooseNavigation} from '../../hooks/use-loose-navigation';
 import {STACK_NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
+import {Tag} from '../../entities/tag';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
   const {increaseOrDecreaseMessageAmountSummatory} =
     useMessageAmountSummatory();
-  const {messagesWithTags} = useMessagesWithTags();
+  const {messages: messagesWithTags} = useMessages();
   const {tags} = useTags();
-  const {createTagsTrigger} = useCreateTags();
-  const {createMessageWithTagsTrigger} = useCreateMessageWithTags();
-  const {deleteMessageWithTagsTrigger} = useDeleteMessageWithTags();
+  const {createMessageTrigger} = useCreateMessage();
+  const {deleteMessageTrigger} = useDeleteMessage();
   const {navigate} = useLooseNavigation();
 
   const onSendButtonPress = (message: string) => {
     const tagNames = findTags(message);
     const creatableMessage = getCreatableMessageFromString(message, tagNames);
 
-    const newTagNames = tagNames?.filter(
-      tagName => !tags?.map(tag => tag.name).includes(tagName),
+    const alreadyCreatedTags = tags?.filter(tag =>
+      tagNames?.includes(tag.name),
     );
-    createTagsTrigger(newTagNames ?? [], {
-      onSuccess(createdTags) {
-        const alreadyCreatedTags = tags?.filter(tag =>
-          tagNames?.includes(tag.name),
-        );
-        createMessageWithTagsTrigger({
-          message: creatableMessage,
-          tags: [...(alreadyCreatedTags ?? []), ...(createdTags ?? [])],
-        });
-      },
+    const newTags = tagNames
+      ?.filter(tagName => !tags?.map(tag => tag.name).includes(tagName))
+      .map(tagName => new Tag(tagName));
+
+    createMessageTrigger({
+      ...creatableMessage,
+      tags: [...(alreadyCreatedTags ?? []), ...(newTags ?? [])],
     });
+
     increaseOrDecreaseMessageAmountSummatory(creatableMessage.amount);
   };
 
   const getOnDeletePressHandler = (message: MessageWithTags) => () => {
-    increaseOrDecreaseMessageAmountSummatory(message.amount * -1);
-    deleteMessageWithTagsTrigger({
-      messageId: message.id,
-      tags: message.tags,
-    });
+    // increaseOrDecreaseMessageAmountSummatory(message.amount * -1);
+    // deleteMessageWithTagsTrigger({
+    //   messageId: message.id,
+    //   tags: message.tags,
+    // });
   };
 
   return (
@@ -65,7 +62,7 @@ export const ChatScreen = () => {
         inverted
         className="px-4"
         data={messagesWithTags}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(_, index) => index.toString()}
         renderItem={({item: message}) => (
           <MessageCard
             longPressDialogItems={[
@@ -89,7 +86,7 @@ export const ChatScreen = () => {
               label: tag.name,
               onPress: () => {
                 navigate(STACK_NAVIGATOR_SCREEN_NAMES.MESSAGES_BY_TAG_ID, {
-                  tagId: tag.id,
+                  tagId: tag.id ?? -1,
                 });
               },
             }))}
