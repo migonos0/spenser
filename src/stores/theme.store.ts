@@ -1,7 +1,8 @@
-import {persist} from 'zustand/middleware';
-import {zustandPersistentStorage} from '../lib/zustand';
-import {create} from 'zustand';
 import {Appearance} from 'react-native';
+import {create} from 'zustand';
+import {persist} from 'zustand/middleware';
+
+import {zustandPersistentStorage} from '../utilities/zustand-persistent-storage';
 
 interface ThemeState {
   isDarkMode: boolean;

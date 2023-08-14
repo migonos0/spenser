@@ -1,4 +1,5 @@
 import {DependencyList, EffectCallback, useEffect} from 'react';
+
 import {useIsFirstRender} from './use-is-first-render';
 /**
  * From https://usehooks-ts.com/react-hook/use-update-effect

@@ -1,30 +1,33 @@
 import {useCallback} from 'react';
-import {MESSAGES_TABLE_NAME, TAGS_TABLE_NAME} from '../constants/db';
-import {useSWRImmutableSQLite, useSWRSQLiteMutation} from '../hooks/use-swr';
+import {useSWRConfig} from 'swr';
+
 import {
-  createMessageWithTags,
-  deleteMessageWithTagsById,
-  findAllMessagesByTagId,
-  findAllMessagesWithTags,
-  findMessageAmountSummatory,
-} from '../services/message.service';
-import {
-  MESSAGES_WITH_TAGS_KEY,
+  MESSAGES_KEY,
   MESSAGE_AMOUNT_SUMMATORY_KEY,
 } from '../constants/swr-keys';
-import {Message, MessageWithTags} from '../schemas/message.schema';
-import {useSWRConfig} from 'swr';
-import {Tag} from '../schemas/tag.schema';
+import {Message} from '../entities/message';
+import {
+  useSWRDataSourceMutation,
+  useSWRImmutableDataSource,
+} from '../hooks/use-swr';
+import {
+  createMessage,
+  deleteMessageById,
+  findAllMessages,
+  findMessageAmountSummatory,
+} from '../services/message.service';
 
 export const useMessageAmountSummatory = () => {
-  const {data, mutate} = useSWRImmutableSQLite(
+  const {data, mutate} = useSWRImmutableDataSource(
     MESSAGE_AMOUNT_SUMMATORY_KEY,
     findMessageAmountSummatory,
   );
 
   const increaseOrDecreaseMessageAmountSummatory = useCallback(
     (number: number) => {
-      mutate(state => (state ?? 0) + number, {revalidate: false});
+      mutate((state: number | undefined) => (state ?? 0) + number, {
+        revalidate: false,
+      });
     },
     [mutate],
   );
@@ -35,33 +38,31 @@ export const useMessageAmountSummatory = () => {
   };
 };
 
-export const useMessagesWithTags = (params?: {ascendant?: boolean}) => {
-  const fetcher = findAllMessagesWithTags({ascendant: params?.ascendant});
+export const useMessages = (params?: {ascendant?: boolean}) => {
+  const fetcher = findAllMessages({ascendant: params?.ascendant});
 
-  const {data} = useSWRImmutableSQLite(MESSAGES_WITH_TAGS_KEY, fetcher);
+  const {data} = useSWRImmutableDataSource(MESSAGES_KEY, fetcher);
 
-  return {messagesWithTags: data};
+  return {messages: data};
 };
 
-export const useCreateMessageWithTags = (params?: {ascendant?: boolean}) => {
+export const useCreateMessage = (params?: {ascendant?: boolean}) => {
   const {mutate} = useSWRConfig();
-  const {trigger} = useSWRSQLiteMutation(
-    MESSAGES_WITH_TAGS_KEY,
-    createMessageWithTags,
-    (result, currentData: MessageWithTags[] | undefined) => {
+  const {trigger} = useSWRDataSourceMutation(
+    MESSAGES_KEY,
+    createMessage,
+    (result, currentData: Message[] | undefined) => {
       if (!result) {
         return currentData;
       }
+
       /**
        * Adding created message to MessagesByTag state
        */
-      for (const tag of result.tags) {
-        mutate(
-          [MESSAGES_TABLE_NAME, tag.id],
-          (messages: Message[] | undefined) => {
-            return [...(messages ?? []), ...[{...result, tags: undefined}]];
-          },
-        );
+      for (const tag of result.tags ?? []) {
+        mutate([MESSAGES_KEY, tag.id], (messages: Message[] | undefined) => {
+          return [...(messages ?? []), ...[result]];
+        });
       }
 
       return params?.ascendant
@@ -70,41 +71,21 @@ export const useCreateMessageWithTags = (params?: {ascendant?: boolean}) => {
     },
   );
 
-  return {createMessageWithTagsTrigger: trigger};
+  return {createMessageTrigger: trigger};
 };
 
-export const useDeleteMessageWithTags = () => {
-  const {mutate} = useSWRConfig();
-
-  const {trigger} = useSWRSQLiteMutation(
-    MESSAGES_WITH_TAGS_KEY,
-    deleteMessageWithTagsById,
-    (result, currentData: MessageWithTags[] | undefined) => {
-      if (!result) {
+export const useDeleteMessage = () => {
+  const {trigger} = useSWRDataSourceMutation(
+    MESSAGES_KEY,
+    deleteMessageById,
+    (deletedMessage, currentData: Message[] | undefined) => {
+      if (!deletedMessage) {
         return currentData;
       }
 
-      /**
-       * Mutating tags
-       */
-      mutate(TAGS_TABLE_NAME, (tags: Tag[] | undefined) =>
-        tags?.filter(tag => !result.deletedTagIds.includes(tag.id)),
-      );
-
-      return currentData?.filter(
-        messageWithTags => messageWithTags.id !== result.deletedMessageId,
-      );
+      return currentData?.filter(message => message.id !== deletedMessage.id);
     },
   );
 
-  return {deleteMessageWithTagsTrigger: trigger};
-};
-
-export const useMessagesByTagId = (tagId?: Tag['id']) => {
-  const key = tagId ? [MESSAGES_TABLE_NAME, tagId] : undefined;
-  const fetcher = tagId ? findAllMessagesByTagId(tagId) : () => undefined;
-
-  const {data} = useSWRImmutableSQLite(key, fetcher);
-
-  return {messages: data};
+  return {deleteMessageTrigger: trigger};
 };

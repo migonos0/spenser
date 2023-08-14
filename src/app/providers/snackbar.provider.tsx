@@ -1,8 +1,9 @@
+import classNames from 'classnames';
 import {ReactNode, useMemo} from 'react';
 import {Snackbar} from 'react-native-paper';
-import {useSnackbarState} from '../../state/snackbar.state';
+
 import {useAppTheme} from '../../hooks/use-app-theme';
-import classNames from 'classnames';
+import {useSnackbarState} from '../../state/snackbar.state';
 import {snackbarStoreActions} from '../../stores/snackbar.store';
 
 interface SnackbarProviderProps {
@@ -30,7 +31,7 @@ export const SnackbarProvider = (props: SnackbarProviderProps) => {
       {props.children}
       <Snackbar
         className={classNames({'border-t-4': borderTopColor})}
-        style={{borderTopColor: borderTopColor}}
+        style={{borderTopColor}}
         visible={isVisible}
         onDismiss={snackbarStoreActions.hideSnackbar}>
         {message}

@@ -1,7 +1,8 @@
 import classNames from 'classnames';
+import {useState} from 'react';
 import {View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
-import {useState} from 'react';
+
 import {LOCALE} from '../../constants/locale';
 
 interface ChatBoxProps {
@@ -29,7 +30,7 @@ export const ChatBox = (props: ChatBoxProps) => {
             props.onSendButtonPress && props.onSendButtonPress(text);
             !props.avoidCleaningAfterSent && setText('');
           }}
-          icon={'send'}
+          icon="send"
           mode="contained">
           {LOCALE.common.send}
         </Button>

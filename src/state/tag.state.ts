@@ -1,23 +1,39 @@
-import {TAGS_TABLE_NAME} from '../constants/db';
-import {useSWRImmutableSQLite, useSWRSQLiteMutation} from '../hooks/use-swr';
-import {Tag} from '../schemas/tag.schema';
-import {createTags, findAllTags} from '../services/tag.service';
+import {MESSAGES_KEY, TAGS_KEY} from '../constants/swr-keys';
+import {Tag} from '../entities/tag';
+import {
+  useSWRDataSourceMutation,
+  useSWRImmutableDataSource,
+} from '../hooks/use-swr';
+import {
+  createTags,
+  findAllTags,
+  findMessagesByTagId,
+} from '../services/tag.service';
 
 export const useTags = () => {
-  const {data} = useSWRImmutableSQLite(TAGS_TABLE_NAME, findAllTags);
+  const {data} = useSWRImmutableDataSource(TAGS_KEY, findAllTags);
 
   return {tags: data};
 };
 
+export const useMessagesByTagId = (tagId?: Tag['id']) => {
+  const key = tagId ? [MESSAGES_KEY, tagId] : undefined;
+  const fetcher = tagId ? findMessagesByTagId(tagId) : () => undefined;
+
+  const {data} = useSWRImmutableDataSource(key, fetcher);
+
+  return {messages: data};
+};
+
 export const useCreateTags = () => {
-  const {trigger} = useSWRSQLiteMutation(
-    TAGS_TABLE_NAME,
+  const {trigger} = useSWRDataSourceMutation(
+    TAGS_KEY,
     createTags,
-    (result, currentData: Tag[] | undefined) => {
-      if (!result) {
+    (createdTags, currentData: Tag[] | undefined) => {
+      if (!createdTags) {
         return currentData;
       }
-      return [...(currentData ?? []), ...result];
+      return [...(currentData ?? []), ...createdTags];
     },
   );
 

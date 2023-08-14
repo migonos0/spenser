@@ -1,9 +1,8 @@
 import classNames from 'classnames';
+import {impactAsync} from 'expo-haptics';
+import {useCallback, useState} from 'react';
 import {StyleProp, TextStyle, View} from 'react-native';
 import {Card, Chip, Dialog, List, Portal, Text} from 'react-native-paper';
-import {trigger} from 'react-native-haptic-feedback';
-import {useCallback, useState} from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface MessageCardProps {
   cardTitle?: string;
@@ -29,7 +28,7 @@ export const MessageCard = (props: MessageCardProps) => {
     if (!props.longPressDialogItems) {
       return;
     }
-    trigger('impactLight');
+    impactAsync();
     setIsMessageCardLongPressDialogVisible(true);
   }, [props.longPressDialogItems]);
   const onMessageCardLongPressDialogDismiss = useCallback(() => {
@@ -42,7 +41,7 @@ export const MessageCard = (props: MessageCardProps) => {
       style: StyleProp<TextStyle>;
     },
     iconName?: string,
-  ) => iconName && <Icon size={24} name={iconName} {...props2} />;
+  ) => iconName && <List.Icon {...props2} icon={iconName} />;
 
   return (
     <>
@@ -68,7 +67,7 @@ export const MessageCard = (props: MessageCardProps) => {
             {props.tags && (
               <Card.Content className="flex flex-row flow flex-wrap gap-1 mt-1">
                 {props.tags.map((tag, index) => (
-                  <Chip icon={'pound'} key={index} onPress={tag.onPress}>
+                  <Chip icon="pound" key={index} onPress={tag.onPress}>
                     {tag.label}
                   </Chip>
                 ))}
@@ -86,7 +85,10 @@ export const MessageCard = (props: MessageCardProps) => {
               {props.longPressDialogItems.map((item, index) => (
                 <List.Item
                   key={index}
-                  onPress={item.onPress}
+                  onPress={() => {
+                    item.onPress();
+                    onMessageCardLongPressDialogDismiss();
+                  }}
                   title={item.title}
                   left={props2 =>
                     longPressMessageIconItemRenderer(props2, item.iconName)

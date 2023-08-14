@@ -1,9 +1,10 @@
 import {FlatList} from 'react-native';
-import {useLooseRoute} from '../../hooks/use-loose-route';
-import {useMessagesByTagId} from '../../state/message.state';
-import {ScreenLayout} from '../layouts/screen.layout';
-import {MessageCard} from '../components/message-card';
+
 import {useAppTheme} from '../../hooks/use-app-theme';
+import {useLooseRoute} from '../../hooks/use-loose-route';
+import {useMessagesByTagId} from '../../state/tag.state';
+import {MessageCard} from '../components/message-card';
+import {ScreenLayout} from '../layouts/screen.layout';
 
 export const MessagesByTagIdScreen = () => {
   const {params} = useLooseRoute();
@@ -16,7 +17,7 @@ export const MessagesByTagIdScreen = () => {
       <FlatList
         className="px-4"
         data={messages}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(_, index) => index.toString()}
         renderItem={({item: message}) => (
           <MessageCard
             twClass="m-2"
