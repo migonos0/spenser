@@ -3455,6 +3455,7 @@ __metadata:
     react-native-quick-sqlite: ^8.0.4
     react-native-safe-area-context: 4.6.3
     react-native-screens: ~3.22.0
+    react-native-vector-icons: ^10.0.0
     react-test-renderer: 18.2.0
     reflect-metadata: ^0.1.13
     swr: ^2.2.1
@@ -10430,7 +10431,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:*, prop-types@npm:^15.8.1":
+"prop-types@npm:*, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -10637,6 +10638,21 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 3b592ff31d9dfde5e2ce967f85f3ad17a94f4f3bee2248a3dad9ec791e7cda72a431f86b468b3b2a70ebeffb49b462f8162668a58fb9ddabb10b5a369816850d
+  languageName: node
+  linkType: hard
+
+"react-native-vector-icons@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "react-native-vector-icons@npm:10.0.0"
+  dependencies:
+    prop-types: ^15.7.2
+    yargs: ^16.1.1
+  bin:
+    fa-upgrade.sh: bin/fa-upgrade.sh
+    fa5-upgrade: bin/fa5-upgrade.sh
+    fa6-upgrade: bin/fa6-upgrade.sh
+    generate-icon: bin/generate-icon.js
+  checksum: c4e39deb5218b6ba047c378217bbc7f24c1db153d2171e42176703a775049ed24f2a140f35d962d215265032722a24cba8acc83397ef6e14bd300db470609bf5
   languageName: node
   linkType: hard
 
@@ -13105,7 +13121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^16.0.0":
+"yargs@npm:^16.0.0, yargs@npm:^16.1.1":
   version: 16.2.0
   resolution: "yargs@npm:16.2.0"
   dependencies:
