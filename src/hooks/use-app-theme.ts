@@ -1,5 +1,3 @@
-import {useTheme} from 'react-native-paper';
+import {MD3Theme, useTheme} from 'react-native-paper';
 
-import {LIGHT_THEME} from '../constants/theme';
-
-export const useAppTheme = useTheme<typeof LIGHT_THEME>;
+export const useAppTheme = useTheme<MD3Theme>;
