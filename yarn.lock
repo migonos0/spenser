@@ -3461,7 +3461,6 @@ __metadata:
     babel-jest: ^29.2.1
     babel-plugin-module-resolver: ^5.0.0
     babel-plugin-transform-typescript-metadata: ^0.3.2
-    classnames: ^2.3.2
     clsx: ^2.0.0
     eslint: ^8.19.0
     expo: ^49.0.0
@@ -4525,13 +4524,6 @@ __metadata:
   version: 1.2.3
   resolution: "cjs-module-lexer@npm:1.2.3"
   checksum: 5ea3cb867a9bb609b6d476cd86590d105f3cfd6514db38ff71f63992ab40939c2feb68967faa15a6d2b1f90daa6416b79ea2de486e9e2485a6f8b66a21b4fb0a
-  languageName: node
-  linkType: hard
-
-"classnames@npm:^2.3.2":
-  version: 2.3.2
-  resolution: "classnames@npm:2.3.2"
-  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
   languageName: node
   linkType: hard
 
