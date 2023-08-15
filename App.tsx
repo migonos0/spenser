@@ -1,10 +1,10 @@
 import {NavigationContainer} from '@react-navigation/native';
-import {StackNavigator} from './src/app/navigators/stack.navigator';
 import {DataSourceProvider} from './src/app/providers/data-source.provider';
 import {ReactNativePaperProvider} from './src/app/providers/react-native-paper.provider';
 import {SnackbarProvider} from './src/app/providers/snackbar.provider';
+import {StackNavigator} from './src/app/navigators/stack.navigator';
 
-export default function App() {
+function App(): JSX.Element {
   return (
     <DataSourceProvider>
       <ReactNativePaperProvider>
@@ -17,3 +17,5 @@ export default function App() {
     </DataSourceProvider>
   );
 }
+
+export default App;
