@@ -6,4 +6,6 @@ export const createTracker =
     await dataSource.manager.save(tracker);
 
 export const findAllTrackers = async (dataSource: DataSource) =>
-  await dataSource.manager.find(Tracker);
+  await dataSource.manager.find(Tracker, {
+    order: {updatedAt: {direction: 'ASC'}},
+  });
