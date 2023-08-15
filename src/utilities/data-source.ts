@@ -2,10 +2,11 @@ import 'reflect-metadata';
 import {DataSource} from 'typeorm';
 
 import {typeORMDriver} from 'react-native-quick-sqlite';
+import {DB_NAME} from '../constants/db';
 
-export const datasource = new DataSource({
+export const dataSource = new DataSource({
   type: 'react-native',
-  database: 'typeormdb',
+  database: DB_NAME,
   location: '.',
   driver: typeORMDriver,
   entities: [],
