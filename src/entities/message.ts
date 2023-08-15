@@ -4,9 +4,11 @@ import {
   Column,
   ManyToMany,
   JoinTable,
+  ManyToOne,
 } from 'typeorm';
 
 import {Tag} from './tag';
+import {Tracker} from './tracker';
 
 @Entity()
 export class Message {
@@ -25,6 +27,9 @@ export class Message {
   @ManyToMany(() => Tag, tag => tag.messages, {cascade: true})
   @JoinTable()
   tags?: Tag[];
+
+  @ManyToOne(() => Tracker, tracker => tracker.messages)
+  tracker?: Tracker;
 
   constructor(
     isExpense: boolean,
