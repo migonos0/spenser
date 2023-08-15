@@ -1,4 +1,0 @@
-{
-  "expenseMessagePatterns": ["-", "less", "minus"],
-  "incomeMessagePatterns": ["+", "plus", "add"]
-}
