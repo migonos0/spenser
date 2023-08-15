@@ -1,5 +1,5 @@
 import {useTheme} from 'react-native-paper';
 
-import {LIGHT_THEME} from '../constants/theme';
+import {Material3Scheme} from '@pchmn/expo-material3-theme';
 
-export const useAppTheme = useTheme<typeof LIGHT_THEME>;
+export const useAppTheme = useTheme<Material3Scheme>;
