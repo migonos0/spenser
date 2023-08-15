@@ -29,7 +29,8 @@
     "react-native-screens": "~3.22.0",
     "reflect-metadata": "^0.1.13",
     "swr": "^2.2.1",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "zod": "^3.22.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
