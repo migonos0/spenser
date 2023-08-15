@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import {useState} from 'react';
 import {
   Avatar,
@@ -10,6 +9,7 @@ import {
 
 import {NODE_ENV} from '../../constants/environment';
 import {themeStoreActions} from '../../stores/theme.store';
+import {cn} from '../../utilities/cn';
 
 export interface MenuItem {
   label: string;
@@ -29,7 +29,7 @@ export interface AppbarProps {
   amountSummatory?: number;
 }
 
-export const Appbar = (props: AppbarProps) => {
+export const Appbar = ({twClass, ...props}: AppbarProps) => {
   const [isUserMenuVisible, setIsUserMenuVisible] = useState(false);
 
   const onUserMenuDismiss = () => setIsUserMenuVisible(false);
@@ -37,7 +37,7 @@ export const Appbar = (props: AppbarProps) => {
   return (
     <>
       <PaperAppbar.Header
-        className={classNames('pl-5', props.twClass)}
+        className={cn('pl-5', twClass)}
         style={{backgroundColor: props.backgroundColor}}>
         <Avatar.Text
           className="mr-2"

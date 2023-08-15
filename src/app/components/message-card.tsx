@@ -1,8 +1,8 @@
-import classNames from 'classnames';
 import {impactAsync} from 'expo-haptics';
 import {useCallback, useState} from 'react';
 import {StyleProp, TextStyle, View} from 'react-native';
 import {Card, Chip, Dialog, List, Portal, Text} from 'react-native-paper';
+import {cn} from '../../utilities/cn';
 
 interface MessageCardProps {
   cardTitle?: string;
@@ -18,7 +18,7 @@ interface MessageCardProps {
   tags?: {label: string; onPress?: () => void}[];
 }
 
-export const MessageCard = (props: MessageCardProps) => {
+export const MessageCard = ({twClass, ...props}: MessageCardProps) => {
   const [
     isMessageCardLongPressDialogVisible,
     setIsMessageCardLongPressDialogVisible,
@@ -46,9 +46,9 @@ export const MessageCard = (props: MessageCardProps) => {
   return (
     <>
       <View
-        className={classNames(
+        className={cn(
           {'pr-8': props.isNotSentByTheUser, 'pl-8': !props.isNotSentByTheUser},
-          props.twClass,
+          twClass,
         )}>
         <Card
           onLongPress={localOnLongPress}
