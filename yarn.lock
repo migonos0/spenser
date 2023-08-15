@@ -3462,6 +3462,7 @@ __metadata:
     babel-plugin-module-resolver: ^5.0.0
     babel-plugin-transform-typescript-metadata: ^0.3.2
     classnames: ^2.3.2
+    clsx: ^2.0.0
     eslint: ^8.19.0
     expo: ^49.0.0
     expo-constants: ~14.4.2
@@ -3481,6 +3482,7 @@ __metadata:
     react-test-renderer: 18.2.0
     reflect-metadata: ^0.1.13
     swr: ^2.2.1
+    tailwind-merge: ^1.14.0
     tailwindcss: 3.3.2
     typeorm: ^0.3.17
     typescript: 4.8.4
@@ -4643,6 +4645,13 @@ __metadata:
   version: 2.1.2
   resolution: "clone@npm:2.1.2"
   checksum: aaf106e9bc025b21333e2f4c12da539b568db4925c0501a1bf4070836c9e848c892fa22c35548ce0d1132b08bbbfa17a00144fe58fccdab6fa900fec4250f67d
+  languageName: node
+  linkType: hard
+
+"clsx@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "clsx@npm:2.0.0"
+  checksum: a2cfb2351b254611acf92faa0daf15220f4cd648bdf96ce369d729813b85336993871a4bf6978ddea2b81b5a130478339c20d9d0b5c6fc287e5147f0c059276e
   languageName: node
   linkType: hard
 
@@ -11945,6 +11954,13 @@ __metadata:
   peerDependencies:
     react: ^16.11.0 || ^17.0.0 || ^18.0.0
   checksum: 62ff1b8132966fc977df192cf4452bab94c73dbea304a1438745f27041917154dad32448d8a65fb40d5e3de0b1751ef3fd57b1d71ba450e031517f009d0fc052
+  languageName: node
+  linkType: hard
+
+"tailwind-merge@npm:^1.14.0":
+  version: 1.14.0
+  resolution: "tailwind-merge@npm:1.14.0"
+  checksum: 8cf5d37f51b3b32e4bdd5544feaed34357bfba2f64f14834cc4a21ac29b0ae22d7255386467a0f1dadb3e38499389efbbabeddcd0b16571af5a0d346a4921877
   languageName: node
   linkType: hard
 
