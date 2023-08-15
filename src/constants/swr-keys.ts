@@ -1,3 +1,4 @@
 export const MESSAGES_KEY = 'MESSAGES';
 export const MESSAGE_AMOUNT_SUMMATORY_KEY = 'MESSAGE_AMOUNT_SUMMATORY';
 export const TAGS_KEY = 'TAG';
+export const SWR_KEYS = {TRACKERS: 'TRACKERS'};
