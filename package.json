@@ -28,6 +28,7 @@
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
     "reflect-metadata": "^0.1.13",
+    "swr": "^2.2.1",
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
