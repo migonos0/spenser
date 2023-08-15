@@ -34,8 +34,8 @@ export const ChatScreen = () => {
 
   const onSendButtonPress = (message: string) => {
     const tagNames = findTags(message);
-    const alreadyCreatedTags = tags?.filter(
-      tag => tagNames?.includes(tag.name),
+    const alreadyCreatedTags = tags?.filter(tag =>
+      tagNames?.includes(tag.name),
     );
     const creatableTags = tagNames
       ?.filter(tagName => !tags?.map(tag => tag.name).includes(tagName))
