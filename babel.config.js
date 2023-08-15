@@ -11,6 +11,7 @@ module.exports = {
         },
       },
     ],
+    'nativewind/babel',
   ],
   presets: ['module:metro-react-native-babel-preset'],
   env: {
