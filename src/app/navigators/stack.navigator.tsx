@@ -8,6 +8,7 @@ import {useMessageAmountSummatory} from '../../state/message.state';
 import {Appbar} from '../components/app-bar';
 import {ChatScreen} from '../screens/chat.screen';
 import {MessagesByTagIdScreen} from '../screens/messages-by-tag-id.screen';
+import {TrackersScreen} from '../screens/trackers.screen';
 
 const StackNavigatorAppbar = () => {
   const {colors} = useAppTheme();
@@ -31,8 +32,12 @@ const Stack = createNativeStackNavigator();
 export const StackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={STACK_NAVIGATOR_SCREEN_NAMES.CHAT}
+      initialRouteName={STACK_NAVIGATOR_SCREEN_NAMES.TRACKERS}
       screenOptions={{header: StackNavigatorAppbar}}>
+      <Stack.Screen
+        name={STACK_NAVIGATOR_SCREEN_NAMES.TRACKERS}
+        component={TrackersScreen}
+      />
       <Stack.Screen
         name={STACK_NAVIGATOR_SCREEN_NAMES.CHAT}
         component={ChatScreen}
