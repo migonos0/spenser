@@ -9,6 +9,9 @@ export class Tracker {
   @Column()
   name: string;
 
+  @Column()
+  description: string;
+
   @Column({type: 'date'})
   createdAt: Date;
 
@@ -20,14 +23,16 @@ export class Tracker {
 
   constructor(
     name: Tracker['name'],
-    createdAt: Tracker['createdAt'] = new Date(),
-    updatedAt: Tracker['updatedAt'] = new Date(),
-    messages: Tracker['messages'],
-    id: Tracker['id'],
+    description: Tracker['description'],
+    createdAt?: Tracker['createdAt'],
+    updatedAt?: Tracker['updatedAt'],
+    messages?: Tracker['messages'],
+    id?: Tracker['id'],
   ) {
     this.name = name;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.description = description;
+    this.createdAt = createdAt ?? new Date();
+    this.updatedAt = updatedAt ?? new Date();
     this.messages = messages;
     this.id = id;
   }
