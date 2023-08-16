@@ -5,11 +5,19 @@ import {Message} from '../entities/message';
 
 export const findAllMessages =
   ({ascendant}: {ascendant?: boolean}) =>
-  async (dataSource: DataSource) =>
-    await dataSource.manager.find(Message, {
+  async (dataSource: DataSource) => {
+    console.log(
+      await dataSource.manager.find(Message, {
+        order: {id: ascendant ? 'ASC' : 'DESC'},
+        relations: {tags: true},
+      }),
+    );
+
+    return await dataSource.manager.find(Message, {
       order: {id: ascendant ? 'ASC' : 'DESC'},
       relations: {tags: true},
     });
+  };
 
 export const createMessage =
   (message: Message) => async (dataSource: DataSource) =>
