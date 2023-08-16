@@ -16,7 +16,7 @@ export class Message {
   @Column()
   isExpense: boolean;
 
-  @Column()
+  @Column({type: 'numeric', precision: 2})
   amount: number;
 
   @Column()
