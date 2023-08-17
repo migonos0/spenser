@@ -1,11 +1,12 @@
 import {Output, minLength, object, string} from 'valibot';
+import {LOCALE} from '../constants/locale';
 
 export const CreateTrackerSchema = object({
-  name: string('Please provide a valid value', [
-    minLength(1, 'Please provide a valid value'),
+  name: string(LOCALE.schemaErrors.common.properValue, [
+    minLength(1, LOCALE.schemaErrors.common.properValue),
   ]),
-  description: string('Please provide a valid value', [
-    minLength(1, 'Please provide a valid value'),
+  description: string(LOCALE.schemaErrors.common.properValue, [
+    minLength(1, LOCALE.schemaErrors.common.properValue),
   ]),
 });
 export type CreateTrackerData = Output<typeof CreateTrackerSchema>;
