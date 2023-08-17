@@ -1,4 +1,4 @@
-import {Avatar, List} from 'react-native-paper';
+import {Avatar, List, Text} from 'react-native-paper';
 import {Tracker} from '../../entities/tracker';
 import {View} from 'react-native';
 import {useAppTheme} from '../../hooks/use-app-theme';
@@ -8,6 +8,7 @@ interface TrackerItemProps {
   tracker: Tracker;
   borderColor?: string;
   class?: string;
+  balance?: number;
 }
 
 export const TrackerItem = (props: TrackerItemProps) => {
@@ -29,6 +30,12 @@ export const TrackerItem = (props: TrackerItemProps) => {
         title={props.tracker.name}
         description={props.tracker.description}
       />
+      <Text>
+        {new Intl.NumberFormat('en-us', {
+          style: 'currency',
+          currency: 'USD',
+        }).format(props.balance ?? 0)}
+      </Text>
     </View>
   );
 };
