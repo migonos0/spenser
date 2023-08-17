@@ -10,8 +10,8 @@ import {Tracker} from '../entities/tracker';
 export const dataSource = new DataSource({
   type: 'react-native',
   database: DB_NAME,
-  location: '.',
   driver: typeORMDriver,
   entities: [Tag, Message, Tracker],
   synchronize: true,
+  location: 'default',
 });
