@@ -1,7 +1,22 @@
 {
   "common": {
     "send": "Send",
-    "delete": "Delete"
+    "delete": "Delete",
+    "dismiss": "Dismiss",
+    "create": "Create"
+  },
+  "screens": {
+    "trackers": {
+      "dialogs": {
+        "createTracker": {
+          "title": "New tracker",
+          "inputs": {
+            "name": "Name",
+            "description": "Description"
+          }
+        }
+      }
+    }
   },
   "inputSchemas": {
     "messages": {
