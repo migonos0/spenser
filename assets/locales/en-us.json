@@ -18,9 +18,9 @@
       }
     }
   },
-  "inputSchemas": {
-    "messages": {
-      "pleaseProvideValidMessage": "Please provide a valid message."
+  "schemaErrors": {
+    "common": {
+      "properValue": "Please provide a proper value"
     }
   }
 }
