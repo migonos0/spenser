@@ -12,10 +12,10 @@ export class Tracker {
   @Column()
   description: string;
 
-  @Column({type: 'date'})
+  @Column({type: 'datetime'})
   createdAt: Date;
 
-  @Column({type: 'date'})
+  @Column({type: 'datetime'})
   updatedAt: Date;
 
   @OneToMany(() => Message, message => message.tracker)
