@@ -37,7 +37,6 @@
     "tailwind-merge": "^1.14.0",
     "typeorm": "^0.3.17",
     "valibot": "^0.12.0",
-    "zod": "^3.22.0",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
