@@ -25,12 +25,17 @@ export const findBalanceByTrackerId =
     return parsedBalance.data;
   };
 
-export const findAllTrackers = async (dataSource: DataSource) => {
-  const trackers = await dataSource.manager.find(Tracker, {
-    order: {updatedAt: {direction: 'DESC'}},
-  });
-  for (const tracker of trackers) {
+const retriveTrackerWithBalance =
+  (tracker: Tracker) => async (dataSource: DataSource) => {
     tracker.balance = await findBalanceByTrackerId(tracker.id)(dataSource);
-  }
-  return trackers;
-};
+    return tracker;
+  };
+
+export const findAllTrackers = async (dataSource: DataSource) =>
+  Promise.all(
+    (
+      await dataSource.manager.find(Tracker, {
+        order: {updatedAt: {direction: 'DESC'}},
+      })
+    ).map(tracker => retriveTrackerWithBalance(tracker)(dataSource)),
+  );
