@@ -1,7 +1,7 @@
 import {DataSource} from 'typeorm';
-import {number} from 'zod';
 
 import {Message} from '../entities/message';
+import {number, safeParse} from 'valibot';
 
 export const findAllMessages =
   ({ascendant}: {ascendant?: boolean}) =>
@@ -36,7 +36,7 @@ export const findMessageAmountSummatory = async (dataSource: DataSource) => {
     .select('SUM(message.amount)', 'sum')
     .getRawOne();
 
-  const parsedMessageAmountSummatory = number().safeParse(sum);
+  const parsedMessageAmountSummatory = safeParse(number(), sum);
 
   if (!parsedMessageAmountSummatory.success) {
     return;
