@@ -1,7 +1,7 @@
 import {FlatList, View} from 'react-native';
 import {useCreateTracker, useTrackers} from '../../state/tracker.state';
 import {ScreenLayout} from '../layouts/screen.layout';
-import {Button, Dialog, FAB, List, Portal, TextInput} from 'react-native-paper';
+import {Button, Dialog, FAB, Portal, TextInput} from 'react-native-paper';
 import {useState} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {
@@ -10,20 +10,32 @@ import {
 } from '../../schemas/create-tracker.schema';
 import {valibotResolver} from '@hookform/resolvers/valibot';
 import {Tracker} from '../../entities/tracker';
+import {TrackerItem} from '../components/tracker-item';
+import {ErrorText} from '../components/error-text';
+import {LOCALE} from '../../constants/locale';
 
 export const TrackersScreen = () => {
   const {trackers} = useTrackers();
   const [isNewTrackerDialogVisible, setIsNewTrackerDialogVisible] =
     useState(false);
   const {createTrackerTrigger} = useCreateTracker();
-  const {control, handleSubmit} = useForm<CreateTrackerData>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: {errors},
+  } = useForm<CreateTrackerData>({
     resolver: valibotResolver(CreateTrackerSchema),
   });
 
-  const onNewTrackerDialogDismiss = () => setIsNewTrackerDialogVisible(false);
-  const newTrackerSubmitHandler: SubmitHandler<CreateTrackerData> = input => {
-    createTrackerTrigger(new Tracker(input.name, input.description));
+  const onNewTrackerDialogDismiss = () => {
+    setIsNewTrackerDialogVisible(false);
+    reset();
   };
+  const newTrackerSubmitHandler: SubmitHandler<CreateTrackerData> = input =>
+    createTrackerTrigger(new Tracker(input.name, input.description), {
+      onSuccess: onNewTrackerDialogDismiss,
+    });
 
   return (
     <>
@@ -31,7 +43,7 @@ export const TrackersScreen = () => {
         <FlatList
           data={trackers}
           renderItem={({item: tracker}) => (
-            <List.Item title={tracker.name} description={tracker.description} />
+            <TrackerItem tracker={tracker} class="border-0 border-b-2" />
           )}
           keyExtractor={({id}, index) =>
             id ? id.toString() : index.toString()
@@ -47,7 +59,9 @@ export const TrackersScreen = () => {
         <Dialog
           visible={isNewTrackerDialogVisible}
           onDismiss={onNewTrackerDialogDismiss}>
-          <Dialog.Title>New Tracker</Dialog.Title>
+          <Dialog.Title>
+            {LOCALE.screens.trackers.dialogs.createTracker.title}
+          </Dialog.Title>
           <Dialog.Content>
             <Controller
               control={control}
@@ -56,11 +70,15 @@ export const TrackersScreen = () => {
                 <TextInput
                   {...rest}
                   onChangeText={onChange}
-                  mode="outlined"
-                  label={'Name'}
+                  label={
+                    LOCALE.screens.trackers.dialogs.createTracker.inputs.name
+                  }
+                  mode="flat"
                 />
               )}
             />
+            <ErrorText error={errors.name?.message} />
+
             <Controller
               control={control}
               name="description"
@@ -68,16 +86,21 @@ export const TrackersScreen = () => {
                 <TextInput
                   {...rest}
                   onChangeText={onChange}
-                  mode="outlined"
-                  label={'Description'}
+                  label={
+                    LOCALE.screens.trackers.dialogs.createTracker.inputs
+                      .description
+                  }
                 />
               )}
             />
+            <ErrorText error={errors.description?.message} />
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={onNewTrackerDialogDismiss}>Cancel</Button>
+            <Button onPress={onNewTrackerDialogDismiss}>
+              {LOCALE.common.dismiss}
+            </Button>
             <Button onPress={handleSubmit(newTrackerSubmitHandler)}>
-              Create
+              {LOCALE.common.create}
             </Button>
           </Dialog.Actions>
         </Dialog>
