@@ -21,6 +21,8 @@ export class Tracker {
   @OneToMany(() => Message, message => message.tracker)
   messages?: Message[];
 
+  balance?: number;
+
   constructor(
     name: Tracker['name'],
     description: Tracker['description'],
