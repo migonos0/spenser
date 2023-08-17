@@ -7,7 +7,7 @@ import {
 export type LooseNavigation = {
   navigate: (
     screenName?: string,
-    params?: Record<string, string | number>,
+    params?: Record<string, string | number | undefined>,
   ) => void;
   addListener: (
     event: 'beforeRemove',
