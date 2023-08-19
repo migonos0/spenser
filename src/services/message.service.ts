@@ -27,4 +27,8 @@ export const findMessageById =
 
 export const findAllMessagesByTracker =
   (tracker: Tracker) => async (ds: DataSource) =>
-    await ds.manager.find(Message, {where: {tracker}, order: {id: 'DESC'}});
+    await ds.manager.find(Message, {
+      where: {tracker},
+      order: {id: 'DESC'},
+      relations: {tags: true},
+    });
