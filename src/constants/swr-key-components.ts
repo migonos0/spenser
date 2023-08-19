@@ -1,0 +1,10 @@
+export const SWR_KEY_COMPONENTS = {
+  MESSAGES: 'MESSAGES',
+  MESSAGE: 'MESSAGE',
+  TAGS: 'TAGS',
+  TAG: 'TAG',
+  TRACKERS: 'TRACKERS',
+  TRACKER: 'TRACKER',
+  DTO: 'DTO',
+  DTOS: 'DTOS',
+};
