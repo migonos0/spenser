@@ -2,6 +2,7 @@ import {DataSource} from 'typeorm';
 import {Tracker} from '../entities/tracker';
 import {Message} from '../entities/message';
 import {number, safeParse} from 'valibot';
+import {TrackerDto} from '../dtos/tracker.dto';
 
 export const createTracker =
   (tracker: Tracker) => async (dataSource: DataSource) =>
@@ -25,17 +26,16 @@ export const findBalanceByTrackerId =
     return parsedBalance.data;
   };
 
-const retriveTrackerWithBalance =
-  (tracker: Tracker) => async (dataSource: DataSource) => {
-    tracker.balance = await findBalanceByTrackerId(tracker.id)(dataSource);
-    return tracker;
-  };
-
 export const findAllTrackers = async (dataSource: DataSource) =>
+  await dataSource.manager.find(Tracker, {order: {updatedAt: 'DESC'}});
+
+export const findAllTrackerDtos = async (dataSource: DataSource) =>
   Promise.all(
-    (
-      await dataSource.manager.find(Tracker, {
-        order: {updatedAt: {direction: 'DESC'}},
-      })
-    ).map(tracker => retriveTrackerWithBalance(tracker)(dataSource)),
+    (await findAllTrackers(dataSource)).map(tracker =>
+      TrackerDto.build(tracker)(dataSource),
+    ),
   );
+
+export const findTrackerById =
+  (trackerId: Tracker['id']) => async (ds: DataSource) =>
+    await ds.manager.findOneBy(Tracker, {id: trackerId});

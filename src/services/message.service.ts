@@ -1,15 +1,7 @@
 import {DataSource} from 'typeorm';
 
 import {Message} from '../entities/message';
-import {number, safeParse} from 'valibot';
-
-export const findAllMessages =
-  ({ascendant}: {ascendant?: boolean}) =>
-  async (dataSource: DataSource) =>
-    await dataSource.manager.find(Message, {
-      order: {id: ascendant ? 'ASC' : 'DESC'},
-      relations: {tags: true},
-    });
+import {Tracker} from '../entities/tracker';
 
 export const createMessage =
   (message: Message) => async (dataSource: DataSource) =>
@@ -29,22 +21,10 @@ export const deleteMessageById =
     return {...(await dataSource.manager.remove(foundMessage)), id: messageId};
   };
 
-export const findMessageAmountSummatory = async (dataSource: DataSource) => {
-  const {sum} = await dataSource
-    .getRepository(Message)
-    .createQueryBuilder('message')
-    .select('SUM(message.amount)', 'sum')
-    .getRawOne();
-
-  const parsedMessageAmountSummatory = safeParse(number(), sum);
-
-  if (!parsedMessageAmountSummatory.success) {
-    return;
-  }
-
-  return parsedMessageAmountSummatory.data;
-};
-
 export const findMessageById =
   (messageId: Message['id']) => async (dataSource: DataSource) =>
     await dataSource.manager.findOneBy(Message, {id: messageId});
+
+export const findAllMessagesByTracker =
+  (tracker: Tracker) => async (ds: DataSource) =>
+    await ds.manager.find(Message, {where: {tracker}, order: {id: 'DESC'}});
