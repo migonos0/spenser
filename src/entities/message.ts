@@ -13,7 +13,7 @@ import {Tracker} from './tracker';
 @Entity()
 export class Message {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number | undefined;
 
   @Column()
   isExpense: boolean;
@@ -26,32 +26,22 @@ export class Message {
 
   @ManyToMany(() => Tag, tag => tag.messages, {cascade: true})
   @JoinTable()
-  tags?: Tag[];
+  tags: Tag[] | undefined;
 
   @ManyToOne(() => Tracker, tracker => tracker.messages)
-  tracker?: Tracker;
+  tracker: Tracker;
 
   constructor(
-    isExpense: boolean,
-    amount: number,
-    description: string,
-    tags?: Tag[],
+    isExpense: Message['isExpense'],
+    amount: Message['amount'],
+    description: Message['description'],
+    tracker: Message['tracker'],
+    tags: Message['tags'],
   ) {
     this.isExpense = isExpense;
     this.amount = amount;
     this.description = description;
+    this.tracker = tracker;
     this.tags = tags;
   }
-
-  // constructor(args: {
-  //   isExpense: boolean;
-  //   amount: number;
-  //   description: string;
-  //   tags?: Tag[];
-  // }) {
-  //   this.isExpense = args.isExpense;
-  //   this.amount = args.amount;
-  //   this.description = args.description;
-  //   this.tags = args.tags;
-  // }
 }
