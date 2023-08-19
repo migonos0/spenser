@@ -1,10 +1,4 @@
-import {useCallback} from 'react';
-import {useSWRConfig} from 'swr';
-
-import {
-  MESSAGES_KEY,
-  MESSAGE_AMOUNT_SUMMATORY_KEY,
-} from '../constants/swr-keys';
+import {swrKeyGetters} from '../utilities/swr-key-getters';
 import {Message} from '../entities/message';
 import {
   useSWRDataSourceMutation,
@@ -13,70 +7,28 @@ import {
 import {
   createMessage,
   deleteMessageById,
-  findAllMessages,
-  findMessageAmountSummatory,
+  findAllMessagesByTracker,
 } from '../services/message.service';
+import {Tracker} from '../entities/tracker';
 
-export const useMessageAmountSummatory = () => {
-  const {data, mutate} = useSWRImmutableDataSource(
-    MESSAGE_AMOUNT_SUMMATORY_KEY,
-    findMessageAmountSummatory,
-  );
+export const useMessagesByTracker = (tracker?: Tracker) => {
+  const key = tracker
+    ? swrKeyGetters.getUseMessagesByTrackerKey(tracker)
+    : undefined;
+  const fetcher = tracker ? findAllMessagesByTracker(tracker) : () => undefined;
 
-  const increaseOrDecreaseMessageAmountSummatory = useCallback(
-    (number: number) => {
-      mutate((state: number | undefined) => (state ?? 0) + number, {
-        revalidate: false,
-      });
-    },
-    [mutate],
-  );
-
-  return {
-    messageAmountSummatory: data,
-    increaseOrDecreaseMessageAmountSummatory,
-  };
-};
-
-export const useMessages = (params?: {ascendant?: boolean}) => {
-  const fetcher = findAllMessages({ascendant: params?.ascendant});
-
-  const {data} = useSWRImmutableDataSource(MESSAGES_KEY, fetcher);
+  const {data} = useSWRImmutableDataSource(key, fetcher);
 
   return {messages: data};
 };
 
-export const useCreateMessage = (params?: {ascendant?: boolean}) => {
-  const {mutate} = useSWRConfig();
+export const useDeleteMessageByTracker = (tracker?: Tracker) => {
+  const key = tracker
+    ? swrKeyGetters.getUseMessagesByTrackerKey(tracker)
+    : undefined;
+
   const {trigger} = useSWRDataSourceMutation(
-    MESSAGES_KEY,
-    createMessage,
-    (result, currentData: Message[] | undefined) => {
-      if (!result) {
-        return currentData;
-      }
-
-      /**
-       * Adding created message to MessagesByTag state
-       */
-      for (const tag of result.tags ?? []) {
-        mutate([MESSAGES_KEY, tag.id], (messages: Message[] | undefined) => {
-          return [...(messages ?? []), ...[result]];
-        });
-      }
-
-      return params?.ascendant
-        ? [...(currentData ?? []), ...[result]]
-        : [...[result], ...(currentData ?? [])];
-    },
-  );
-
-  return {createMessageTrigger: trigger};
-};
-
-export const useDeleteMessage = () => {
-  const {trigger} = useSWRDataSourceMutation(
-    MESSAGES_KEY,
+    key,
     deleteMessageById,
     (deletedMessage, currentData: Message[] | undefined) => {
       if (!deletedMessage) {
@@ -88,4 +40,23 @@ export const useDeleteMessage = () => {
   );
 
   return {deleteMessageTrigger: trigger};
+};
+
+export const useCreateMessageByTracker = (tracker?: Tracker) => {
+  const key = tracker
+    ? swrKeyGetters.getUseMessagesByTrackerKey(tracker)
+    : undefined;
+
+  const {trigger} = useSWRDataSourceMutation(
+    key,
+    createMessage,
+    (result, currentData: Message[] | undefined) => {
+      if (!result) {
+        return currentData;
+      }
+      return [result, ...(currentData ?? [])];
+    },
+  );
+
+  return {createMessageTrigger: trigger};
 };
