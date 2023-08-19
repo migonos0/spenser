@@ -4,7 +4,7 @@ import {Message} from './message';
 @Entity()
 export class Tracker {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number | undefined;
 
   @Column()
   name: string;
@@ -19,9 +19,7 @@ export class Tracker {
   updatedAt: Date;
 
   @OneToMany(() => Message, message => message.tracker)
-  messages?: Message[];
-
-  balance?: number;
+  messages: Message[] | undefined;
 
   constructor(
     name: Tracker['name'],
