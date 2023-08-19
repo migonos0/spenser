@@ -1,5 +1,5 @@
 import {FlatList, View} from 'react-native';
-import {useCreateTracker, useTrackers} from '../../state/tracker.state';
+import {useCreateTracker, useTrackerDtos} from '../../state/tracker.state';
 import {ScreenLayout} from '../layouts/screen.layout';
 import {Button, Dialog, FAB, Portal, TextInput} from 'react-native-paper';
 import {useState} from 'react';
@@ -13,9 +13,11 @@ import {Tracker} from '../../entities/tracker';
 import {TrackerItem} from '../components/tracker-item';
 import {ErrorText} from '../components/error-text';
 import {LOCALE} from '../../constants/locale';
+import {useLooseNavigation} from '../../hooks/use-loose-navigation';
+import {STACK_NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
 
 export const TrackersScreen = () => {
-  const {trackers} = useTrackers();
+  const {trackerDtos} = useTrackerDtos();
   const [isNewTrackerDialogVisible, setIsNewTrackerDialogVisible] =
     useState(false);
   const {createTrackerTrigger} = useCreateTracker();
@@ -27,6 +29,7 @@ export const TrackersScreen = () => {
   } = useForm<CreateTrackerData>({
     resolver: valibotResolver(CreateTrackerSchema),
   });
+  const {navigate} = useLooseNavigation();
 
   const onNewTrackerDialogDismiss = () => {
     setIsNewTrackerDialogVisible(false);
@@ -41,9 +44,18 @@ export const TrackersScreen = () => {
     <>
       <ScreenLayout>
         <FlatList
-          data={trackers}
+          data={trackerDtos}
           renderItem={({item: tracker}) => (
-            <TrackerItem tracker={tracker} class="border-0 border-b-2" />
+            <TrackerItem
+              trackerDto={tracker}
+              class="border-0 border-b-2"
+              balance={tracker.balance}
+              onPress={() =>
+                navigate(STACK_NAVIGATOR_SCREEN_NAMES.CHAT, {
+                  trackerId: tracker.id,
+                })
+              }
+            />
           )}
           keyExtractor={({id}, index) =>
             id ? id.toString() : index.toString()
@@ -73,7 +85,6 @@ export const TrackersScreen = () => {
                   label={
                     LOCALE.screens.trackers.dialogs.createTracker.inputs.name
                   }
-                  mode="flat"
                 />
               )}
             />
