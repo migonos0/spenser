@@ -28,6 +28,7 @@ export const useDeleteMessageByTracker = (tracker?: Tracker) => {
   const key = tracker
     ? swrKeyGetters.getUseMessagesByTrackerKey(tracker)
     : undefined;
+  const {mutate} = useSWRConfig();
 
   const {trigger} = useSWRDataSourceMutation(
     key,
@@ -36,6 +37,23 @@ export const useDeleteMessageByTracker = (tracker?: Tracker) => {
       if (!deletedMessage) {
         return currentData;
       }
+
+      /**
+       * Decreasing to the balance of the tracker
+       */
+      mutate(
+        swrKeyGetters.getUseTrackerDtosKey(),
+        (currentTrackerDtos: TrackerDto[] | undefined) =>
+          currentTrackerDtos?.map(currentTrackerDto =>
+            currentTrackerDto.id !== tracker?.id
+              ? currentTrackerDto
+              : {
+                  ...currentTrackerDto,
+                  balance:
+                    (currentTrackerDto.balance ?? 0) - deletedMessage.amount,
+                },
+          ),
+      );
 
       return currentData?.filter(message => message.id !== deletedMessage.id);
     },
