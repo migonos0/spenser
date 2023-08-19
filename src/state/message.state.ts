@@ -10,6 +10,8 @@ import {
   findAllMessagesByTracker,
 } from '../services/message.service';
 import {Tracker} from '../entities/tracker';
+import {useSWRConfig} from 'swr';
+import {TrackerDto} from '../dtos/tracker.dto';
 
 export const useMessagesByTracker = (tracker?: Tracker) => {
   const key = tracker
@@ -46,6 +48,7 @@ export const useCreateMessageByTracker = (tracker?: Tracker) => {
   const key = tracker
     ? swrKeyGetters.getUseMessagesByTrackerKey(tracker)
     : undefined;
+  const {mutate} = useSWRConfig();
 
   const {trigger} = useSWRDataSourceMutation(
     key,
@@ -54,6 +57,23 @@ export const useCreateMessageByTracker = (tracker?: Tracker) => {
       if (!result) {
         return currentData;
       }
+
+      /**
+       * Adding to the balance of the tracker
+       */
+      mutate(
+        swrKeyGetters.getUseTrackerDtosKey(),
+        (currentTrackerDtos: TrackerDto[] | undefined) =>
+          currentTrackerDtos?.map(currentTrackerDto =>
+            currentTrackerDto.id !== tracker?.id
+              ? currentTrackerDto
+              : {
+                  ...currentTrackerDto,
+                  balance: (currentTrackerDto.balance ?? 0) + result.amount,
+                },
+          ),
+      );
+
       return [result, ...(currentData ?? [])];
     },
   );
