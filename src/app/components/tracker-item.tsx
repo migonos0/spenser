@@ -1,14 +1,15 @@
 import {Avatar, List, Text} from 'react-native-paper';
-import {Tracker} from '../../entities/tracker';
 import {View} from 'react-native';
 import {useAppTheme} from '../../hooks/use-app-theme';
 import {cn} from '../../utilities/cn';
+import {TrackerDto} from '../../dtos/tracker.dto';
 
 interface TrackerItemProps {
-  tracker: Tracker;
+  trackerDto: TrackerDto;
   borderColor?: string;
   class?: string;
   balance?: number;
+  onPress?: () => void;
 }
 
 export const TrackerItem = (props: TrackerItemProps) => {
@@ -16,6 +17,7 @@ export const TrackerItem = (props: TrackerItemProps) => {
 
   return (
     <View
+      onTouchEnd={props.onPress}
       className={cn(
         'flex flex-row items-center border-2 px-5 py-2',
         props.class,
@@ -23,12 +25,12 @@ export const TrackerItem = (props: TrackerItemProps) => {
       style={{borderColor: props.borderColor ?? colors.backdrop}}>
       <Avatar.Text
         size={48}
-        label={props.tracker.name.slice(0, 2).toUpperCase()}
+        label={props.trackerDto.name.slice(0, 2).toUpperCase()}
       />
       <List.Item
         className="flex-1"
-        title={props.tracker.name}
-        description={props.tracker.description}
+        title={props.trackerDto.name}
+        description={props.trackerDto.description}
       />
       <Text>
         {new Intl.NumberFormat('en-us', {
