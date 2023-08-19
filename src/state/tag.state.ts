@@ -1,4 +1,4 @@
-import {MESSAGES_KEY, TAGS_KEY} from '../constants/swr-keys';
+import {swrKeyGetters} from '../utilities/swr-key-getters';
 import {Tag} from '../entities/tag';
 import {
   useSWRDataSourceMutation,
@@ -11,13 +11,16 @@ import {
 } from '../services/tag.service';
 
 export const useTags = () => {
-  const {data} = useSWRImmutableDataSource(TAGS_KEY, findAllTags);
+  const {data} = useSWRImmutableDataSource(
+    swrKeyGetters.getUseTagsKey(),
+    findAllTags,
+  );
 
   return {tags: data};
 };
 
 export const useMessagesByTagId = (tagId?: Tag['id']) => {
-  const key = tagId ? [MESSAGES_KEY, tagId] : undefined;
+  const key = tagId ? swrKeyGetters.getUseMessagesByTagIdKey(tagId) : undefined;
   const fetcher = tagId ? findMessagesByTagId(tagId) : () => undefined;
 
   const {data} = useSWRImmutableDataSource(key, fetcher);
@@ -27,7 +30,7 @@ export const useMessagesByTagId = (tagId?: Tag['id']) => {
 
 export const useCreateTags = () => {
   const {trigger} = useSWRDataSourceMutation(
-    TAGS_KEY,
+    swrKeyGetters.getUseTagsKey(),
     createTags,
     (createdTags, currentData: Tag[] | undefined) => {
       if (!createdTags) {
