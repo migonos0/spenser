@@ -30,5 +30,5 @@ export const findAllMessagesByTracker =
     await ds.manager.find(Message, {
       where: {tracker},
       order: {id: 'DESC'},
-      relations: {tags: true},
+      relations: {tags: true, tracker: true},
     });
