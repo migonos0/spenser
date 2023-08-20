@@ -29,7 +29,7 @@ export class Message {
   tags: Tag[] | undefined;
 
   @ManyToOne(() => Tracker, tracker => tracker.messages)
-  tracker: Tracker;
+  tracker: Tracker | undefined;
 
   constructor(
     isExpense: Message['isExpense'],
