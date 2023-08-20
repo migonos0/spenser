@@ -19,6 +19,7 @@ export const MessagesByTagIdScreen = () => {
   return (
     <ScreenLayout>
       <FlatList
+        inverted
         className="px-4"
         data={messages}
         keyExtractor={(_, index) => index.toString()}

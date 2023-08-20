@@ -29,6 +29,7 @@ export const findMessagesByTrackerAndTagIds =
       .innerJoin('message.tags', 'tag')
       .where('message.trackerId = :trackerId', {trackerId})
       .andWhere('tag.id = tagId', {tagId})
+      .orderBy('message.id', 'DESC')
       .getMany();
 
 export const createTag = (tag: Tag) => async (dataSource: DataSource) =>
