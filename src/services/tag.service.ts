@@ -1,6 +1,8 @@
 import {DataSource} from 'typeorm';
 
 import {Tag} from '../entities/tag';
+import {Tracker} from '../entities/tracker';
+import {Message} from '../entities/message';
 
 export const findAllTags = async (dataSource: DataSource) =>
   await dataSource.manager.find(Tag);
@@ -19,14 +21,15 @@ export const findTagById =
   (tagId: Tag['id']) => async (dataSource: DataSource) =>
     await dataSource.manager.findOneBy(Tag, {id: tagId});
 
-export const findMessagesByTagId =
-  (tagId: Tag['id']) => async (dataSource: DataSource) =>
-    (
-      await dataSource.manager.findOne(Tag, {
-        where: {id: tagId},
-        relations: {messages: true},
-      })
-    )?.messages;
+export const findMessagesByTrackerAndTagIds =
+  (trackerId: Tracker['id'], tagId: Tag['id']) => async (ds: DataSource) =>
+    await ds
+      .getRepository(Message)
+      .createQueryBuilder('message')
+      .innerJoin('message.tags', 'tag')
+      .where('message.trackerId = :trackerId', {trackerId})
+      .andWhere('tag.id = tagId', {tagId})
+      .getMany();
 
 export const createTag = (tag: Tag) => async (dataSource: DataSource) =>
   await dataSource.manager.save(tag);

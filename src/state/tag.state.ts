@@ -7,8 +7,9 @@ import {
 import {
   createTags,
   findAllTags,
-  findMessagesByTagId,
+  findMessagesByTrackerAndTagIds,
 } from '../services/tag.service';
+import {Tracker} from '../entities/tracker';
 
 export const useTags = () => {
   const {data} = useSWRImmutableDataSource(
@@ -19,9 +20,18 @@ export const useTags = () => {
   return {tags: data};
 };
 
-export const useMessagesByTagId = (tagId?: Tag['id']) => {
-  const key = tagId ? swrKeyGetters.getUseMessagesByTagIdKey(tagId) : undefined;
-  const fetcher = tagId ? findMessagesByTagId(tagId) : () => undefined;
+export const useMessagesByTrackerAndTagIds = (
+  trackerId?: Tracker['id'],
+  tagId?: Tag['id'],
+) => {
+  const key =
+    tagId && trackerId
+      ? swrKeyGetters.getUseMessagesByTrackerAndTagIdsKey(trackerId, tagId)
+      : undefined;
+  const fetcher =
+    tagId && trackerId
+      ? findMessagesByTrackerAndTagIds(trackerId, tagId)
+      : () => undefined;
 
   const {data} = useSWRImmutableDataSource(key, fetcher);
 

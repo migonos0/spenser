@@ -9,10 +9,6 @@ export const swrKeyGetters = {
     SWR_KEY_COMPONENTS.TRACKERS,
     SWR_KEY_COMPONENTS.DTOS,
   ],
-  getUseMessagesByTagIdKey: (tagId: Tag['id']) => [
-    SWR_KEY_COMPONENTS.TAG,
-    tagId,
-  ],
   getUseMessagesByTrackerKey: (tracker: Tracker) => [
     SWR_KEY_COMPONENTS.MESSAGES,
     SWR_KEY_COMPONENTS.TRACKER,
@@ -21,5 +17,15 @@ export const swrKeyGetters = {
   getUseTrackerByIdKey: (trackerId: Tracker['id']) => [
     SWR_KEY_COMPONENTS.TRACKER,
     trackerId,
+  ],
+  getUseMessagesByTrackerAndTagIdsKey: (
+    trackerId: Tracker['id'],
+    tagId: Tag['id'],
+  ) => [
+    SWR_KEY_COMPONENTS.MESSAGES,
+    SWR_KEY_COMPONENTS.TRACKER,
+    trackerId,
+    SWR_KEY_COMPONENTS.TAG,
+    tagId,
   ],
 };
