@@ -103,6 +103,7 @@ export const ChatScreen = () => {
               onPress: () => {
                 navigate(STACK_NAVIGATOR_SCREEN_NAMES.MESSAGES_BY_TAG_ID, {
                   tagId: tag.id ?? -1,
+                  trackerId: message.tracker?.id,
                 });
               },
             }))}
