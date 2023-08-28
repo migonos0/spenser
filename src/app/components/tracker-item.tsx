@@ -1,8 +1,9 @@
-import {Avatar, List, Text} from 'react-native-paper';
+import {List, Text} from 'react-native-paper';
 import {View} from 'react-native';
 import {useAppTheme} from '../../hooks/use-app-theme';
 import {cn} from '../../utilities/cn';
 import {TrackerDto} from '../../dtos/tracker.dto';
+import {TextAvatar} from './text-avatar';
 
 interface TrackerItemProps {
   trackerDto: TrackerDto;
@@ -23,10 +24,7 @@ export const TrackerItem = (props: TrackerItemProps) => {
         props.class,
       )}
       style={{borderColor: props.borderColor ?? colors.backdrop}}>
-      <Avatar.Text
-        size={48}
-        label={props.trackerDto.name.slice(0, 2).toUpperCase()}
-      />
+      <TextAvatar label={props.trackerDto.name.slice(0, 2).toUpperCase()} />
       <List.Item
         className="flex-1"
         title={props.trackerDto.name}
