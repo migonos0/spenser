@@ -15,6 +15,9 @@ import {ErrorText} from '../components/error-text';
 import {LOCALE} from '../../constants/locale';
 import {useLooseNavigation} from '../../hooks/use-loose-navigation';
 import {STACK_NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
+import {appbarActions} from '../../stores/appbar-store';
+import {displayName} from '../../../app.json';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const TrackersScreen = () => {
   const {trackerDtos} = useTrackerDtos();
@@ -30,6 +33,12 @@ export const TrackersScreen = () => {
     resolver: valibotResolver(CreateTrackerSchema),
   });
   const {navigate} = useLooseNavigation();
+
+  useFocusEffect(() => {
+    appbarActions.setTitle(displayName);
+    appbarActions.setLeftComponent(undefined);
+    appbarActions.setMiddleComponent(undefined);
+  });
 
   const onNewTrackerDialogDismiss = () => {
     setIsNewTrackerDialogVisible(false);
