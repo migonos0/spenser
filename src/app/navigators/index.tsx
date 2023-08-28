@@ -1,36 +1,17 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {NODE_ENV} from '../../constants/environment';
-import {DEVELOPER_MENU_ITEMS} from '../../constants/menu-items';
 import {STACK_NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
-import {useAppTheme} from '../../hooks/use-app-theme';
-import {Appbar} from '../components/app-bar';
 import {ChatScreen} from '../screens/chat.screen';
 import {MessagesByTagIdScreen} from '../screens/messages-by-tag-id.screen';
 import {TrackersScreen} from '../screens/trackers.screen';
 
-const StackNavigatorAppbar = () => {
-  const {colors} = useAppTheme();
-
-  return (
-    <Appbar
-      avatarBackgroundColor={colors.primaryContainer}
-      foregroundColor={colors.inverseOnSurface}
-      backgroundColor={colors.primary}
-      developerMenuItems={
-        NODE_ENV === 'development' ? DEVELOPER_MENU_ITEMS : undefined
-      }
-    />
-  );
-};
-
 const Stack = createNativeStackNavigator();
 
-export const StackNavigator = () => {
+export const Navigator = () => {
   return (
     <Stack.Navigator
       initialRouteName={STACK_NAVIGATOR_SCREEN_NAMES.TRACKERS}
-      screenOptions={{header: StackNavigatorAppbar}}>
+      screenOptions={{headerShown: false}}>
       <Stack.Screen
         name={STACK_NAVIGATOR_SCREEN_NAMES.TRACKERS}
         component={TrackersScreen}
