@@ -20,13 +20,20 @@ import {ChatBox} from '../components/chat-box';
 import {MessageCard} from '../components/message-card';
 import {ScreenLayout} from '../layouts/screen.layout';
 import {useLooseRoute} from '../../hooks/use-loose-route';
-import {useTrackerById} from '../../state/tracker.state';
+import {useTrackerById, useTrackerDtoById} from '../../state/tracker.state';
+import {useEffect} from 'react';
+import {appbarActions} from '../../stores/appbar-store';
+import {TextAvatar} from '../components/text-avatar';
+import {Text} from 'react-native-paper';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
   const {tags} = useTags();
   const {params} = useLooseRoute();
   const {tracker} = useTrackerById(
+    params?.trackerId ? +params.trackerId : undefined,
+  );
+  const {trackerDto} = useTrackerDtoById(
     params?.trackerId ? +params.trackerId : undefined,
   );
   const {createMessageTrigger} = useCreateMessageByTracker(
@@ -38,6 +45,26 @@ export const ChatScreen = () => {
   const {navigate} = useLooseNavigation();
   const {createTagsTrigger} = useCreateTags();
   const {messages} = useMessagesByTracker(tracker ?? undefined);
+
+  useEffect(() => {
+    appbarActions.setLeftComponent(
+      <TextAvatar
+        class="mr-2"
+        label={tracker?.name.slice(0, 2).toUpperCase()}
+      />,
+    );
+    appbarActions.setTitle(tracker?.name);
+  }, [tracker?.name]);
+  useEffect(() => {
+    appbarActions.setMiddleComponent(
+      <Text style={{color: colors.onPrimary}} variant="titleMedium">
+        {new Intl.NumberFormat('en-us', {
+          style: 'currency',
+          currency: 'USD',
+        }).format(trackerDto?.balance ?? 0)}
+      </Text>,
+    );
+  }, [trackerDto?.balance, colors.onPrimary]);
 
   const onSendButtonPress = (message: string) => {
     if (!tracker) {
