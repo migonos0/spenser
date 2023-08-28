@@ -1,11 +1,26 @@
 {
   "common": {
     "send": "Send",
-    "delete": "Delete"
+    "delete": "Delete",
+    "dismiss": "Dismiss",
+    "create": "Create"
   },
-  "inputSchemas": {
-    "messages": {
-      "pleaseProvideValidMessage": "Please provide a valid message."
+  "screens": {
+    "trackers": {
+      "dialogs": {
+        "createTracker": {
+          "title": "New tracker",
+          "inputs": {
+            "name": "Name",
+            "description": "Description"
+          }
+        }
+      }
+    }
+  },
+  "schemaErrors": {
+    "common": {
+      "properValue": "Please provide a proper value"
     }
   }
 }

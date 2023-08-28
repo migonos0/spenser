@@ -1,21 +1,20 @@
-import classNames from 'classnames';
 import {useState} from 'react';
 import {View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 
 import {LOCALE} from '../../constants/locale';
+import {cn} from '../../utilities/cn';
 
 interface ChatBoxProps {
   twClass?: string;
   onSendButtonPress?: (t: string) => void;
   avoidCleaningAfterSent?: boolean;
 }
-export const ChatBox = (props: ChatBoxProps) => {
+export const ChatBox = ({twClass, ...props}: ChatBoxProps) => {
   const [text, setText] = useState<string>('');
 
   return (
-    <View
-      className={classNames('flex flex-row w-full px-5 py-3', props.twClass)}>
+    <View className={cn('flex flex-row w-full px-5 py-3', twClass)}>
       <View className="flex-1 flex justify-center content-center pb-2 mr-2">
         <TextInput
           multiline

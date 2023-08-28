@@ -1,7 +1,7 @@
-import classNames from 'classnames';
 import {ReactNode} from 'react';
 import {View} from 'react-native';
 import {Surface} from 'react-native-paper';
+import {cn} from '../../utilities/cn';
 
 interface ScreenLayoutProps {
   children?: ReactNode;
@@ -9,8 +9,8 @@ interface ScreenLayoutProps {
   footer?: ReactNode;
 }
 
-export const ScreenLayout = (props: ScreenLayoutProps) => (
-  <Surface className={classNames('h-full flex', props.twClass)}>
+export const ScreenLayout = ({twClass, ...props}: ScreenLayoutProps) => (
+  <Surface className={cn('h-full flex', twClass)}>
     <View className="flex-1">{props.children}</View>
 
     <View>{props.footer}</View>

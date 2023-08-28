@@ -7,10 +7,9 @@ import {Tag} from '../../entities/tag';
 import {useAppTheme} from '../../hooks/use-app-theme';
 import {useLooseNavigation} from '../../hooks/use-loose-navigation';
 import {
-  useMessageAmountSummatory,
-  useMessages,
-  useCreateMessage,
-  useDeleteMessage,
+  useCreateMessageByTracker,
+  useDeleteMessageByTracker,
+  useMessagesByTracker,
 } from '../../state/message.state';
 import {useCreateTags, useTags} from '../../state/tag.state';
 import {
@@ -20,19 +19,57 @@ import {
 import {ChatBox} from '../components/chat-box';
 import {MessageCard} from '../components/message-card';
 import {ScreenLayout} from '../layouts/screen.layout';
+import {useLooseRoute} from '../../hooks/use-loose-route';
+import {useTrackerById, useTrackerDtoById} from '../../state/tracker.state';
+import {useEffect} from 'react';
+import {appbarActions} from '../../stores/appbar-store';
+import {TextAvatar} from '../components/text-avatar';
+import {Text} from 'react-native-paper';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
-  const {increaseOrDecreaseMessageAmountSummatory} =
-    useMessageAmountSummatory();
-  const {messages} = useMessages();
   const {tags} = useTags();
-  const {createMessageTrigger} = useCreateMessage();
-  const {deleteMessageTrigger} = useDeleteMessage();
+  const {params} = useLooseRoute();
+  const {tracker} = useTrackerById(
+    params?.trackerId ? +params.trackerId : undefined,
+  );
+  const {trackerDto} = useTrackerDtoById(
+    params?.trackerId ? +params.trackerId : undefined,
+  );
+  const {createMessageTrigger} = useCreateMessageByTracker(
+    tracker ?? undefined,
+  );
+  const {deleteMessageTrigger} = useDeleteMessageByTracker(
+    tracker ?? undefined,
+  );
   const {navigate} = useLooseNavigation();
   const {createTagsTrigger} = useCreateTags();
+  const {messages} = useMessagesByTracker(tracker ?? undefined);
+
+  useEffect(() => {
+    appbarActions.setLeftComponent(
+      <TextAvatar
+        class="mr-2"
+        label={tracker?.name.slice(0, 2).toUpperCase()}
+      />,
+    );
+    appbarActions.setTitle(tracker?.name);
+  }, [tracker?.name]);
+  useEffect(() => {
+    appbarActions.setMiddleComponent(
+      <Text style={{color: colors.onPrimary}} variant="titleMedium">
+        {new Intl.NumberFormat('en-us', {
+          style: 'currency',
+          currency: 'USD',
+        }).format(trackerDto?.balance ?? 0)}
+      </Text>,
+    );
+  }, [trackerDto?.balance, colors.onPrimary]);
 
   const onSendButtonPress = (message: string) => {
+    if (!tracker) {
+      return;
+    }
     const tagNames = findTags(message);
     const alreadyCreatedTags = tags?.filter(tag =>
       tagNames?.includes(tag.name),
@@ -51,18 +88,16 @@ export const ChatScreen = () => {
             creatableMessage.isExpense,
             creatableMessage.amount,
             creatableMessage.description,
+            tracker,
             [...(alreadyCreatedTags ?? []), ...(createdTags ?? [])],
           ),
         );
-        increaseOrDecreaseMessageAmountSummatory(creatableMessage.amount);
       },
     });
   };
 
-  const getOnDeletePressHandler = (message: Message) => () => {
-    increaseOrDecreaseMessageAmountSummatory(message.amount * -1);
+  const getOnDeletePressHandler = (message: Message) => () =>
     deleteMessageTrigger(message.id);
-  };
 
   return (
     <ScreenLayout footer={<ChatBox onSendButtonPress={onSendButtonPress} />}>
@@ -95,6 +130,7 @@ export const ChatScreen = () => {
               onPress: () => {
                 navigate(STACK_NAVIGATOR_SCREEN_NAMES.MESSAGES_BY_TAG_ID, {
                   tagId: tag.id ?? -1,
+                  trackerId: message.tracker?.id,
                 });
               },
             }))}

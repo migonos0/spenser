@@ -2173,6 +2173,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hookform/resolvers@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@hookform/resolvers@npm:3.2.0"
+  peerDependencies:
+    react-hook-form: ^7.0.0
+  checksum: 041692117f1915ea23ab48f0eeaa4841ffb45f849b9743315ac4b05ae860a4ceb41adc55cf3c213aefe705b6b63b725d9a128c0ae7d15f5faca162e2a94a63d1
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.10":
   version: 0.11.10
   resolution: "@humanwhocodes/config-array@npm:0.11.10"
@@ -3448,6 +3457,7 @@ __metadata:
     "@babel/core": ^7.20.0
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
+    "@hookform/resolvers": ^3.2.0
     "@pchmn/expo-material3-theme": ^1.3.1
     "@react-native-async-storage/async-storage": ^1.19.2
     "@react-native/eslint-config": ^0.72.2
@@ -3461,17 +3471,17 @@ __metadata:
     babel-jest: ^29.2.1
     babel-plugin-module-resolver: ^5.0.0
     babel-plugin-transform-typescript-metadata: ^0.3.2
-    classnames: ^2.3.2
+    clsx: ^2.0.0
     eslint: ^8.19.0
     expo: ^49.0.0
     expo-constants: ~14.4.2
     expo-haptics: ~12.4.0
-    expo-status-bar: ~1.6.0
     jest: ^29.2.1
     metro-react-native-babel-preset: 0.76.8
     nativewind: ^2.0.11
     prettier: ^2.4.1
     react: 18.2.0
+    react-hook-form: ^7.45.4
     react-native: 0.72.4
     react-native-paper: ^5.10.1
     react-native-quick-sqlite: ^8.0.4
@@ -3481,10 +3491,11 @@ __metadata:
     react-test-renderer: 18.2.0
     reflect-metadata: ^0.1.13
     swr: ^2.2.1
+    tailwind-merge: ^1.14.0
     tailwindcss: 3.3.2
     typeorm: ^0.3.17
     typescript: 4.8.4
-    zod: ^3.22.0
+    valibot: ^0.12.0
     zustand: ^4.4.1
   languageName: unknown
   linkType: soft
@@ -4526,13 +4537,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.3.2":
-  version: 2.3.2
-  resolution: "classnames@npm:2.3.2"
-  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
-  languageName: node
-  linkType: hard
-
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -4643,6 +4647,13 @@ __metadata:
   version: 2.1.2
   resolution: "clone@npm:2.1.2"
   checksum: aaf106e9bc025b21333e2f4c12da539b568db4925c0501a1bf4070836c9e848c892fa22c35548ce0d1132b08bbbfa17a00144fe58fccdab6fa900fec4250f67d
+  languageName: node
+  linkType: hard
+
+"clsx@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "clsx@npm:2.0.0"
+  checksum: a2cfb2351b254611acf92faa0daf15220f4cd648bdf96ce369d729813b85336993871a4bf6978ddea2b81b5a130478339c20d9d0b5c6fc287e5147f0c059276e
   languageName: node
   linkType: hard
 
@@ -5974,13 +5985,6 @@ __metadata:
     compare-versions: ^3.4.0
     invariant: ^2.2.4
   checksum: 9a740ef3203356d080745fb80930cd853bbb5492bd329062dcd96114b884f3c0e3c94e940c1b9e7b93ab2c3ecd4fdf3790312c0f773136c4c858b6cdca085701
-  languageName: node
-  linkType: hard
-
-"expo-status-bar@npm:~1.6.0":
-  version: 1.6.0
-  resolution: "expo-status-bar@npm:1.6.0"
-  checksum: e9fe7eeac4dfb3a534d79b6fa0df2a3d2e4c69edeb3573e408ca8d3b7d192627b3f9638c8f656bea9af0a6660f27c99c5da504a508294893dbe359ad5f1d6ab3
   languageName: node
   linkType: hard
 
@@ -10603,6 +10607,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.45.4":
+  version: 7.45.4
+  resolution: "react-hook-form@npm:7.45.4"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 1d84c78dadf561bc9e360272c5c856c724426162e13a74929c0517c3eb8004a7f057561fff3bfd4c1121b36d6cf1437399df1dbfd01d0817b9f922503f407d8f
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.12.0 || ^17.0.0 || ^18.0.0, react-is@npm:^18.0.0, react-is@npm:^18.1.0, react-is@npm:^18.2.0":
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
@@ -11948,6 +11961,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tailwind-merge@npm:^1.14.0":
+  version: 1.14.0
+  resolution: "tailwind-merge@npm:1.14.0"
+  checksum: 8cf5d37f51b3b32e4bdd5544feaed34357bfba2f64f14834cc4a21ac29b0ae22d7255386467a0f1dadb3e38499389efbbabeddcd0b16571af5a0d346a4921877
+  languageName: node
+  linkType: hard
+
 "tailwindcss@npm:3.3.2":
   version: 3.3.2
   resolution: "tailwindcss@npm:3.3.2"
@@ -12770,6 +12790,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"valibot@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "valibot@npm:0.12.0"
+  checksum: 1ec982de04dd352783d50061c26cfdf9a9c95762a0c85f6318871c08cdd0290d3cf1f0f5950f5870fa60d3d5d9fcb960b9a15882f1f1f80cfa1b3b5b9c896edb
+  languageName: node
+  linkType: hard
+
 "valid-url@npm:~1.0.9":
   version: 1.0.9
   resolution: "valid-url@npm:1.0.9"
@@ -13187,13 +13214,6 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
-  languageName: node
-  linkType: hard
-
-"zod@npm:^3.22.0":
-  version: 3.22.0
-  resolution: "zod@npm:3.22.0"
-  checksum: b3974ac2c879e1597559d69ad11c331dd4961164fb3a4805d12fe2b3c5b0b6404e4b3acca997d514456f2035140d228f1e9c523a69852937faeb0027f94b6ec0
   languageName: node
   linkType: hard
 

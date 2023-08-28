@@ -1,10 +1,10 @@
-import {StatusBar} from 'expo-status-bar';
 import {ReactNode} from 'react';
 import {MD3DarkTheme, MD3LightTheme, PaperProvider} from 'react-native-paper';
 
 import {useIsDarkMode} from '../../stores/theme.store';
 
 import {useMaterial3Theme} from '@pchmn/expo-material3-theme';
+import {StatusBar} from 'react-native';
 
 interface ReactNativePaperProviderProps {
   children?: ReactNode;
@@ -24,7 +24,7 @@ export const ReactNativePaperProvider = (
           : {...MD3LightTheme, colors: theme.light}
       }>
       <StatusBar
-        style={isDarkMode ? 'dark' : 'light'}
+        barStyle={isDarkMode ? 'dark-content' : 'light-content'}
         backgroundColor={isDarkMode ? theme.dark.primary : theme.light.primary}
       />
       {props.children}

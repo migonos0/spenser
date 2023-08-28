@@ -1,24 +1,21 @@
 import {DataSource} from 'typeorm';
-import {number} from 'zod';
 
 import {Message} from '../entities/message';
-
-export const findAllMessages =
-  ({ascendant}: {ascendant?: boolean}) =>
-  async (dataSource: DataSource) =>
-    await dataSource.manager.find(Message, {
-      order: {id: ascendant ? 'ASC' : 'DESC'},
-      relations: {tags: true},
-    });
+import {Tracker} from '../entities/tracker';
 
 export const createMessage =
-  (message: Message) => async (dataSource: DataSource) =>
-    await dataSource.manager.save(message);
+  (message: Message) => async (dataSource: DataSource) => {
+    if (message.tracker) {
+      message.tracker.updatedAt = new Date();
+      await dataSource.getRepository(Tracker).save(message.tracker);
+    }
 
+    return await dataSource.manager.save(message);
+  };
 export const deleteMessageById =
   (messageId: Message['id']) => async (dataSource: DataSource) => {
     const foundMessage = await dataSource.manager.findOne(Message, {
-      relations: {tags: true},
+      relations: {tags: true, tracker: true},
       where: {id: messageId},
     });
 
@@ -26,25 +23,20 @@ export const deleteMessageById =
       return;
     }
 
-    return {...(await dataSource.manager.remove(foundMessage)), id: messageId};
+    const deletedMessage = await dataSource.manager.remove(foundMessage);
+
+    if (foundMessage.tracker) {
+      foundMessage.tracker.updatedAt = new Date();
+      await dataSource.getRepository(Tracker).save(foundMessage.tracker);
+    }
+
+    return {...deletedMessage, id: messageId};
   };
 
-export const findMessageAmountSummatory = async (dataSource: DataSource) => {
-  const {sum} = await dataSource
-    .getRepository(Message)
-    .createQueryBuilder('message')
-    .select('SUM(message.amount)', 'sum')
-    .getRawOne();
-
-  const parsedMessageAmountSummatory = number().safeParse(sum);
-
-  if (!parsedMessageAmountSummatory.success) {
-    return;
-  }
-
-  return parsedMessageAmountSummatory.data;
-};
-
-export const findMessageById =
-  (messageId: Message['id']) => async (dataSource: DataSource) =>
-    await dataSource.manager.findOneBy(Message, {id: messageId});
+export const findAllMessagesByTracker =
+  (tracker: Tracker) => async (ds: DataSource) =>
+    await ds.manager.find(Message, {
+      where: {tracker},
+      order: {id: 'DESC'},
+      relations: {tags: true, tracker: true},
+    });
