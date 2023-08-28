@@ -39,20 +39,34 @@ export const useDeleteMessageByTracker = (tracker?: Tracker) => {
       }
 
       /**
-       * Decreasing to the balance of the tracker
+       * Decreasing to the balance of the tracker, removing and placing it on top.
        */
       mutate(
         swrKeyGetters.getUseTrackerDtosKey(),
-        (currentTrackerDtos: TrackerDto[] | undefined) =>
-          currentTrackerDtos?.map(currentTrackerDto =>
-            currentTrackerDto.id !== tracker?.id
-              ? currentTrackerDto
-              : {
-                  ...currentTrackerDto,
-                  balance:
-                    (currentTrackerDto.balance ?? 0) - deletedMessage.amount,
-                },
-          ),
+        (cachedTrackerDtos: TrackerDto[] | undefined) => {
+          if (!cachedTrackerDtos) {
+            return;
+          }
+          const cachedTrackerDtoIndex = cachedTrackerDtos.findIndex(
+            ctd => ctd.id === tracker?.id,
+          );
+          const cachedTrackerDto = cachedTrackerDtos.at(cachedTrackerDtoIndex);
+          if (!cachedTrackerDto) {
+            return cachedTrackerDtos;
+          }
+
+          const cachedTrackerDtosCopy = cachedTrackerDtos.slice();
+          cachedTrackerDtosCopy.splice(cachedTrackerDtoIndex, 1);
+
+          return [
+            {
+              ...cachedTrackerDto,
+              balance: (cachedTrackerDto.balance ?? 0) - deletedMessage.amount,
+            },
+            ...cachedTrackerDtosCopy,
+          ];
+        },
+        {revalidate: false},
       );
 
       return currentData?.filter(message => message.id !== deletedMessage.id);
@@ -77,19 +91,34 @@ export const useCreateMessageByTracker = (tracker?: Tracker) => {
       }
 
       /**
-       * Adding to the balance of the tracker
+       * Adding to the balance of the tracker, removing and placing it on top.
        */
       mutate(
         swrKeyGetters.getUseTrackerDtosKey(),
-        (currentTrackerDtos: TrackerDto[] | undefined) =>
-          currentTrackerDtos?.map(currentTrackerDto =>
-            currentTrackerDto.id !== tracker?.id
-              ? currentTrackerDto
-              : {
-                  ...currentTrackerDto,
-                  balance: (currentTrackerDto.balance ?? 0) + result.amount,
-                },
-          ),
+        (cachedTrackerDtos: TrackerDto[] | undefined) => {
+          if (!cachedTrackerDtos) {
+            return;
+          }
+          const cachedTrackerDtoIndex = cachedTrackerDtos.findIndex(
+            ctd => ctd.id === tracker?.id,
+          );
+          const cachedTrackerDto = cachedTrackerDtos.at(cachedTrackerDtoIndex);
+          if (!cachedTrackerDto) {
+            return cachedTrackerDtos;
+          }
+
+          const cachedTrackerDtosCopy = cachedTrackerDtos.slice();
+          cachedTrackerDtosCopy.splice(cachedTrackerDtoIndex, 1);
+
+          return [
+            {
+              ...cachedTrackerDto,
+              balance: (cachedTrackerDto.balance ?? 0) + result.amount,
+            },
+            ...cachedTrackerDtosCopy,
+          ];
+        },
+        {revalidate: false},
       );
 
       return [result, ...(currentData ?? [])];
