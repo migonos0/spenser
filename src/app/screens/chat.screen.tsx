@@ -25,6 +25,12 @@ import {useEffect} from 'react';
 import {appbarActions} from '../../stores/appbar-store';
 import {TextAvatar} from '../components/text-avatar';
 import {Text} from 'react-native-paper';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {
+  CreateMessageData,
+  CreateMessageSchema,
+} from '../../schemas/create-message.schema';
+import {valibotResolver} from '@hookform/resolvers/valibot';
 
 export const ChatScreen = () => {
   const {colors} = useAppTheme();
@@ -45,6 +51,9 @@ export const ChatScreen = () => {
   const {navigate} = useLooseNavigation();
   const {createTagsTrigger} = useCreateTags();
   const {messages} = useMessagesByTracker(tracker ?? undefined);
+  const {control, handleSubmit, reset} = useForm<CreateMessageData>({
+    resolver: valibotResolver(CreateMessageSchema),
+  });
 
   useEffect(() => {
     appbarActions.setLeftComponent(
@@ -66,7 +75,9 @@ export const ChatScreen = () => {
     );
   }, [trackerDto?.balance, colors.onPrimary]);
 
-  const onSendButtonPress = (message: string) => {
+  const createMessageSubmitHandler: SubmitHandler<CreateMessageData> = ({
+    message,
+  }) => {
     if (!tracker) {
       return;
     }
@@ -91,6 +102,7 @@ export const ChatScreen = () => {
             tracker,
             [...(alreadyCreatedTags ?? []), ...(createdTags ?? [])],
           ),
+          {onSuccess: reset as () => void},
         );
       },
     });
@@ -100,7 +112,21 @@ export const ChatScreen = () => {
     deleteMessageTrigger(message.id);
 
   return (
-    <ScreenLayout footer={<ChatBox onSendButtonPress={onSendButtonPress} />}>
+    <ScreenLayout
+      footer={
+        <Controller
+          control={control}
+          name="message"
+          render={({field: {onChange, value, onBlur}}) => (
+            <ChatBox
+              onBlur={onBlur}
+              value={value}
+              onChange={onChange}
+              onSendButtonPress={handleSubmit(createMessageSubmitHandler)}
+            />
+          )}
+        />
+      }>
       <FlatList
         inverted
         className="px-4"
