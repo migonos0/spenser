@@ -1,8 +1,8 @@
 import {swrKeyGetters} from '../utilities/swr-key-getters';
 import {Transaction} from '../entities/transaction';
 import {
-  useSWRDataSourceMutation,
-  useSWRImmutableDataSource,
+  useSWRMutationOnInitializedDS,
+  useSWRImmutableOnInitializedDS,
 } from '../hooks/use-swr';
 import {
   createTransaction,
@@ -18,10 +18,10 @@ export const useTransactionsByAccount = (account?: Account) => {
     ? swrKeyGetters.getUseTransactionsByAccountKey(account)
     : undefined;
   const fetcher = account
-    ? findAllTransactionsByAccount(account)
+    ? () => findAllTransactionsByAccount(account)
     : () => undefined;
 
-  const {data} = useSWRImmutableDataSource(key, fetcher);
+  const {data} = useSWRImmutableOnInitializedDS(key, fetcher);
 
   return {transactions: data};
 };
@@ -32,7 +32,7 @@ export const useDeleteTransactionByAccount = (account?: Account) => {
     : undefined;
   const {mutate} = useSWRConfig();
 
-  const {trigger} = useSWRDataSourceMutation(
+  const {trigger} = useSWRMutationOnInitializedDS(
     key,
     deleteTransactionById,
     (deletedTransaction, currentData: Transaction[] | undefined) => {
@@ -87,7 +87,7 @@ export const useCreateTransactionByAccount = (account?: Account) => {
     : undefined;
   const {mutate} = useSWRConfig();
 
-  const {trigger} = useSWRDataSourceMutation(
+  const {trigger} = useSWRMutationOnInitializedDS(
     key,
     createTransaction,
     (createdTransaction, currentData: Transaction[] | undefined) => {

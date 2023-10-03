@@ -5,9 +5,8 @@ import swrMutationHook, {
   MutationFetcher,
   SWRMutationConfiguration,
 } from 'swr/mutation';
-import {DataSource} from 'typeorm';
 
-import {useDataSource} from '../state/data-source.state';
+import {useIsDataSourceInitialized} from '../state/data-source.state';
 
 export const useSWRImmutable = <Data>(
   key: Key,
@@ -39,44 +38,42 @@ export const useSWRMutation = <Data, ExtraArg = never>(
   return result;
 };
 
-export const useSWRDataSource = <Data>(
+export const useSWROnInitializedDS = <Data>(
   key: Key,
-  fetcher: (dataSource: DataSource) => Data | Promise<Data>,
+  fetcher: () => Data | Promise<Data>,
 ) => {
-  const dataSource = useDataSource();
+  const isDataSourceInitialized = useIsDataSourceInitialized();
 
-  const key2 = dataSource ? key : undefined;
-  const fetcher2 = () => dataSource && fetcher(dataSource);
+  const key2 = isDataSourceInitialized ? key : undefined;
 
-  return useSWR(key2, fetcher2);
+  return useSWR(key2, fetcher);
 };
 
-export const useSWRImmutableDataSource = <Data>(
+export const useSWRImmutableOnInitializedDS = <Data>(
   key: Key,
-  fetcher: (dataSource: DataSource) => Data | Promise<Data>,
+  fetcher: () => Data | Promise<Data>,
 ) => {
-  const dataSource = useDataSource();
+  const dataSource = useIsDataSourceInitialized();
 
   const key2 = dataSource ? key : undefined;
-  const fetcher2 = () => dataSource && fetcher(dataSource);
 
-  return useSWRImmutable(key2, fetcher2);
+  return useSWRImmutable(key2, fetcher);
 };
 
-export const useSWRDataSourceMutation = <T, U, V = any>(
+export const useSWRMutationOnInitializedDS = <T, U, V = any>(
   key: Key,
-  fetcher: (input: T) => (dataSource: DataSource) => U | Promise<U>,
+  fetcher: (input: T) => U | Promise<U>,
   populateCache?: (result: U | undefined, currentData: V) => V,
 ) => {
-  const dataSource = useDataSource();
+  const isDataSourceInitialized = useIsDataSourceInitialized();
   const {mutate} = useSWRConfig();
 
-  const key2 = dataSource ? key : undefined;
+  const key2 = isDataSourceInitialized ? key : undefined;
   const fetcher2 = async (_: unknown, {arg}: {arg: T}) => {
-    if (!dataSource) {
+    if (!isDataSourceInitialized) {
       return;
     }
-    return await fetcher(arg)(dataSource);
+    return await fetcher(arg);
   };
 
   const result = useSWRMutation(key2, fetcher2, {

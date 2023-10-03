@@ -1,4 +1,3 @@
-import {DataSource} from 'typeorm';
 import {Account} from '../entities/account';
 import {findBalanceByAccountId} from '../services/account.service';
 
@@ -21,11 +20,10 @@ export class AccountDto {
     this.transactions = trackerDto.transactions;
   }
 
-  static build(account: Account) {
-    return async (ds: DataSource) =>
-      new AccountDto({
-        ...account,
-        balance: await findBalanceByAccountId(account.id)(ds),
-      });
+  static async build(account: Account) {
+    return new AccountDto({
+      ...account,
+      balance: await findBalanceByAccountId(account.id),
+    });
   }
 }

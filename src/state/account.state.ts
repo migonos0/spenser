@@ -1,8 +1,8 @@
 import {swrKeyGetters} from '../utilities/swr-key-getters';
 import {Account} from '../entities/account';
 import {
-  useSWRDataSourceMutation,
-  useSWRImmutableDataSource,
+  useSWRMutationOnInitializedDS,
+  useSWRImmutableOnInitializedDS,
 } from '../hooks/use-swr';
 import {
   createAccount,
@@ -12,7 +12,7 @@ import {
 import {useMemo} from 'react';
 
 export const useAccountDtos = () => {
-  const {data} = useSWRImmutableDataSource(
+  const {data} = useSWRImmutableOnInitializedDS(
     swrKeyGetters.getUseAccountDtosKey(),
     findAllAccountDtos,
   );
@@ -21,7 +21,7 @@ export const useAccountDtos = () => {
 };
 
 export const useCreateAccount = () => {
-  const {trigger} = useSWRDataSourceMutation(
+  const {trigger} = useSWRMutationOnInitializedDS(
     swrKeyGetters.getUseAccountDtosKey(),
     createAccount,
     (createdAccount, currentData: Account[] | undefined) => {
@@ -39,9 +39,9 @@ export const useAccountById = (accountId?: Account['id']) => {
   const key = accountId
     ? swrKeyGetters.getUseAccountByIdKey(accountId)
     : undefined;
-  const fetcher = findAccountById(accountId);
+  const fetcher = () => findAccountById(accountId);
 
-  const {data} = useSWRImmutableDataSource(key, fetcher);
+  const {data} = useSWRImmutableOnInitializedDS(key, fetcher);
 
   return {account: data};
 };

@@ -1,41 +1,36 @@
-import {DataSource} from 'typeorm';
 import {Account} from '../entities/account';
 import {Transaction} from '../entities/transaction';
 import {number, safeParse} from 'valibot';
 import {AccountDto} from '../dtos/account.dto';
+import {dataSource} from '../utilities/data-source';
 
-export const createAccount =
-  (account: Account) => async (dataSource: DataSource) =>
-    await dataSource.manager.save(account);
+export const createAccount = async (account: Account) =>
+  await dataSource.manager.save(account);
 
-export const findBalanceByAccountId =
-  (accountId: Account['id']) => async (dataSource: DataSource) => {
-    const {balance} = await dataSource
-      .createQueryBuilder()
-      .from(Transaction, 'transaction')
-      .select('SUM(transaction.amount)', 'balance')
-      .where('transaction.accountId = :accountId', {accountId})
-      .getRawOne();
+export const findBalanceByAccountId = async (accountId: Account['id']) => {
+  const {balance} = await dataSource
+    .createQueryBuilder()
+    .from(Transaction, 'transaction')
+    .select('SUM(transaction.amount)', 'balance')
+    .where('transaction.accountId = :accountId', {accountId})
+    .getRawOne();
 
-    const parsedBalance = safeParse(number(), balance);
+  const parsedBalance = safeParse(number(), balance);
 
-    if (!parsedBalance.success) {
-      return;
-    }
+  if (!parsedBalance.success) {
+    return;
+  }
 
-    return parsedBalance.data;
-  };
+  return parsedBalance.data;
+};
 
-export const findAllAccounts = async (dataSource: DataSource) =>
+export const findAllAccounts = async () =>
   await dataSource.manager.find(Account, {order: {updatedAt: 'DESC'}});
 
-export const findAllAccountDtos = async (dataSource: DataSource) =>
+export const findAllAccountDtos = async () =>
   Promise.all(
-    (await findAllAccounts(dataSource)).map(account =>
-      AccountDto.build(account)(dataSource),
-    ),
+    (await findAllAccounts()).map(account => AccountDto.build(account)),
   );
 
-export const findAccountById =
-  (accountId: Account['id']) => async (ds: DataSource) =>
-    await ds.manager.findOneBy(Account, {id: accountId});
+export const findAccountById = async (accountId: Account['id']) =>
+  await dataSource.manager.findOneBy(Account, {id: accountId});
