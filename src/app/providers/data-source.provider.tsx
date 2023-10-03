@@ -9,14 +9,9 @@ interface DataSourceProviderProps {
 
 export const DataSourceProvider = (props: DataSourceProviderProps) => {
   useEffect(() => {
-    dataSource
-      .initialize()
-      .then(() => {
-        dataSourceStoreActions.setDataSource(dataSource);
-      })
-      .catch(() => {
-        dataSourceStoreActions.setDataSource(undefined);
-      });
+    dataSource.initialize().then(() => {
+      dataSourceStoreActions.setIsInitializedTrue();
+    });
   }, []);
 
   return <>{props.children}</>;
