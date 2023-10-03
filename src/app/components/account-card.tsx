@@ -2,18 +2,18 @@ import {List, Text} from 'react-native-paper';
 import {View} from 'react-native';
 import {useAppTheme} from '../../hooks/use-app-theme';
 import {cn} from '../../utilities/cn';
-import {TrackerDto} from '../../dtos/tracker.dto';
+import {AccountDto} from '../../dtos/account.dto';
 import {TextAvatar} from './text-avatar';
 
-interface TrackerItemProps {
-  trackerDto: TrackerDto;
+interface AccountCardProps {
+  accountDto: AccountDto;
   borderColor?: string;
   class?: string;
   balance?: number;
   onPress?: () => void;
 }
 
-export const TrackerItem = (props: TrackerItemProps) => {
+export const AccountCard = (props: AccountCardProps) => {
   const {colors} = useAppTheme();
 
   return (
@@ -24,11 +24,11 @@ export const TrackerItem = (props: TrackerItemProps) => {
         props.class,
       )}
       style={{borderColor: props.borderColor ?? colors.backdrop}}>
-      <TextAvatar label={props.trackerDto.name.slice(0, 2).toUpperCase()} />
+      <TextAvatar label={props.accountDto.name.slice(0, 2).toUpperCase()} />
       <List.Item
         className="flex-1"
-        title={props.trackerDto.name}
-        description={props.trackerDto.description}
+        title={props.accountDto.name}
+        description={props.accountDto.description}
       />
       <Text>
         {new Intl.NumberFormat('en-us', {

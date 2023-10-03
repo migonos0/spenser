@@ -1,8 +1,8 @@
 import {DataSource} from 'typeorm';
 
 import {Tag} from '../entities/tag';
-import {Tracker} from '../entities/tracker';
-import {Message} from '../entities/message';
+import {Account} from '../entities/account';
+import {Transaction} from '../entities/transaction';
 
 export const findAllTags = async (dataSource: DataSource) =>
   await dataSource.manager.find(Tag);
@@ -21,15 +21,15 @@ export const findTagById =
   (tagId: Tag['id']) => async (dataSource: DataSource) =>
     await dataSource.manager.findOneBy(Tag, {id: tagId});
 
-export const findMessagesByTrackerAndTagIds =
-  (trackerId: Tracker['id'], tagId: Tag['id']) => async (ds: DataSource) =>
+export const findTransactionsByAccountAndTagIds =
+  (accountId: Account['id'], tagId: Tag['id']) => async (ds: DataSource) =>
     await ds
-      .getRepository(Message)
-      .createQueryBuilder('message')
-      .innerJoin('message.tags', 'tag')
-      .where('message.trackerId = :trackerId', {trackerId})
+      .getRepository(Transaction)
+      .createQueryBuilder('transaction')
+      .innerJoin('transaction.tags', 'tag')
+      .where('transaction.accountId = :accountId', {accountId})
       .andWhere('tag.id = tagId', {tagId})
-      .orderBy('message.id', 'DESC')
+      .orderBy('transaction.id', 'DESC')
       .getMany();
 
 export const createTag = (tag: Tag) => async (dataSource: DataSource) =>

@@ -1,8 +1,8 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
-import {Message} from './message';
+import {Transaction} from './transaction';
 
 @Entity()
-export class Tracker {
+export class Account {
   @PrimaryGeneratedColumn()
   id: number | undefined;
 
@@ -18,22 +18,22 @@ export class Tracker {
   @Column({type: 'datetime'})
   updatedAt: Date;
 
-  @OneToMany(() => Message, message => message.tracker)
-  messages: Message[] | undefined;
+  @OneToMany(() => Transaction, message => message.account)
+  transactions: Transaction[] | undefined;
 
   constructor(
-    name: Tracker['name'],
-    description: Tracker['description'],
-    createdAt?: Tracker['createdAt'],
-    updatedAt?: Tracker['updatedAt'],
-    messages?: Tracker['messages'],
-    id?: Tracker['id'],
+    name: Account['name'],
+    description: Account['description'],
+    createdAt?: Account['createdAt'],
+    updatedAt?: Account['updatedAt'],
+    transactions?: Account['transactions'],
+    id?: Account['id'],
   ) {
     this.name = name;
     this.description = description;
     this.createdAt = createdAt ?? new Date();
     this.updatedAt = updatedAt ?? new Date();
-    this.messages = messages;
+    this.transactions = transactions;
     this.id = id;
   }
 }

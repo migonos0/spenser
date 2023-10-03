@@ -1,28 +1,28 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {STACK_NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
-import {ChatScreen} from '../screens/chat.screen';
-import {MessagesByTagIdScreen} from '../screens/messages-by-tag-id.screen';
-import {TrackersScreen} from '../screens/trackers.screen';
+import {NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
+import {TransactionsScreen} from '../screens/transactions.screen';
+import {TransactionsByTagScreen} from '../screens/transactions-by-tag.screen';
+import {AccountsScreen} from '../screens/accounts.screen';
 
 const Stack = createNativeStackNavigator();
 
 export const Navigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={STACK_NAVIGATOR_SCREEN_NAMES.TRACKERS}
+      initialRouteName={NAVIGATOR_SCREEN_NAMES.ACCOUNTS}
       screenOptions={{headerShown: false}}>
       <Stack.Screen
-        name={STACK_NAVIGATOR_SCREEN_NAMES.TRACKERS}
-        component={TrackersScreen}
+        name={NAVIGATOR_SCREEN_NAMES.ACCOUNTS}
+        component={AccountsScreen}
       />
       <Stack.Screen
-        name={STACK_NAVIGATOR_SCREEN_NAMES.CHAT}
-        component={ChatScreen}
+        name={NAVIGATOR_SCREEN_NAMES.TRANSACTIONS}
+        component={TransactionsScreen}
       />
       <Stack.Screen
-        name={STACK_NAVIGATOR_SCREEN_NAMES.MESSAGES_BY_TAG_ID}
-        component={MessagesByTagIdScreen}
+        name={NAVIGATOR_SCREEN_NAMES.TRANSACTIONS_BY_TAG_ID}
+        component={TransactionsByTagScreen}
       />
     </Stack.Navigator>
   );
