@@ -2,17 +2,17 @@ import {FlatList} from 'react-native';
 
 import {useAppTheme} from '../../hooks/use-app-theme';
 import {useLooseRoute} from '../../hooks/use-loose-route';
-import {useMessagesByTrackerAndTagIds} from '../../state/tag.state';
-import {MessageCard} from '../components/message-card';
+import {useTransactionsByAccountAndTagIds} from '../../state/tag.state';
+import {TransactionCard} from '../components/transaction-card';
 import {ScreenLayout} from '../layouts/screen.layout';
 
-export const MessagesByTagIdScreen = () => {
+export const TransactionsByTagScreen = () => {
   const {params} = useLooseRoute();
   const tagId = params?.tagId;
-  const trackerId = params?.trackerId;
+  const transactionId = params?.transactionId;
   const {colors} = useAppTheme();
-  const {messages} = useMessagesByTrackerAndTagIds(
-    +(trackerId ?? -1),
+  const {transactions: transactions} = useTransactionsByAccountAndTagIds(
+    +(transactionId ?? -1),
     +(tagId ?? -1),
   );
 
@@ -21,19 +21,17 @@ export const MessagesByTagIdScreen = () => {
       <FlatList
         inverted
         className="px-4"
-        data={messages}
+        data={transactions}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({item: message}) => (
-          <MessageCard
-            twClass="m-2"
+          <TransactionCard
+            class="m-2"
             backgroundColor={
               message.isExpense
                 ? colors.tertiaryContainer
                 : colors.surfaceVariant
             }
-            cardTitle={
-              (!message.isExpense ? '+' : '') + message.amount.toString()
-            }
+            title={(!message.isExpense ? '+' : '') + message.amount.toString()}
             body={message.description}
           />
         )}

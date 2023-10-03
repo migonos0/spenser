@@ -6,10 +6,10 @@
     "create": "Create"
   },
   "screens": {
-    "trackers": {
+    "accounts": {
       "dialogs": {
-        "createTracker": {
-          "title": "New tracker",
+        "createAccount": {
+          "title": "New account",
           "inputs": {
             "name": "Name",
             "description": "Description"

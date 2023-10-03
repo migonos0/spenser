@@ -1,6 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToMany} from 'typeorm';
 
-import {Message} from './message';
+import {Transaction} from './transaction';
 
 @Entity()
 export class Tag {
@@ -10,8 +10,8 @@ export class Tag {
   @Column()
   name: string;
 
-  @ManyToMany(() => Message, message => message.tags)
-  messages?: Message[];
+  @ManyToMany(() => Transaction, message => message.tags)
+  messages?: Transaction[];
 
   constructor(name: string) {
     this.name = name;

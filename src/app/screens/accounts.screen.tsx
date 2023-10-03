@@ -1,36 +1,36 @@
 import {FlatList, View} from 'react-native';
-import {useCreateTracker, useTrackerDtos} from '../../state/tracker.state';
+import {useCreateAccount, useAccountDtos} from '../../state/account.state';
 import {ScreenLayout} from '../layouts/screen.layout';
 import {Button, Dialog, FAB, Portal, TextInput} from 'react-native-paper';
 import {useState} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {
-  CreateTrackerData,
-  CreateTrackerSchema,
+  CreateAccountData,
+  CreateAccountSchema,
 } from '../../schemas/create-tracker.schema';
 import {valibotResolver} from '@hookform/resolvers/valibot';
-import {Tracker} from '../../entities/tracker';
-import {TrackerItem} from '../components/tracker-item';
+import {Account} from '../../entities/account';
+import {AccountCard} from '../components/account-card';
 import {ErrorText} from '../components/error-text';
 import {LOCALE} from '../../constants/locale';
 import {useLooseNavigation} from '../../hooks/use-loose-navigation';
-import {STACK_NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
+import {NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
 import {appbarActions} from '../../stores/appbar-store';
 import {displayName} from '../../../app.json';
 import {useFocusEffect} from '@react-navigation/native';
 
-export const TrackersScreen = () => {
-  const {trackerDtos} = useTrackerDtos();
-  const [isNewTrackerDialogVisible, setIsNewTrackerDialogVisible] =
+export const AccountsScreen = () => {
+  const {accountDtos} = useAccountDtos();
+  const [isNewAccountDialogVisible, setIsNewAccountDialogVisible] =
     useState(false);
-  const {createTrackerTrigger} = useCreateTracker();
+  const {createAccountTrigger} = useCreateAccount();
   const {
     control,
     handleSubmit,
     reset,
     formState: {errors},
-  } = useForm<CreateTrackerData>({
-    resolver: valibotResolver(CreateTrackerSchema),
+  } = useForm<CreateAccountData>({
+    resolver: valibotResolver(CreateAccountSchema),
   });
   const {navigate} = useLooseNavigation();
 
@@ -40,28 +40,28 @@ export const TrackersScreen = () => {
     appbarActions.setMiddleComponent(undefined);
   });
 
-  const onNewTrackerDialogDismiss = () => {
-    setIsNewTrackerDialogVisible(false);
+  const onNewAccountDialogDismiss = () => {
+    setIsNewAccountDialogVisible(false);
     reset();
   };
-  const newTrackerSubmitHandler: SubmitHandler<CreateTrackerData> = input =>
-    createTrackerTrigger(new Tracker(input.name, input.description), {
-      onSuccess: onNewTrackerDialogDismiss,
+  const newAccountSubmitHandler: SubmitHandler<CreateAccountData> = input =>
+    createAccountTrigger(new Account(input.name, input.description), {
+      onSuccess: onNewAccountDialogDismiss,
     });
 
   return (
     <>
       <ScreenLayout>
         <FlatList
-          data={trackerDtos}
-          renderItem={({item: tracker}) => (
-            <TrackerItem
-              trackerDto={tracker}
+          data={accountDtos}
+          renderItem={({item: accountDto}) => (
+            <AccountCard
+              accountDto={accountDto}
               class="border-0 border-b-2"
-              balance={tracker.balance}
+              balance={accountDto.balance}
               onPress={() =>
-                navigate(STACK_NAVIGATOR_SCREEN_NAMES.CHAT, {
-                  trackerId: tracker.id,
+                navigate(NAVIGATOR_SCREEN_NAMES.TRANSACTIONS, {
+                  accountId: accountDto.id,
                 })
               }
             />
@@ -73,15 +73,15 @@ export const TrackersScreen = () => {
       </ScreenLayout>
 
       <View className="absolute bottom-0 right-0 p-5">
-        <FAB icon={'plus'} onPress={() => setIsNewTrackerDialogVisible(true)} />
+        <FAB icon={'plus'} onPress={() => setIsNewAccountDialogVisible(true)} />
       </View>
 
       <Portal>
         <Dialog
-          visible={isNewTrackerDialogVisible}
-          onDismiss={onNewTrackerDialogDismiss}>
+          visible={isNewAccountDialogVisible}
+          onDismiss={onNewAccountDialogDismiss}>
           <Dialog.Title>
-            {LOCALE.screens.trackers.dialogs.createTracker.title}
+            {LOCALE.screens.accounts.dialogs.createAccount.title}
           </Dialog.Title>
           <Dialog.Content>
             <Controller
@@ -92,7 +92,7 @@ export const TrackersScreen = () => {
                   {...rest}
                   onChangeText={onChange}
                   label={
-                    LOCALE.screens.trackers.dialogs.createTracker.inputs.name
+                    LOCALE.screens.accounts.dialogs.createAccount.inputs.name
                   }
                 />
               )}
@@ -107,7 +107,7 @@ export const TrackersScreen = () => {
                   {...rest}
                   onChangeText={onChange}
                   label={
-                    LOCALE.screens.trackers.dialogs.createTracker.inputs
+                    LOCALE.screens.accounts.dialogs.createAccount.inputs
                       .description
                   }
                 />
@@ -116,10 +116,10 @@ export const TrackersScreen = () => {
             <ErrorText error={errors.description?.message} />
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={onNewTrackerDialogDismiss}>
+            <Button onPress={onNewAccountDialogDismiss}>
               {LOCALE.common.dismiss}
             </Button>
-            <Button onPress={handleSubmit(newTrackerSubmitHandler)}>
+            <Button onPress={handleSubmit(newAccountSubmitHandler)}>
               {LOCALE.common.create}
             </Button>
           </Dialog.Actions>

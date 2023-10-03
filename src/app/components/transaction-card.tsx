@@ -4,10 +4,10 @@ import {StyleProp, TextStyle, View} from 'react-native';
 import {Card, Chip, Dialog, List, Portal, Text} from 'react-native-paper';
 import {cn} from '../../utilities/cn';
 
-interface MessageCardProps {
-  cardTitle?: string;
+interface TransactionCardProps {
+  title?: string;
   body?: string;
-  twClass?: string;
+  class?: string;
   isNotSentByTheUser?: boolean;
   backgroundColor?: string;
   longPressDialogItems?: {
@@ -18,21 +18,19 @@ interface MessageCardProps {
   tags?: {label: string; onPress?: () => void}[];
 }
 
-export const MessageCard = ({twClass, ...props}: MessageCardProps) => {
-  const [
-    isMessageCardLongPressDialogVisible,
-    setIsMessageCardLongPressDialogVisible,
-  ] = useState(false);
+export const TransactionCard = (props: TransactionCardProps) => {
+  const [isLongPressDialogVisible, setIsLongPressDialogVisible] =
+    useState(false);
 
   const localOnLongPress = useCallback(() => {
     if (!props.longPressDialogItems) {
       return;
     }
     impactAsync();
-    setIsMessageCardLongPressDialogVisible(true);
+    setIsLongPressDialogVisible(true);
   }, [props.longPressDialogItems]);
-  const onMessageCardLongPressDialogDismiss = useCallback(() => {
-    setIsMessageCardLongPressDialogVisible(false);
+  const onLongPressDialogDismiss = useCallback(() => {
+    setIsLongPressDialogVisible(false);
   }, []);
 
   const longPressMessageIconItemRenderer = (
@@ -48,15 +46,15 @@ export const MessageCard = ({twClass, ...props}: MessageCardProps) => {
       <View
         className={cn(
           {'pr-8': props.isNotSentByTheUser, 'pl-8': !props.isNotSentByTheUser},
-          twClass,
+          props.class,
         )}>
         <Card
           onLongPress={localOnLongPress}
           style={{backgroundColor: props.backgroundColor}}>
           <View className="py-4">
-            {props.cardTitle && (
+            {props.title && (
               <Card.Content>
-                <Text variant="titleMedium">{props.cardTitle}</Text>
+                <Text variant="titleMedium">{props.title}</Text>
               </Card.Content>
             )}
             {props.body && (
@@ -79,15 +77,15 @@ export const MessageCard = ({twClass, ...props}: MessageCardProps) => {
       {props.longPressDialogItems && (
         <Portal>
           <Dialog
-            onDismiss={onMessageCardLongPressDialogDismiss}
-            visible={isMessageCardLongPressDialogVisible}>
+            onDismiss={onLongPressDialogDismiss}
+            visible={isLongPressDialogVisible}>
             <Dialog.Content>
               {props.longPressDialogItems.map((item, index) => (
                 <List.Item
                   key={index}
                   onPress={() => {
                     item.onPress();
-                    onMessageCardLongPressDialogDismiss();
+                    onLongPressDialogDismiss();
                   }}
                   title={item.title}
                   left={props2 =>

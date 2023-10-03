@@ -7,9 +7,9 @@ import {
 import {
   createTags,
   findAllTags,
-  findMessagesByTrackerAndTagIds,
+  findTransactionsByAccountAndTagIds,
 } from '../services/tag.service';
-import {Tracker} from '../entities/tracker';
+import {Account} from '../entities/account';
 
 export const useTags = () => {
   const {data} = useSWRImmutableDataSource(
@@ -20,22 +20,22 @@ export const useTags = () => {
   return {tags: data};
 };
 
-export const useMessagesByTrackerAndTagIds = (
-  trackerId?: Tracker['id'],
+export const useTransactionsByAccountAndTagIds = (
+  accountId?: Account['id'],
   tagId?: Tag['id'],
 ) => {
   const key =
-    tagId && trackerId
-      ? swrKeyGetters.getUseMessagesByTrackerAndTagIdsKey(trackerId, tagId)
+    tagId && accountId
+      ? swrKeyGetters.getUseTransactionsByAccountAndTagIdsKey(accountId, tagId)
       : undefined;
   const fetcher =
-    tagId && trackerId
-      ? findMessagesByTrackerAndTagIds(trackerId, tagId)
+    tagId && accountId
+      ? findTransactionsByAccountAndTagIds(accountId, tagId)
       : () => undefined;
 
   const {data} = useSWRImmutableDataSource(key, fetcher);
 
-  return {messages: data};
+  return {transactions: data};
 };
 
 export const useCreateTags = () => {

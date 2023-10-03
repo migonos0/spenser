@@ -1,30 +1,30 @@
 import {SWR_KEY_COMPONENTS} from '../constants/swr-key-components';
 import {Tag} from '../entities/tag';
-import {Tracker} from '../entities/tracker';
+import {Account} from '../entities/account';
 
 export const swrKeyGetters = {
-  getUseMessagesKey: () => SWR_KEY_COMPONENTS.MESSAGES,
+  getUseMessagesKey: () => SWR_KEY_COMPONENTS.TRANSACTIONS,
   getUseTagsKey: () => SWR_KEY_COMPONENTS.TAGS,
-  getUseTrackerDtosKey: () => [
-    SWR_KEY_COMPONENTS.TRACKERS,
+  getUseAccountDtosKey: () => [
+    SWR_KEY_COMPONENTS.ACCOUNTS,
     SWR_KEY_COMPONENTS.DTOS,
   ],
-  getUseMessagesByTrackerKey: (tracker: Tracker) => [
-    SWR_KEY_COMPONENTS.MESSAGES,
-    SWR_KEY_COMPONENTS.TRACKER,
-    tracker,
+  getUseTransactionsByAccountKey: (account: Account) => [
+    SWR_KEY_COMPONENTS.TRANSACTIONS,
+    SWR_KEY_COMPONENTS.ACCOUNT,
+    account,
   ],
-  getUseTrackerByIdKey: (trackerId: Tracker['id']) => [
-    SWR_KEY_COMPONENTS.TRACKER,
-    trackerId,
+  getUseAccountByIdKey: (accountId: Account['id']) => [
+    SWR_KEY_COMPONENTS.ACCOUNT,
+    accountId,
   ],
-  getUseMessagesByTrackerAndTagIdsKey: (
-    trackerId: Tracker['id'],
+  getUseTransactionsByAccountAndTagIdsKey: (
+    accountId: Account['id'],
     tagId: Tag['id'],
   ) => [
-    SWR_KEY_COMPONENTS.MESSAGES,
-    SWR_KEY_COMPONENTS.TRACKER,
-    trackerId,
+    SWR_KEY_COMPONENTS.TRANSACTIONS,
+    SWR_KEY_COMPONENTS.ACCOUNT,
+    accountId,
     SWR_KEY_COMPONENTS.TAG,
     tagId,
   ],

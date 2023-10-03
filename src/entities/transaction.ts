@@ -8,10 +8,10 @@ import {
 } from 'typeorm';
 
 import {Tag} from './tag';
-import {Tracker} from './tracker';
+import {Account} from './account';
 
 @Entity()
-export class Message {
+export class Transaction {
   @PrimaryGeneratedColumn()
   id: number | undefined;
 
@@ -28,20 +28,20 @@ export class Message {
   @JoinTable()
   tags: Tag[] | undefined;
 
-  @ManyToOne(() => Tracker, tracker => tracker.messages)
-  tracker: Tracker | undefined;
+  @ManyToOne(() => Account, tracker => tracker.transactions)
+  account: Account | undefined;
 
   constructor(
-    isExpense: Message['isExpense'],
-    amount: Message['amount'],
-    description: Message['description'],
-    tracker: Message['tracker'],
-    tags: Message['tags'],
+    isExpense: Transaction['isExpense'],
+    amount: Transaction['amount'],
+    description: Transaction['description'],
+    account: Transaction['account'],
+    tags: Transaction['tags'],
   ) {
     this.isExpense = isExpense;
     this.amount = amount;
     this.description = description;
-    this.tracker = tracker;
+    this.account = account;
     this.tags = tags;
   }
 }
