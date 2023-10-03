@@ -1,8 +1,8 @@
 import {swrKeyGetters} from '../utilities/swr-key-getters';
 import {Tag} from '../entities/tag';
 import {
-  useSWRDataSourceMutation,
-  useSWRImmutableDataSource,
+  useSWRMutationOnInitializedDS,
+  useSWRImmutableOnInitializedDS,
 } from '../hooks/use-swr';
 import {
   createTags,
@@ -12,7 +12,7 @@ import {
 import {Account} from '../entities/account';
 
 export const useTags = () => {
-  const {data} = useSWRImmutableDataSource(
+  const {data} = useSWRImmutableOnInitializedDS(
     swrKeyGetters.getUseTagsKey(),
     findAllTags,
   );
@@ -30,16 +30,16 @@ export const useTransactionsByAccountAndTagIds = (
       : undefined;
   const fetcher =
     tagId && accountId
-      ? findTransactionsByAccountAndTagIds(accountId, tagId)
+      ? () => findTransactionsByAccountAndTagIds(accountId, tagId)
       : () => undefined;
 
-  const {data} = useSWRImmutableDataSource(key, fetcher);
+  const {data} = useSWRImmutableOnInitializedDS(key, fetcher);
 
   return {transactions: data};
 };
 
 export const useCreateTags = () => {
-  const {trigger} = useSWRDataSourceMutation(
+  const {trigger} = useSWRMutationOnInitializedDS(
     swrKeyGetters.getUseTagsKey(),
     createTags,
     (createdTags, currentData: Tag[] | undefined) => {
