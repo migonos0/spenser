@@ -1,7 +1,7 @@
 import {FlatList} from 'react-native';
 
 import {LOCALE} from '../../constants/locale';
-import {NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
+import {NAVIGATOR_SCREEN_NAMES} from '../../constants/navigator-screen-names';
 import {Transaction} from '../../entities/transaction';
 import {Tag} from '../../entities/tag';
 import {useAppTheme} from '../../hooks/use-app-theme';

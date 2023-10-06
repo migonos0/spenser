@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {NAVIGATOR_SCREEN_NAMES} from '../../constants/stack-navigator-screen-names';
+import {NAVIGATOR_SCREEN_NAMES} from '../../constants/navigator-screen-names';
 import {TransactionsScreen} from '../screens/transactions.screen';
 import {TransactionsByTagScreen} from '../screens/transactions-by-tag.screen';
 import {AccountsScreen} from '../screens/accounts.screen';
