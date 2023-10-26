@@ -14,7 +14,7 @@ import {AccountCard} from '../components/account-card';
 import {ErrorText} from '../components/error-text';
 import {LOCALE} from '../../constants/locale';
 import {useLooseNavigation} from '../../hooks/use-loose-navigation';
-import {NAVIGATOR_SCREEN_NAMES} from '../../constants/navigator-screen-names';
+import {ACCOUNTS_NAVIGATOR_SCREEN_NAMES} from '../../constants/navigation';
 import {appbarActions} from '../../stores/appbar-store';
 import {displayName} from '../../../app.json';
 import {useFocusEffect} from '@react-navigation/native';
@@ -60,7 +60,7 @@ export const AccountsScreen = () => {
               class="border-0 border-b-2"
               balance={accountDto.balance}
               onPress={() =>
-                navigate(NAVIGATOR_SCREEN_NAMES.TRANSACTIONS, {
+                navigate(ACCOUNTS_NAVIGATOR_SCREEN_NAMES.TRANSACTIONS, {
                   accountId: accountDto.id,
                 })
               }

@@ -1,38 +1,38 @@
 import {FlatList} from 'react-native';
 
-import {LOCALE} from '../../constants/locale';
-import {NAVIGATOR_SCREEN_NAMES} from '../../constants/navigator-screen-names';
-import {Transaction} from '../../entities/transaction';
-import {Tag} from '../../entities/tag';
-import {useAppTheme} from '../../hooks/use-app-theme';
-import {useLooseNavigation} from '../../hooks/use-loose-navigation';
+import {LOCALE} from '../../../constants/locale';
+import {ACCOUNTS_NAVIGATOR_SCREEN_NAMES} from '../../../constants/navigation';
+import {Transaction} from '../../../entities/transaction';
+import {Tag} from '../../../entities/tag';
+import {useAppTheme} from '../../../hooks/use-app-theme';
+import {useLooseNavigation} from '../../../hooks/use-loose-navigation';
 import {
   useCreateTransactionByAccount,
   useDeleteTransactionByAccount,
   useTransactionsByAccount,
-} from '../../state/transaction.state';
-import {useCreateTags, useTags} from '../../state/tag.state';
+} from '../../../state/transaction.state';
+import {useCreateTags, useTags} from '../../../state/tag.state';
 import {
   findTags,
   getCreatableTransactionFromString,
-} from '../../utilities/transaction-pattern-finders';
-import {ChatBox} from '../components/chat-box';
-import {TransactionCard} from '../components/transaction-card';
-import {ScreenLayout} from '../layouts/screen.layout';
-import {useLooseRoute} from '../../hooks/use-loose-route';
-import {useAccountById, useAccountDtoById} from '../../state/account.state';
+} from '../../../utilities/transaction-pattern-finders';
+import {ChatBox} from '../../components/chat-box';
+import {TransactionCard} from '../../components/transaction-card';
+import {ScreenLayout} from '../../layouts/screen.layout';
+import {useLooseRoute} from '../../../hooks/use-loose-route';
+import {useAccountById, useAccountDtoById} from '../../../state/account.state';
 import {useEffect} from 'react';
-import {appbarActions} from '../../stores/appbar-store';
-import {TextAvatar} from '../components/text-avatar';
+import {appbarActions} from '../../../stores/appbar-store';
+import {TextAvatar} from '../../components/text-avatar';
 import {Text} from 'react-native-paper';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {
   CreateTransactionData,
   CreateTransactionSchema,
-} from '../../schemas/create-message.schema';
+} from '../../../schemas/create-message.schema';
 import {valibotResolver} from '@hookform/resolvers/valibot';
 
-export const TransactionsScreen = () => {
+export const TransactionsByAccountScreen = () => {
   const {colors} = useAppTheme();
   const {tags} = useTags();
   const {params} = useLooseRoute();
@@ -155,10 +155,13 @@ export const TransactionsScreen = () => {
             tags={transaction.tags?.map(tag => ({
               label: tag.name,
               onPress: () => {
-                navigate(NAVIGATOR_SCREEN_NAMES.TRANSACTIONS_BY_TAG_ID, {
-                  tagId: tag.id ?? -1,
-                  transactionId: transaction.account?.id,
-                });
+                navigate(
+                  ACCOUNTS_NAVIGATOR_SCREEN_NAMES.TRANSACTIONS_BY_TAG_ID,
+                  {
+                    tagId: tag.id ?? -1,
+                    transactionId: transaction.account?.id,
+                  },
+                );
               },
             }))}
           />
