@@ -1,5 +1,4 @@
-import {useEffect} from 'react';
-import swrHook, {BareFetcher, Key, SWRConfiguration, useSWRConfig} from 'swr';
+import swrHook, {BareFetcher, Key, SWRConfiguration} from 'swr';
 import swrImmutableHook from 'swr/immutable';
 import swrMutationHook, {
   MutationFetcher,
@@ -66,7 +65,6 @@ export const useSWRMutationOnInitializedDS = <T, U, V = any>(
   populateCache?: (result: U | undefined, currentData: V) => V,
 ) => {
   const isDataSourceInitialized = useIsDataSourceInitialized();
-  const {mutate} = useSWRConfig();
 
   const key2 = isDataSourceInitialized ? key : undefined;
   const fetcher2 = async (_: unknown, {arg}: {arg: T}) => {
@@ -78,23 +76,8 @@ export const useSWRMutationOnInitializedDS = <T, U, V = any>(
 
   const result = useSWRMutation(key2, fetcher2, {
     revalidate: false,
+    populateCache,
   });
-
-  useEffect(() => {
-    if (!result.data || result.error || result.isMutating) {
-      return;
-    }
-    mutate(
-      key,
-      currentData => {
-        return populateCache
-          ? populateCache(result.data, currentData)
-          : currentData;
-      },
-      {revalidate: false},
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result.data, result.error, result.isMutating]);
 
   return result;
 };
