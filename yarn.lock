@@ -3235,6 +3235,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native-vector-icons@npm:^6.4.16":
+  version: 6.4.16
+  resolution: "@types/react-native-vector-icons@npm:6.4.16"
+  dependencies:
+    "@types/react": "*"
+    "@types/react-native": ^0.70
+  checksum: e912de6e28184e5b7382fc5fb2b15cddc54ba90204c03a80a26ce27a443a93dac09d7889be8e90ed2f1aba884c001949813c1ecf1b4e6f2b527dc5ab1b4e042b
+  languageName: node
+  linkType: hard
+
+"@types/react-native@npm:^0.70":
+  version: 0.70.16
+  resolution: "@types/react-native@npm:0.70.16"
+  dependencies:
+    "@types/react": "*"
+  checksum: 09a97b24db34c34f0ed5d29e6591845f7bff44c2e94a7c8d66c4d7554fc02b4b0b846fc4c63cdbbe6d8e6082c905a54b75fc8a86fdf021a1b0f1c6a10c2b252e
+  languageName: node
+  linkType: hard
+
 "@types/react-test-renderer@npm:^18.0.0":
   version: 18.0.0
   resolution: "@types/react-test-renderer@npm:18.0.0"
@@ -3497,6 +3516,7 @@ __metadata:
     "@tsconfig/react-native": ^3.0.0
     "@types/node": ^20.5.0
     "@types/react": ^18.0.24
+    "@types/react-native-vector-icons": ^6.4.16
     "@types/react-test-renderer": ^18.0.0
     babel-jest: ^29.2.1
     babel-plugin-module-resolver: ^5.0.0
