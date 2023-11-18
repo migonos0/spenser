@@ -1,29 +1,31 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
 import {ACCOUNTS_NAVIGATOR_SCREEN_NAMES} from '../../constants/navigation';
-import {TransactionsByAccountScreen} from '../screens/accounts/transactions-by-account.screen';
-import {TransactionsByTagScreen} from '../screens/transactions-by-tag.screen';
+import {TabBar} from '../components/tab-bar';
 import {AccountsScreen} from '../screens/accounts.screen';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Stack = createNativeStackNavigator();
+const getBottomTabBarIconFC =
+  (iconName: string) =>
+  ({color, size}: {focused: boolean; color: string; size: number}) => {
+    return <Icon name={iconName} size={size} color={color} />;
+  };
+
+const Tab = createBottomTabNavigator();
 
 export const AccountsNavigator = () => {
   return (
-    <Stack.Navigator
+    <Tab.Navigator
+      tabBar={TabBar}
       initialRouteName={ACCOUNTS_NAVIGATOR_SCREEN_NAMES.ACCOUNTS}
       screenOptions={{headerShown: false}}>
-      <Stack.Screen
+      <Tab.Screen
+        options={{
+          tabBarLabel: 'Accounts',
+          tabBarIcon: getBottomTabBarIconFC('notebook'),
+        }}
         name={ACCOUNTS_NAVIGATOR_SCREEN_NAMES.ACCOUNTS}
         component={AccountsScreen}
       />
-      <Stack.Screen
-        name={ACCOUNTS_NAVIGATOR_SCREEN_NAMES.TRANSACTIONS}
-        component={TransactionsByAccountScreen}
-      />
-      <Stack.Screen
-        name={ACCOUNTS_NAVIGATOR_SCREEN_NAMES.TRANSACTIONS_BY_TAG_ID}
-        component={TransactionsByTagScreen}
-      />
-    </Stack.Navigator>
+    </Tab.Navigator>
   );
 };
