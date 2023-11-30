@@ -1,7 +1,7 @@
 import {FlatList} from 'react-native';
 
 import {LOCALE} from '../../../constants/locale';
-import {ACCOUNTS_NAVIGATOR_SCREEN_NAMES} from '../../../constants/screen-names';
+import {SCREEN_NAMES} from '../../../constants/screen-names';
 import {Transaction} from '../../../entities/transaction';
 import {Tag} from '../../../entities/tag';
 import {useAppTheme} from '../../../hooks/use-app-theme';
@@ -155,13 +155,10 @@ export const TransactionsByAccountScreen = () => {
             tags={transaction.tags?.map(tag => ({
               label: tag.name,
               onPress: () => {
-                navigate(
-                  ACCOUNTS_NAVIGATOR_SCREEN_NAMES.TRANSACTIONS_BY_TAG_ID,
-                  {
-                    tagId: tag.id ?? -1,
-                    transactionId: transaction.account?.id,
-                  },
-                );
+                navigate(SCREEN_NAMES.TRANSACTIONS_BY_TAG_AND_ACCOUNT, {
+                  tagId: tag.id ?? -1,
+                  transactionId: transaction.account?.id,
+                });
               },
             }))}
           />
