@@ -1,5 +1,13 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import {Transaction} from './transaction';
+import {Group} from './group';
 
 @Entity()
 export class Account {
@@ -21,12 +29,17 @@ export class Account {
   @OneToMany(() => Transaction, message => message.account)
   transactions: Transaction[] | undefined;
 
+  @ManyToMany(() => Group, group => group.accounts, {cascade: true})
+  @JoinTable()
+  groups: Group[] | undefined;
+
   constructor(
     name: Account['name'],
     description: Account['description'],
     createdAt?: Account['createdAt'],
     updatedAt?: Account['updatedAt'],
     transactions?: Account['transactions'],
+    groups?: Account['groups'],
     id?: Account['id'],
   ) {
     this.name = name;
@@ -34,6 +47,7 @@ export class Account {
     this.createdAt = createdAt ?? new Date();
     this.updatedAt = updatedAt ?? new Date();
     this.transactions = transactions;
+    this.groups = groups;
     this.id = id;
   }
 }
