@@ -1,4 +1,4 @@
-import {ACCOUNTS_NAVIGATOR_SCREEN_NAMES} from '../../constants/screen-names';
+import {SCREEN_NAMES} from '../../constants/screen-names';
 import {TabBar} from '../components/tab-bar';
 import {AccountsScreen} from '../screens/accounts.screen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -16,14 +16,14 @@ export const HomeNavigator = () => {
   return (
     <Tab.Navigator
       tabBar={TabBar}
-      initialRouteName={ACCOUNTS_NAVIGATOR_SCREEN_NAMES.ACCOUNTS}
+      initialRouteName={SCREEN_NAMES.ACCOUNTS}
       screenOptions={{headerShown: false}}>
       <Tab.Screen
         options={{
           tabBarLabel: 'Accounts',
           tabBarIcon: getBottomTabBarIconFC('notebook'),
         }}
-        name={ACCOUNTS_NAVIGATOR_SCREEN_NAMES.ACCOUNTS}
+        name={SCREEN_NAMES.ACCOUNTS}
         component={AccountsScreen}
       />
     </Tab.Navigator>
