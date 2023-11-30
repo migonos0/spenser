@@ -14,7 +14,7 @@ import {AccountCard} from '../components/account-card';
 import {ErrorText} from '../components/error-text';
 import {LOCALE} from '../../constants/locale';
 import {useLooseNavigation} from '../../hooks/use-loose-navigation';
-import {ACCOUNTS_NAVIGATOR_SCREEN_NAMES} from '../../constants/navigation';
+import {ACCOUNTS_NAVIGATOR_SCREEN_NAMES} from '../../constants/screen-names';
 import {appbarActions} from '../../stores/appbar-store';
 import {displayName} from '../../../app.json';
 import {useFocusEffect} from '@react-navigation/native';

@@ -1,10 +1,10 @@
 import {
   ACCOUNTS_NAVIGATOR_SCREEN_NAMES,
-  NAVIGATOR_NAMES,
-} from '../../constants/navigation';
+  SCREEN_NAMES,
+} from '../../constants/screen-names';
 import {TransactionsByAccountScreen} from '../screens/accounts/transactions-by-account.screen';
 import {TransactionsByTagScreen} from '../screens/transactions-by-tag.screen';
-import {AccountsNavigator} from './accounts.navigator';
+import {HomeNavigator} from './home.navigator';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
@@ -13,13 +13,10 @@ export const Navigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName={NAVIGATOR_NAMES.ACCOUNTS}>
+      initialRouteName={SCREEN_NAMES.HOME}>
+      <Stack.Screen name={SCREEN_NAMES.HOME} component={HomeNavigator} />
       <Stack.Screen
-        name={NAVIGATOR_NAMES.ACCOUNTS}
-        component={AccountsNavigator}
-      />
-      <Stack.Screen
-        name={ACCOUNTS_NAVIGATOR_SCREEN_NAMES.TRANSACTIONS}
+        name={SCREEN_NAMES.TRANSACTIONS_BY_ACCOUNT}
         component={TransactionsByAccountScreen}
       />
       <Stack.Screen

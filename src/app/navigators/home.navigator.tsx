@@ -1,4 +1,4 @@
-import {ACCOUNTS_NAVIGATOR_SCREEN_NAMES} from '../../constants/navigation';
+import {ACCOUNTS_NAVIGATOR_SCREEN_NAMES} from '../../constants/screen-names';
 import {TabBar} from '../components/tab-bar';
 import {AccountsScreen} from '../screens/accounts.screen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -12,7 +12,7 @@ const getBottomTabBarIconFC =
 
 const Tab = createBottomTabNavigator();
 
-export const AccountsNavigator = () => {
+export const HomeNavigator = () => {
   return (
     <Tab.Navigator
       tabBar={TabBar}
