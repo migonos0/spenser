@@ -3,7 +3,7 @@ import {
   SCREEN_NAMES,
 } from '../../constants/screen-names';
 import {TransactionsByAccountScreen} from '../screens/accounts/transactions-by-account.screen';
-import {TransactionsByTagAndAccountScreen} from '../screens/transactions-by-tag.screen';
+import {TransactionsByTagAndAccountScreen} from '../screens/transactions-by-tag-and-acount.screen';
 import {HomeNavigator} from './home.navigator';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
