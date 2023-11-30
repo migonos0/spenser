@@ -3,7 +3,7 @@ import {
   SCREEN_NAMES,
 } from '../../constants/screen-names';
 import {TransactionsByAccountScreen} from '../screens/accounts/transactions-by-account.screen';
-import {TransactionsByTagScreen} from '../screens/transactions-by-tag.screen';
+import {TransactionsByTagAndAccountScreen} from '../screens/transactions-by-tag.screen';
 import {HomeNavigator} from './home.navigator';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -21,7 +21,7 @@ export const Navigator = () => {
       />
       <Stack.Screen
         name={ACCOUNTS_NAVIGATOR_SCREEN_NAMES.TRANSACTIONS_BY_TAG_ID}
-        component={TransactionsByTagScreen}
+        component={TransactionsByTagAndAccountScreen}
       />
     </Stack.Navigator>
   );

@@ -6,7 +6,7 @@ import {useTransactionsByAccountAndTagIds} from '../../state/tag.state';
 import {TransactionCard} from '../components/transaction-card';
 import {ScreenLayout} from '../layouts/screen.layout';
 
-export const TransactionsByTagScreen = () => {
+export const TransactionsByTagAndAccountScreen = () => {
   const {params} = useLooseRoute();
   const tagId = params?.tagId;
   const transactionId = params?.transactionId;
