@@ -1,7 +1,4 @@
-import {
-  ACCOUNTS_NAVIGATOR_SCREEN_NAMES,
-  SCREEN_NAMES,
-} from '../../constants/screen-names';
+import {SCREEN_NAMES} from '../../constants/screen-names';
 import {TransactionsByAccountScreen} from '../screens/accounts/transactions-by-account.screen';
 import {TransactionsByTagAndAccountScreen} from '../screens/transactions-by-tag-and-acount.screen';
 import {HomeNavigator} from './home.navigator';
@@ -20,7 +17,7 @@ export const Navigator = () => {
         component={TransactionsByAccountScreen}
       />
       <Stack.Screen
-        name={ACCOUNTS_NAVIGATOR_SCREEN_NAMES.TRANSACTIONS_BY_TAG_ID}
+        name={SCREEN_NAMES.TRANSACTIONS_BY_TAG_AND_ACCOUNT}
         component={TransactionsByTagAndAccountScreen}
       />
     </Stack.Navigator>
