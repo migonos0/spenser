@@ -28,4 +28,8 @@ export const swrKeyGetters = {
     SWR_KEY_COMPONENTS.TAG,
     tagId,
   ],
+  getUseGroupDtosKey: () => [
+    SWR_KEY_COMPONENTS.GROUPS,
+    SWR_KEY_COMPONENTS.DTOS,
+  ],
 };
