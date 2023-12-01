@@ -1,4 +1,10 @@
-import {Column, Entity, ManyToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import {Account} from './account';
 
 @Entity()
@@ -18,7 +24,8 @@ export class Group {
   @Column({type: 'datetime'})
   updatedAt: Date;
 
-  @ManyToMany(() => Account, account => account.groups)
+  @ManyToMany(() => Account, {cascade: true})
+  @JoinTable()
   accounts: Account[] | undefined;
 
   constructor(
