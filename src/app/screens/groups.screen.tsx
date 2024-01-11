@@ -28,6 +28,7 @@ import {LOCALE} from '../../constants/locale';
 import {Group} from '../../entities/group';
 import {useAccountDtos} from '../../state/account.state';
 import {AccountDto} from '../../dtos/account.dto';
+import {Account} from '../../entities/account';
 
 export const GroupsScreen = () => {
   const {groupDtos} = useGroupDtos();
@@ -38,8 +39,9 @@ export const GroupsScreen = () => {
     control,
     formState: {errors},
     handleSubmit,
+    reset,
     setValue,
-  } = useForm<CreateGroupData>({
+  } = useForm<CreateGroupData & {accounts: Account[]}>({
     resolver: valibotResolver(CreateGroupSchema),
     defaultValues: {accounts: []},
   });
@@ -47,35 +49,28 @@ export const GroupsScreen = () => {
   const {accountDtos} = useAccountDtos();
   const {
     field: {value: selectedGroupAccounts},
-  } = useController({control: control, name: 'accounts'});
+  } = useController({control, name: 'accounts'});
 
   const onNewGroupDialogDismiss = () => setIsNewGroupDialogVisible(false);
   const onGroupAccountsDialogDismiss = () =>
     setIsGroupAccountsDialogVisible(false);
 
-  const newGroupSubmitHandler: SubmitHandler<CreateGroupData> = input =>
+  const newGroupSubmitHandler: SubmitHandler<CreateGroupData> = input => {
     createGroupTrigger(
-      new Group(input.name, input.description, input.accounts),
+      new Group(input.name, input.description, selectedGroupAccounts),
       {
         onSuccess: () => {
           onNewGroupDialogDismiss();
           onGroupAccountsDialogDismiss();
+          reset();
         },
       },
     );
+  };
 
-  /**
-   * This will only work when an AccountDto or any objects that has
-   * all the attributes of the Account Entity. Due to difficulties with
-   * typings, the 'accounts' field of the create-group schema has been
-   * altered, though the type of this field does not accurately describes
-   * what the field is able to support.
-   * @param accountDto
-   * @returns
-   */
   const renderGroupAccountCheckbox = (accountDto: AccountDto) => {
-    const isChecked = !!selectedGroupAccounts?.find(
-      accounts => accounts.id === accountDto.id,
+    const isChecked = !!selectedGroupAccounts.find(
+      account => account.id === accountDto.id,
     );
     return (
       <Checkbox.Android
@@ -84,10 +79,10 @@ export const GroupsScreen = () => {
           setValue(
             'accounts',
             isChecked
-              ? selectedGroupAccounts?.filter(
+              ? selectedGroupAccounts.filter(
                   account => account.id !== accountDto.id,
                 )
-              : [...(selectedGroupAccounts ?? []), accountDto],
+              : [...selectedGroupAccounts, accountDto],
           )
         }
       />
