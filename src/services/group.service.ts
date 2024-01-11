@@ -8,7 +8,7 @@ export const findAllGroups = async () => {
 };
 
 export const createGroup = async (group: Group) =>
-  await dataSource.manager.save(group);
+  await GroupDto.build(await dataSource.manager.save(group));
 
 export const findBalanceByGroupId = async (groupId: Group['id']) => {
   const foundGroup = await dataSource.manager.findOne(Group, {

@@ -3545,7 +3545,7 @@ __metadata:
     tailwindcss: 3.3.2
     typeorm: ^0.3.17
     typescript: 4.8.4
-    valibot: ^0.12.0
+    valibot: ^0.25.0
     zustand: ^4.4.1
   languageName: unknown
   linkType: soft
@@ -12840,10 +12840,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"valibot@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "valibot@npm:0.12.0"
-  checksum: 1ec982de04dd352783d50061c26cfdf9a9c95762a0c85f6318871c08cdd0290d3cf1f0f5950f5870fa60d3d5d9fcb960b9a15882f1f1f80cfa1b3b5b9c896edb
+"valibot@npm:^0.25.0":
+  version: 0.25.0
+  resolution: "valibot@npm:0.25.0"
+  checksum: 9c8b1de522a792e3bba714db3da979b0e98bd6b485928df2dc38e59bf10d75576961d1bf09809ed2528b08b714d598777be6503f2083ee3d9832e32158db5ab9
   languageName: node
   linkType: hard
 
