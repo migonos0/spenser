@@ -25,10 +25,8 @@ import {
 import {valibotResolver} from '@hookform/resolvers/valibot';
 import {ErrorText} from '../components/error-text';
 import {LOCALE} from '../../constants/locale';
-import {Group} from '../../entities/group';
 import {useAccountDtos} from '../../state/account.state';
 import {AccountDto} from '../../dtos/account.dto';
-import {Account} from '../../entities/account';
 
 export const GroupsScreen = () => {
   const {groupDtos} = useGroupDtos();
@@ -41,15 +39,15 @@ export const GroupsScreen = () => {
     handleSubmit,
     reset,
     setValue,
-  } = useForm<CreateGroupData & {accounts: Account[]}>({
+  } = useForm<CreateGroupData & {accountDtos: AccountDto[]}>({
     resolver: valibotResolver(CreateGroupSchema),
-    defaultValues: {accounts: []},
+    defaultValues: {accountDtos: []},
   });
   const {createGroupTrigger} = useCreateGroup();
   const {accountDtos} = useAccountDtos();
   const {
-    field: {value: selectedGroupAccounts},
-  } = useController({control, name: 'accounts'});
+    field: {value: selectedGroupAccountDtos},
+  } = useController({control, name: 'accountDtos'});
 
   const onNewGroupDialogDismiss = () => setIsNewGroupDialogVisible(false);
   const onGroupAccountsDialogDismiss = () =>
@@ -57,7 +55,11 @@ export const GroupsScreen = () => {
 
   const newGroupSubmitHandler: SubmitHandler<CreateGroupData> = input => {
     createGroupTrigger(
-      new Group(input.name, input.description, selectedGroupAccounts),
+      {
+        description: input.description,
+        name: input.name,
+        accountDtos: selectedGroupAccountDtos,
+      },
       {
         onSuccess: () => {
           onNewGroupDialogDismiss();
@@ -69,7 +71,7 @@ export const GroupsScreen = () => {
   };
 
   const renderGroupAccountCheckbox = (accountDto: AccountDto) => {
-    const isChecked = !!selectedGroupAccounts.find(
+    const isChecked = !!selectedGroupAccountDtos.find(
       account => account.id === accountDto.id,
     );
     return (
@@ -77,12 +79,12 @@ export const GroupsScreen = () => {
         status={isChecked ? 'checked' : 'unchecked'}
         onPress={() =>
           setValue(
-            'accounts',
+            'accountDtos',
             isChecked
-              ? selectedGroupAccounts.filter(
+              ? selectedGroupAccountDtos.filter(
                   account => account.id !== accountDto.id,
                 )
-              : [...selectedGroupAccounts, accountDto],
+              : [...selectedGroupAccountDtos, accountDto],
           )
         }
       />

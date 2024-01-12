@@ -6,6 +6,7 @@ import {
 } from '../hooks/use-swr';
 import {createGroup, findAllGroupDtos} from '../services/group.service';
 import {swrKeyGetters} from '../utilities/swr-key-getters';
+import {GroupDto} from '../dtos/group.dto';
 
 export const useGroupDtos = () => {
   const {data} = useSWRImmutableOnInitializedDS(
@@ -20,7 +21,7 @@ export const useCreateGroup = () => {
   const {trigger} = useSWRMutationOnInitializedDS(
     swrKeyGetters.getUseGroupDtosKey(),
     createGroup,
-    (createdGroup, currentData: Group[] | undefined) => {
+    (createdGroup, currentData: GroupDto[] | undefined) => {
       if (!createdGroup) {
         return currentData;
       }
