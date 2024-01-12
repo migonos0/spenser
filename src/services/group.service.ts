@@ -52,7 +52,7 @@ export const findAllGroupDtos = async () =>
     ),
   );
 
-export const deleteGroupById = async (group: Group) => {
+export const deleteGroup = async (group: Group) => {
   await dataSource.manager.save({...group, accounts: []});
   const result = await dataSource.manager.delete(Group, group.id);
   if (result.affected ?? 0 < 1) {
