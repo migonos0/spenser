@@ -52,21 +52,11 @@ export const findAllGroupDtos = async () =>
     ),
   );
 
-export const deleteGroupById = async (groupId: Group['id']) => {
-  const foundGroup = await dataSource.getRepository(Group).findOne({
-    relations: {
-      accounts: true,
-    },
-    where: {id: groupId},
-  });
-  if (!foundGroup) {
-    throw new Error('Given group identificator not registered');
-  }
-  foundGroup.accounts = [];
-  await dataSource.manager.save(foundGroup);
-  const result = await dataSource.manager.delete(Group, foundGroup.id);
+export const deleteGroupById = async (group: Group) => {
+  await dataSource.manager.save({...group, accounts: []});
+  const result = await dataSource.manager.delete(Group, group.id);
   if (result.affected ?? 0 < 1) {
     throw new Error('An error occured while deleting the group.');
   }
-  return foundGroup;
+  return group;
 };
