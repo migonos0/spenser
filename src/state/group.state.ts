@@ -4,7 +4,11 @@ import {
   useSWRImmutableOnInitializedDS,
   useSWRMutationOnInitializedDS,
 } from '../hooks/use-swr';
-import {createGroup, findAllGroupDtos} from '../services/group.service';
+import {
+  createGroup,
+  deleteGroup,
+  findAllGroupDtos,
+} from '../services/group.service';
 import {swrKeyGetters} from '../utilities/swr-key-getters';
 import {GroupDto} from '../dtos/group.dto';
 
@@ -41,4 +45,19 @@ export const useGroupDtoById = (groupId: Group['id']) => {
   );
 
   return {groupDto: foundGroupDto};
+};
+
+export const useDeleteGroup = () => {
+  const {trigger} = useSWRMutationOnInitializedDS(
+    swrKeyGetters.getUseGroupDtosKey(),
+    deleteGroup,
+    (deletedGroup, currentData: GroupDto[] | undefined) => {
+      if (!deleteGroup) {
+        return currentData;
+      }
+      return currentData?.filter(groupDto => groupDto.id !== deletedGroup?.id);
+    },
+  );
+
+  return {deleteGroupTrigger: trigger};
 };
