@@ -1,5 +1,9 @@
 import {FlatList, View} from 'react-native';
-import {useCreateGroup, useGroupDtos} from '../../state/group.state';
+import {
+  useCreateGroup,
+  useDeleteGroup,
+  useGroupDtos,
+} from '../../state/group.state';
 import {ScreenLayout} from '../layouts/screen.layout';
 import {GroupCard} from '../components/group-card';
 import {
@@ -44,6 +48,7 @@ export const GroupsScreen = () => {
     defaultValues: {accountDtos: []},
   });
   const {createGroupTrigger} = useCreateGroup();
+  const {deleteGroupTrigger} = useDeleteGroup();
   const {accountDtos} = useAccountDtos();
   const {
     field: {value: selectedGroupAccountDtos},
@@ -99,7 +104,22 @@ export const GroupsScreen = () => {
           keyExtractor={({id}, index) =>
             id ? id.toString() : index.toString()
           }
-          renderItem={({item: groupDto}) => <GroupCard groupDto={groupDto} />}
+          renderItem={({item: groupDto}) => (
+            <GroupCard
+              longPressDialogItems={[
+                {
+                  onPress: () =>
+                    deleteGroupTrigger({
+                      ...groupDto,
+                      accounts: groupDto.accountDtos,
+                    }),
+                  title: 'Delete Group',
+                  iconName: 'delete',
+                },
+              ]}
+              groupDto={groupDto}
+            />
+          )}
         />
       </ScreenLayout>
 
