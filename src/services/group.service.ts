@@ -52,10 +52,18 @@ export const findAllGroupDtos = async () =>
     ),
   );
 
-export const deleteGroup = async (group: Group) => {
-  await dataSource.manager.save({...group, accounts: []});
+export const deleteGroup = async (
+  group: Pick<Group, 'id' | 'accounts' | 'name' | 'description'>,
+) => {
+  const deletableGroup = new Group(
+    group.name,
+    group.description,
+    group.accounts,
+  );
+  deletableGroup.id = group.id;
+  await dataSource.manager.save(deletableGroup);
   const result = await dataSource.manager.delete(Group, group.id);
-  if (result.affected ?? 0 < 1) {
+  if (result.affected && !(result.affected > 0)) {
     throw new Error('An error occured while deleting the group.');
   }
   return group;
