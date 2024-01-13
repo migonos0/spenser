@@ -2963,6 +2963,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-navigation/bottom-tabs@npm:^6.5.9":
+  version: 6.5.9
+  resolution: "@react-navigation/bottom-tabs@npm:6.5.9"
+  dependencies:
+    "@react-navigation/elements": ^1.3.19
+    color: ^4.2.3
+    warn-once: ^0.1.0
+  peerDependencies:
+    "@react-navigation/native": ^6.0.0
+    react: "*"
+    react-native: "*"
+    react-native-safe-area-context: ">= 3.0.0"
+    react-native-screens: ">= 3.0.0"
+  checksum: 71f61822c02244095375ae365f28076a00bd742598b535b53fdbaa7216103c99dedff4edc19beb5fcfe764e58a23b8e6d1ca830a729df466711850e5c5b84ac4
+  languageName: node
+  linkType: hard
+
 "@react-navigation/core@npm:^6.4.9":
   version: 6.4.9
   resolution: "@react-navigation/core@npm:6.4.9"
@@ -2988,6 +3005,18 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: ">= 3.0.0"
   checksum: 02293f0932e5f53bb9c4df46f97063bfa27f05a1f606ea556de42189e6bf3e928f70a531ae64e0f56072d6525178cee9bd41eafbcbbce4653476f4aa2346524a
+  languageName: node
+  linkType: hard
+
+"@react-navigation/elements@npm:^1.3.19":
+  version: 1.3.19
+  resolution: "@react-navigation/elements@npm:1.3.19"
+  peerDependencies:
+    "@react-navigation/native": ^6.0.0
+    react: "*"
+    react-native: "*"
+    react-native-safe-area-context: ">= 3.0.0"
+  checksum: fd095ce1d5ba3c9225f0e861dcad4f72ab96436d8ef60f55731fb517ec1d0397eccde0a69ad9e5844333b82e48e922463d9b2a7f3bffd478a210d26f1b41bc7a
   languageName: node
   linkType: hard
 
@@ -3203,6 +3232,25 @@ __metadata:
   version: 15.7.5
   resolution: "@types/prop-types@npm:15.7.5"
   checksum: 5b43b8b15415e1f298243165f1d44390403bb2bd42e662bca3b5b5633fdd39c938e91b7fce3a9483699db0f7a715d08cef220c121f723a634972fdf596aec980
+  languageName: node
+  linkType: hard
+
+"@types/react-native-vector-icons@npm:^6.4.16":
+  version: 6.4.16
+  resolution: "@types/react-native-vector-icons@npm:6.4.16"
+  dependencies:
+    "@types/react": "*"
+    "@types/react-native": ^0.70
+  checksum: e912de6e28184e5b7382fc5fb2b15cddc54ba90204c03a80a26ce27a443a93dac09d7889be8e90ed2f1aba884c001949813c1ecf1b4e6f2b527dc5ab1b4e042b
+  languageName: node
+  linkType: hard
+
+"@types/react-native@npm:^0.70":
+  version: 0.70.16
+  resolution: "@types/react-native@npm:0.70.16"
+  dependencies:
+    "@types/react": "*"
+  checksum: 09a97b24db34c34f0ed5d29e6591845f7bff44c2e94a7c8d66c4d7554fc02b4b0b846fc4c63cdbbe6d8e6082c905a54b75fc8a86fdf021a1b0f1c6a10c2b252e
   languageName: node
   linkType: hard
 
@@ -3462,11 +3510,13 @@ __metadata:
     "@react-native-async-storage/async-storage": ^1.19.2
     "@react-native/eslint-config": ^0.72.2
     "@react-native/metro-config": ^0.72.11
+    "@react-navigation/bottom-tabs": ^6.5.9
     "@react-navigation/native": ^6.1.7
     "@react-navigation/native-stack": ^6.9.13
     "@tsconfig/react-native": ^3.0.0
     "@types/node": ^20.5.0
     "@types/react": ^18.0.24
+    "@types/react-native-vector-icons": ^6.4.16
     "@types/react-test-renderer": ^18.0.0
     babel-jest: ^29.2.1
     babel-plugin-module-resolver: ^5.0.0
@@ -3495,7 +3545,7 @@ __metadata:
     tailwindcss: 3.3.2
     typeorm: ^0.3.17
     typescript: 4.8.4
-    valibot: ^0.12.0
+    valibot: ^0.25.0
     zustand: ^4.4.1
   languageName: unknown
   linkType: soft
@@ -12790,10 +12840,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"valibot@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "valibot@npm:0.12.0"
-  checksum: 1ec982de04dd352783d50061c26cfdf9a9c95762a0c85f6318871c08cdd0290d3cf1f0f5950f5870fa60d3d5d9fcb960b9a15882f1f1f80cfa1b3b5b9c896edb
+"valibot@npm:^0.25.0":
+  version: 0.25.0
+  resolution: "valibot@npm:0.25.0"
+  checksum: 9c8b1de522a792e3bba714db3da979b0e98bd6b485928df2dc38e59bf10d75576961d1bf09809ed2528b08b714d598777be6503f2083ee3d9832e32158db5ab9
   languageName: node
   linkType: hard
 

@@ -7,4 +7,6 @@ export const SWR_KEY_COMPONENTS = {
   ACCOUNT: 'ACCOUNT',
   DTO: 'DTO',
   DTOS: 'DTOS',
+  GROUPS: 'GROUPS',
+  GROUP: 'GROUP',
 };
