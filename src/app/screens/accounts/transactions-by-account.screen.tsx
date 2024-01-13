@@ -13,8 +13,10 @@ import {
 } from '../../../state/transaction.state';
 import {useCreateTags, useTags} from '../../../state/tag.state';
 import {
+  findTransactionCategoryAndMatchingPattern,
+  findAmount,
+  findDescription,
   findTags,
-  getCreatableTransactionFromString,
 } from '../../../utilities/transaction-pattern-finders';
 import {ChatBox} from '../../components/chat-box';
 import {TransactionCard} from '../../components/transaction-card';
@@ -53,6 +55,7 @@ export const TransactionsByAccountScreen = () => {
   const {transactions} = useTransactionsByAccount(account ?? undefined);
   const {control, handleSubmit, reset} = useForm<CreateTransactionData>({
     resolver: valibotResolver(CreateTransactionSchema),
+    defaultValues: {transaction: ''},
   });
 
   useEffect(() => {
@@ -88,21 +91,29 @@ export const TransactionsByAccountScreen = () => {
     const creatableTags = tagNames
       ?.filter(tagName => !tags?.map(tag => tag.name).includes(tagName))
       .map(tagName => new Tag(tagName));
+
     createTagsTrigger(creatableTags ?? [], {
       onSuccess(createdTags) {
-        const creatableTransaction = getCreatableTransactionFromString(
+        const transactionCategoryAndMatchingPattern =
+          findTransactionCategoryAndMatchingPattern(transaction);
+        const amount = findAmount(transaction);
+        const description = findDescription({
           transaction,
-          tagNames,
-        );
+          amount,
+          tags: tagNames ?? [],
+          transactionCategoryMatchingPattern:
+            transactionCategoryAndMatchingPattern.matchingPattern,
+        });
+
         createTransactionTrigger(
           new Transaction(
-            creatableTransaction.isExpense,
-            creatableTransaction.amount,
-            creatableTransaction.description,
+            transactionCategoryAndMatchingPattern.isExpense,
+            amount * (transactionCategoryAndMatchingPattern.isExpense ? -1 : 1),
+            description,
             account,
             [...(alreadyCreatedTags ?? []), ...(createdTags ?? [])],
           ),
-          {onSuccess: reset as () => void},
+          {onSuccess: () => reset()},
         );
       },
     });

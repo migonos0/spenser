@@ -2,18 +2,60 @@ import {
   EXPENSE_MESSAGE_PATTERNS,
   INCOME_MESSAGE_PATTERNS,
 } from '../constants/message-patterns';
-import {Transaction} from '../entities/transaction';
 
 export const validateExpense = (transaction: string) =>
   EXPENSE_MESSAGE_PATTERNS.some(pattern =>
     transaction.toLowerCase().includes(pattern),
   );
 
-export const findAmount = (transaction: string) =>
-  transaction.match(/(\d+(\.\d{1,2}))|(\.\d{1,2})|(\d+)/)?.find(match => match);
+export const findTransactionCategoryAndMatchingPattern = (
+  transaction: string,
+) => {
+  for (const matchingPattern of EXPENSE_MESSAGE_PATTERNS) {
+    const indexOfPattern = transaction.indexOf(matchingPattern);
+    if (indexOfPattern < 0) {
+      continue;
+    }
+    return {isExpense: true, matchingPattern};
+  }
+  for (const matchingPattern of INCOME_MESSAGE_PATTERNS) {
+    const indexOfPattern = transaction.indexOf(matchingPattern);
+    if (indexOfPattern < 0) {
+      continue;
+    }
+    return {isExpense: false, matchingPattern};
+  }
+  return {isExpense: false, matchingPattern: undefined};
+};
+
+export const findAmount = (transaction: string) => {
+  const stringifiedAmount = transaction
+    .match(/(\d+(\.\d{1,2}))|(\.\d{1,2})|(\d+)/)
+    ?.find(match => match);
+  return !stringifiedAmount || isNaN(+stringifiedAmount)
+    ? 0
+    : +stringifiedAmount;
+};
 
 export const findTags = (transaction: string) =>
   transaction.match(/#([A-z])\w*/g)?.map(tag => tag.replace('#', ''));
+
+export const findDescription = (input: {
+  transaction: string;
+  amount: number;
+  tags: string[];
+  transactionCategoryMatchingPattern?: string;
+}) => {
+  const arr = [
+    ...(input.amount !== 0 ? [input.amount] : []),
+    ...input.tags.map(tag => '#' + tag),
+    ...(input.transactionCategoryMatchingPattern
+      ? [input.transactionCategoryMatchingPattern]
+      : []),
+  ];
+  let regex = new RegExp('\\b' + arr.join('|') + '\\b', 'gi');
+  return input.transaction.replace(regex, '');
+};
 
 export const cleanTransactionDescription = (
   transaction: string,
@@ -48,21 +90,4 @@ export const cleanPatterns = (transaction: string, patterns: string[]) => {
 
 export const cleanPattern = (message: string, pattern: string) => {
   return cleanPatterns(message, [pattern]);
-};
-
-export const getCreatableTransactionFromString = (
-  transaction: string,
-  tagNames?: string[],
-): Omit<Transaction, 'id' | 'tags' | 'account'> => {
-  const isExpense = validateExpense(transaction);
-  const stringifiedAmount = findAmount(transaction);
-  const description = cleanTransactionDescription(
-    transaction,
-    isExpense,
-    stringifiedAmount,
-    tagNames,
-  );
-  const amount = Number(stringifiedAmount) * (isExpense ? -1 : 1);
-
-  return {amount, description, isExpense};
 };
