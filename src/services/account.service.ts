@@ -25,7 +25,9 @@ export const findBalanceByAccountId = async (accountId: Account['id']) => {
 };
 
 export const findAllAccounts = async () =>
-  await dataSource.manager.find(Account, {order: {updatedAt: 'DESC'}});
+  await dataSource.manager.find(Account, {
+    order: {updatedAt: 'DESC'},
+  });
 
 export const findAllAccountDtos = async () =>
   Promise.all(
@@ -33,4 +35,9 @@ export const findAllAccountDtos = async () =>
   );
 
 export const findAccountById = async (accountId: Account['id']) =>
-  await dataSource.manager.findOneBy(Account, {id: accountId});
+  (
+    await dataSource.manager.find(Account, {
+      where: {id: accountId},
+      relations: {groups: true},
+    })
+  ).at(0);
