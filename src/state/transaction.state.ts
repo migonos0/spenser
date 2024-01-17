@@ -55,25 +55,22 @@ export const useDeleteTransactionByAccount = (account?: Account) => {
           if (!cachedAccountDtos) {
             return;
           }
-          const cachedAccountDtoIndex = cachedAccountDtos.findIndex(
-            accountDto => accountDto.id === account?.id,
-          );
-          const cachedAccountDto = cachedAccountDtos.at(cachedAccountDtoIndex);
-          if (!cachedAccountDto) {
-            return cachedAccountDtos;
-          }
-
-          const cachedAccountDtosCopy = cachedAccountDtos.slice();
-          cachedAccountDtosCopy.splice(cachedAccountDtoIndex, 1);
-
-          return [
-            {
-              ...cachedAccountDto,
-              balance:
-                (cachedAccountDto.balance ?? 0) - deletedTransaction.amount,
+          return cachedAccountDtos.reduce(
+            (accumulator: AccountDto[], accountDto) => {
+              if (accountDto.id === deletedTransaction.account?.id) {
+                return [
+                  {
+                    ...accountDto,
+                    balance:
+                      (accountDto.balance ?? 0) - deletedTransaction.amount,
+                  },
+                  ...accumulator,
+                ];
+              }
+              return [...accumulator, accountDto];
             },
-            ...cachedAccountDtosCopy,
-          ];
+            [],
+          );
         },
         {revalidate: false},
       );
