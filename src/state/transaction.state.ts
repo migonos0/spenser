@@ -33,6 +33,10 @@ export const useDeleteTransactionByAccount = (account?: Account) => {
     ? swrKeyGetters.getUseTransactionsByAccountKey(account)
     : undefined;
   const {mutate} = useSWRConfig();
+  const groupIds = useMemo(
+    () => account?.groups?.map(group => group.id),
+    [account],
+  );
 
   const {trigger} = useSWRMutationOnInitializedDS(
     key,
@@ -74,6 +78,31 @@ export const useDeleteTransactionByAccount = (account?: Account) => {
         {revalidate: false},
       );
 
+      /**
+       * Decreacing to the balance of the groups where the account is registered.
+       */
+      mutate(
+        swrKeyGetters.getUseGroupDtosKey(),
+        (cachedGroupDtos: GroupDto[] | undefined) => {
+          if (!cachedGroupDtos) {
+            return;
+          }
+          return cachedGroupDtos.reduce((accumulator: GroupDto[], groupDto) => {
+            if (groupIds?.includes(groupDto.id)) {
+              return [
+                {
+                  ...groupDto,
+                  balance: (groupDto.balance ?? 0) - deletedTransaction.amount,
+                },
+                ...accumulator,
+              ];
+            }
+            return [...accumulator, groupDto];
+          }, []);
+        },
+        {revalidate: false},
+      );
+
       return currentData?.filter(
         transaction => transaction.id !== deletedTransaction.id,
       );
@@ -84,7 +113,6 @@ export const useDeleteTransactionByAccount = (account?: Account) => {
 };
 
 export const useCreateTransactionByAccount = (account?: Account) => {
-  console.log(account);
   const key = account
     ? swrKeyGetters.getUseTransactionsByAccountKey(account)
     : undefined;
