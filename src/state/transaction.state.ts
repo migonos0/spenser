@@ -111,25 +111,22 @@ export const useCreateTransactionByAccount = (account?: Account) => {
           if (!cachedAccountDtos) {
             return;
           }
-          const cachedAccountDtoIndex = cachedAccountDtos.findIndex(
-            accountDto => accountDto.id === account?.id,
-          );
-          const cachedAccountDto = cachedAccountDtos.at(cachedAccountDtoIndex);
-          if (!cachedAccountDto) {
-            return cachedAccountDtos;
-          }
-
-          const cachedAccountDtosCopy = cachedAccountDtos.slice();
-          cachedAccountDtosCopy.splice(cachedAccountDtoIndex, 1);
-
-          return [
-            {
-              ...cachedAccountDto,
-              balance:
-                (cachedAccountDto.balance ?? 0) + createdTransaction.amount,
+          return cachedAccountDtos.reduce(
+            (accumulator: AccountDto[], account2) => {
+              if (account2.id === createdTransaction.account?.id) {
+                return [
+                  {
+                    ...account2,
+                    balance:
+                      (account2.balance ?? 0) + createdTransaction.amount,
+                  },
+                  ...accumulator,
+                ];
+              }
+              return [...accumulator, account2];
             },
-            ...cachedAccountDtosCopy,
-          ];
+            [],
+          );
         },
         {revalidate: false},
       );
@@ -143,14 +140,18 @@ export const useCreateTransactionByAccount = (account?: Account) => {
           if (!cachedGroupDtos) {
             return;
           }
-          return cachedGroupDtos.map(groupDto =>
-            groupIds?.includes(groupDto.id)
-              ? {
-                  ...groupDto,
-                  balance: (groupDto.balance ?? 0) + createdTransaction.amount,
-                }
-              : groupDto,
-          );
+          return cachedGroupDtos.reduce((accumulator: GroupDto[], group) => {
+            if (groupIds?.includes(group.id)) {
+              return [
+                {
+                  ...group,
+                  balance: (group.balance ?? 0) + createdTransaction.amount,
+                },
+                ...accumulator,
+              ];
+            }
+            return [...accumulator, group];
+          }, []);
         },
         {revalidate: false},
       );
