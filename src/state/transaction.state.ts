@@ -12,6 +12,8 @@ import {
 import {Account} from '../entities/account';
 import {useSWRConfig} from 'swr';
 import {AccountDto} from '../dtos/account.dto';
+import {GroupDto} from '../dtos/group.dto';
+import {useMemo} from 'react';
 
 export const useTransactionsByAccount = (account?: Account) => {
   const key = account
@@ -82,10 +84,15 @@ export const useDeleteTransactionByAccount = (account?: Account) => {
 };
 
 export const useCreateTransactionByAccount = (account?: Account) => {
+  console.log(account);
   const key = account
     ? swrKeyGetters.getUseTransactionsByAccountKey(account)
     : undefined;
   const {mutate} = useSWRConfig();
+  const groupIds = useMemo(
+    () => account?.groups?.map(group => group.id),
+    [account],
+  );
 
   const {trigger} = useSWRMutationOnInitializedDS(
     key,
@@ -96,7 +103,7 @@ export const useCreateTransactionByAccount = (account?: Account) => {
       }
 
       /**
-       * Adding to the balance of the tracker, removing and placing it on top.
+       * Adding to the balance of the account, removing and placing it on top.
        */
       mutate(
         swrKeyGetters.getUseAccountDtosKey(),
@@ -123,6 +130,27 @@ export const useCreateTransactionByAccount = (account?: Account) => {
             },
             ...cachedAccountDtosCopy,
           ];
+        },
+        {revalidate: false},
+      );
+
+      /**
+       * Adding to the balance of the groups where the account is registered
+       */
+      mutate(
+        swrKeyGetters.getUseGroupDtosKey(),
+        (cachedGroupDtos: GroupDto[] | undefined) => {
+          if (!cachedGroupDtos) {
+            return;
+          }
+          return cachedGroupDtos.map(groupDto =>
+            groupIds?.includes(groupDto.id)
+              ? {
+                  ...groupDto,
+                  balance: (groupDto.balance ?? 0) + createdTransaction.amount,
+                }
+              : groupDto,
+          );
         },
         {revalidate: false},
       );
