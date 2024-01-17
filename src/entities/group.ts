@@ -24,7 +24,7 @@ export class Group {
   @Column({type: 'datetime'})
   updatedAt: Date;
 
-  @ManyToMany(() => Account, {cascade: true})
+  @ManyToMany(() => Account, account => account.groups, {cascade: true})
   @JoinTable()
   accounts: Account[] | undefined;
 
