@@ -3,7 +3,6 @@ import {FlatList} from 'react-native';
 import {LOCALE} from '../../../constants/locale';
 import {SCREEN_NAMES} from '../../../constants/screen-names';
 import {Transaction} from '../../../entities/transaction';
-import {Tag} from '../../../entities/tag';
 import {useAppTheme} from '../../../hooks/use-app-theme';
 import {useLooseNavigation} from '../../../hooks/use-loose-navigation';
 import {
@@ -90,7 +89,9 @@ export const TransactionsByAccountScreen = () => {
     );
     const creatableTags = tagNames
       ?.filter(tagName => !tags?.map(tag => tag.name).includes(tagName))
-      .map(tagName => new Tag(tagName));
+      .map(tagName => ({
+        name: tagName,
+      }));
 
     createTagsTrigger(creatableTags ?? [], {
       onSuccess(createdTags) {
