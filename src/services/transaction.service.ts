@@ -7,8 +7,7 @@ export const createTransaction = async (transaction: Transaction) => {
     transaction.account.updatedAt = new Date();
     await dataSource.getRepository(Account).save(transaction.account);
   }
-
-  return await dataSource.manager.save(transaction);
+  return await dataSource.manager.save(new Transaction(transaction));
 };
 export const deleteTransactionById = async (
   transactionId: Transaction['id'],

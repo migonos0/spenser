@@ -106,13 +106,15 @@ export const TransactionsByAccountScreen = () => {
         });
 
         createTransactionTrigger(
-          new Transaction(
-            transactionCategoryAndMatchingPattern.isExpense,
-            amount * (transactionCategoryAndMatchingPattern.isExpense ? -1 : 1),
+          {
+            amount:
+              amount *
+              (transactionCategoryAndMatchingPattern.isExpense ? -1 : 1),
             description,
             account,
-            [...(alreadyCreatedTags ?? []), ...(createdTags ?? [])],
-          ),
+            isExpense: transactionCategoryAndMatchingPattern.isExpense,
+            tags: [...(alreadyCreatedTags ?? []), ...(createdTags ?? [])],
+          },
           {onSuccess: () => reset()},
         );
       },
