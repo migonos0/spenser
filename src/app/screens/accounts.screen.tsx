@@ -9,7 +9,6 @@ import {
   CreateAccountSchema,
 } from '../../schemas/create-tracker.schema';
 import {valibotResolver} from '@hookform/resolvers/valibot';
-import {Account} from '../../entities/account';
 import {AccountCard} from '../components/account-card';
 import {ErrorText} from '../components/error-text';
 import {LOCALE} from '../../constants/locale';
@@ -45,9 +44,12 @@ export const AccountsScreen = () => {
     reset();
   };
   const newAccountSubmitHandler: SubmitHandler<CreateAccountData> = input =>
-    createAccountTrigger(new Account(input.name, input.description), {
-      onSuccess: onNewAccountDialogDismiss,
-    });
+    createAccountTrigger(
+      {description: input.description, name: input.name},
+      {
+        onSuccess: onNewAccountDialogDismiss,
+      },
+    );
 
   return (
     <>
