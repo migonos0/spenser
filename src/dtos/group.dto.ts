@@ -1,6 +1,6 @@
 import {AccountDto} from './account.dto';
 
-interface IGroupDto {
+export type GroupDtoInput = {
   id?: number;
   name: string;
   description: string;
@@ -8,7 +8,7 @@ interface IGroupDto {
   updatedAt?: Date;
   accountDtos?: AccountDto[];
   balance?: number;
-}
+};
 export class GroupDto {
   id?: number;
   name: string;
@@ -19,8 +19,8 @@ export class GroupDto {
   balance?: number;
 
   constructor();
-  constructor(obj: IGroupDto);
-  constructor(obj?: IGroupDto) {
+  constructor(obj: GroupDtoInput);
+  constructor(obj?: GroupDtoInput) {
     this.id = obj?.id;
     this.name = obj?.name ?? '';
     this.description = obj?.description ?? '';

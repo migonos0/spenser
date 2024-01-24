@@ -7,14 +7,14 @@ import {
 } from 'typeorm';
 import {Account} from './account';
 
-interface IGroup {
+export type GroupInput = {
   id?: number;
   name: string;
   description: string;
   createdAt?: Date;
   updatedAt?: Date;
   accounts?: Account[];
-}
+};
 
 @Entity()
 export class Group {
@@ -38,8 +38,8 @@ export class Group {
   accounts?: Account[];
 
   constructor();
-  constructor(obj: IGroup);
-  constructor(obj?: IGroup) {
+  constructor(obj: GroupInput);
+  constructor(obj?: GroupInput) {
     this.id = obj?.id;
     this.name = obj?.name ?? '';
     this.description = obj?.description ?? '';

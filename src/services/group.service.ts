@@ -1,6 +1,6 @@
 import {AccountDto} from '../dtos/account.dto';
-import {GroupDto} from '../dtos/group.dto';
-import {Group} from '../entities/group';
+import {GroupDto, GroupDtoInput} from '../dtos/group.dto';
+import {Group, GroupInput} from '../entities/group';
 import {dataSource} from '../utilities/data-source';
 
 export const findAllGroups = async () => {
@@ -10,9 +10,7 @@ export const findAllGroups = async () => {
   });
 };
 
-export const createGroup = async (
-  input: Pick<GroupDto, 'name' | 'description' | 'accountDtos'>,
-) =>
+export const createGroup = async (input: GroupDtoInput) =>
   new GroupDto({
     ...(await dataSource.manager.save(
       new Group({...input, accounts: input.accountDtos}),
@@ -52,9 +50,7 @@ export const findAllGroupDtos = async () =>
     ),
   );
 
-export const deleteGroup = async (
-  group: Pick<Group, 'id' | 'name' | 'description'>,
-) => {
+export const deleteGroup = async (group: GroupInput) => {
   const deletableGroup = new Group({
     ...group,
     accounts: [],
