@@ -15,7 +15,7 @@ export const createGroup = async (
 ) =>
   new GroupDto({
     ...(await dataSource.manager.save(
-      new Group(input.name, input.description, input.accountDtos),
+      new Group({...input, accounts: input.accountDtos}),
     )),
     accountDtos: input.accountDtos,
   });
@@ -53,14 +53,12 @@ export const findAllGroupDtos = async () =>
   );
 
 export const deleteGroup = async (
-  group: Pick<Group, 'id' | 'accounts' | 'name' | 'description'>,
+  group: Pick<Group, 'id' | 'name' | 'description'>,
 ) => {
-  const deletableGroup = new Group(
-    group.name,
-    group.description,
-    group.accounts,
-  );
-  deletableGroup.id = group.id;
+  const deletableGroup = new Group({
+    ...group,
+    accounts: [],
+  });
   await dataSource.manager.save(deletableGroup);
   const result = await dataSource.manager.delete(Group, group.id);
   if (result.affected && !(result.affected > 0)) {
