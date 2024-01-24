@@ -1,25 +1,35 @@
-import {Group} from '../entities/group';
 import {AccountDto} from './account.dto';
 
+export type GroupDtoInput = {
+  id?: number;
+  name: string;
+  description: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  accountDtos?: AccountDto[];
+  balance?: number;
+};
 export class GroupDto {
-  id: Group['id'];
-  name: Group['name'];
-  description: Group['description'];
-  createdAt: Group['createdAt'];
-  updatedAt: Group['updatedAt'];
-  accountDtos: AccountDto[] | undefined;
+  id?: number;
+  name: string;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+  accountDtos?: AccountDto[];
   balance?: number;
 
-  constructor(groupDto: GroupDto) {
-    this.id = groupDto.id;
-    this.name = groupDto.name;
-    this.description = groupDto.description;
-    this.createdAt = groupDto.createdAt;
-    this.updatedAt = groupDto.updatedAt;
-    this.accountDtos = groupDto.accountDtos;
+  constructor();
+  constructor(obj: GroupDtoInput);
+  constructor(obj?: GroupDtoInput) {
+    this.id = obj?.id;
+    this.name = obj?.name ?? '';
+    this.description = obj?.description ?? '';
+    this.createdAt = obj?.createdAt ?? new Date();
+    this.updatedAt = obj?.updatedAt ?? new Date();
+    this.accountDtos = obj?.accountDtos;
     this.balance =
-      groupDto.balance ??
-      groupDto.accountDtos?.reduce(
+      obj?.balance ??
+      obj?.accountDtos?.reduce(
         (accumulator, accountDto) => accumulator + (accountDto.balance ?? 0),
         0,
       );

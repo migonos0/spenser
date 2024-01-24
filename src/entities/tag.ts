@@ -13,7 +13,11 @@ export class Tag {
   @ManyToMany(() => Transaction, message => message.tags)
   messages?: Transaction[];
 
-  constructor(name: string) {
-    this.name = name;
+  constructor();
+  constructor(obj: Tag);
+  constructor(obj?: Tag) {
+    this.id = obj?.id;
+    this.name = obj?.name ?? '';
+    this.messages = obj?.messages;
   }
 }

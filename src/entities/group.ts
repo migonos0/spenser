@@ -7,10 +7,19 @@ import {
 } from 'typeorm';
 import {Account} from './account';
 
+export type GroupInput = {
+  id?: number;
+  name: string;
+  description: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  accounts?: Account[];
+};
+
 @Entity()
 export class Group {
   @PrimaryGeneratedColumn()
-  id: number | undefined;
+  id?: number;
 
   @Column()
   name: string;
@@ -26,17 +35,15 @@ export class Group {
 
   @ManyToMany(() => Account, account => account.groups, {cascade: true})
   @JoinTable()
-  accounts: Account[] | undefined;
+  accounts?: Account[];
 
-  constructor(
-    name: Group['name'],
-    description: Group['description'],
-    accounts?: Group['accounts'],
-  ) {
-    this.name = name;
-    this.description = description;
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
-    this.accounts = accounts;
+  constructor();
+  constructor(obj: GroupInput);
+  constructor(obj?: GroupInput) {
+    this.id = obj?.id;
+    this.name = obj?.name ?? '';
+    this.description = obj?.description ?? '';
+    this.createdAt = obj?.createdAt ?? new Date();
+    this.updatedAt = obj?.updatedAt ?? new Date();
   }
 }

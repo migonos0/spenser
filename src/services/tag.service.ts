@@ -30,7 +30,8 @@ export const findTransactionsByAccountAndTagIds = async (
     .orderBy('transaction.id', 'DESC')
     .getMany();
 
-export const createTag = async (tag: Tag) => await dataSource.manager.save(tag);
+export const createTag = async (tag: Tag) =>
+  await dataSource.manager.save(new Tag(tag));
 
 export const createTags = async (tags: Tag[]) => {
   const createdTags: Tag[] = [];

@@ -1,11 +1,11 @@
-import {Account} from '../entities/account';
+import {Account, AccountInput} from '../entities/account';
 import {Transaction} from '../entities/transaction';
 import {number, safeParse} from 'valibot';
 import {AccountDto} from '../dtos/account.dto';
 import {dataSource} from '../utilities/data-source';
 
-export const createAccount = async (account: Account) =>
-  await dataSource.manager.save(account);
+export const createAccount = async (account: AccountInput) =>
+  await dataSource.manager.save(new Account(account));
 
 export const findBalanceByAccountId = async (accountId: Account['id']) => {
   const {balance} = await dataSource

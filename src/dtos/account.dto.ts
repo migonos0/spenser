@@ -1,23 +1,26 @@
 import {Account} from '../entities/account';
+import {Transaction} from '../entities/transaction';
 import {findBalanceByAccountId} from '../services/account.service';
 
 export class AccountDto {
-  id: Account['id'];
-  name: Account['name'];
-  description: Account['description'];
-  balance: number | undefined;
-  createdAt: Account['createdAt'];
-  updatedAt: Account['updatedAt'];
-  transactions: Account['transactions'];
+  id?: number;
+  name: string;
+  description: string;
+  balance?: number;
+  createdAt: Date;
+  updatedAt: Date;
+  transactions?: Transaction[];
 
-  constructor(trackerDto: AccountDto) {
-    this.id = trackerDto.id;
-    this.name = trackerDto.name;
-    this.description = trackerDto.description;
-    this.balance = trackerDto.balance;
-    this.createdAt = trackerDto.createdAt;
-    this.updatedAt = trackerDto.updatedAt;
-    this.transactions = trackerDto.transactions;
+  constructor();
+  constructor(accountDto: AccountDto);
+  constructor(accountDto?: AccountDto) {
+    this.id = accountDto?.id;
+    this.name = accountDto?.name ?? '';
+    this.description = accountDto?.description ?? '';
+    this.balance = accountDto?.balance;
+    this.createdAt = accountDto?.createdAt ?? new Date();
+    this.updatedAt = accountDto?.updatedAt ?? new Date();
+    this.transactions = accountDto?.transactions;
   }
 
   static async build(account: Account) {
