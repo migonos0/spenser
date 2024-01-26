@@ -10,14 +10,14 @@ export class Tag {
   @Column()
   name: string;
 
-  @ManyToMany(() => Transaction, message => message.tags)
-  messages?: Transaction[];
+  @ManyToMany(() => Transaction, message => message.tags, {cascade: true})
+  transactions?: Transaction[];
 
   constructor();
   constructor(obj: Tag);
   constructor(obj?: Tag) {
     this.id = obj?.id;
     this.name = obj?.name ?? '';
-    this.messages = obj?.messages;
+    this.transactions = obj?.transactions;
   }
 }

@@ -22,7 +22,7 @@ export class Transaction {
   @Column({nullable: false})
   description: string;
 
-  @ManyToMany(() => Tag, tag => tag.messages, {cascade: true})
+  @ManyToMany(() => Tag, tag => tag.transactions, {cascade: true})
   @JoinTable()
   tags?: Tag[];
 
