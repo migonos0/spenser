@@ -4,12 +4,9 @@ import {
   useSWRMutationOnInitializedDS,
   useSWRImmutableOnInitializedDS,
 } from '../hooks/use-swr';
-import {
-  createTags,
-  findAllTags,
-  findTransactionsByAccountAndTagIds,
-} from '../services/tag.service';
+import {createTags, findAllTags} from '../services/tag.service';
 import {Account} from '../entities/account';
+import {findTransactionsByAccountAndTagIds} from '../services/transaction.service';
 
 export const useTags = () => {
   const {data} = useSWRImmutableOnInitializedDS(

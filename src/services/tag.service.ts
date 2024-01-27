@@ -1,6 +1,4 @@
 import {Tag} from '../entities/tag';
-import {Account} from '../entities/account';
-import {Transaction} from '../entities/transaction';
 import {dataSource} from '../utilities/data-source';
 import {FindOptionsRelations} from 'typeorm';
 
@@ -27,19 +25,6 @@ export const findTagById = async (
 ) => {
   (await dataSource.manager.find(Tag, {where: {id: tagId}, relations})).at(0);
 };
-
-export const findTransactionsByAccountAndTagIds = async (
-  accountId: Account['id'],
-  tagId: Tag['id'],
-) =>
-  await dataSource
-    .getRepository(Transaction)
-    .createQueryBuilder('transaction')
-    .innerJoin('transaction.tags', 'tag')
-    .where('transaction.accountId = :accountId', {accountId})
-    .andWhere('tag.id = tagId', {tagId})
-    .orderBy('transaction.id', 'DESC')
-    .getMany();
 
 export const createTag = async (tag: Tag) =>
   await dataSource.manager.save(new Tag(tag));
