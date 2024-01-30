@@ -1,5 +1,4 @@
 import {Account, AccountInput} from '../entities/account';
-import {Transaction} from '../entities/transaction';
 import {number, safeParse} from 'valibot';
 import {AccountDto} from '../dtos/account.dto';
 import {dataSource} from '../utilities/data-source';
@@ -10,9 +9,10 @@ export const createAccount = async (account: AccountInput) =>
 export const findBalanceByAccountId = async (accountId: Account['id']) => {
   const {balance} = await dataSource
     .createQueryBuilder()
-    .from(Transaction, 'transaction')
-    .select('SUM(transaction.amount)', 'balance')
+    .from(Account, 'account')
+    .innerJoin('account.transactions', 'transaction')
     .where('transaction.accountId = :accountId', {accountId})
+    .select('SUM(transaction.amount)', 'balance')
     .getRawOne();
 
   const parsedBalance = safeParse(number(), balance);
@@ -21,7 +21,7 @@ export const findBalanceByAccountId = async (accountId: Account['id']) => {
     return;
   }
 
-  return parsedBalance.data;
+  return parsedBalance.output;
 };
 
 export const findAllAccounts = async () =>
