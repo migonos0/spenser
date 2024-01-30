@@ -10,7 +10,7 @@ export class Tag {
   @Column()
   name: string;
 
-  @ManyToMany(() => Transaction, message => message.tags, {cascade: true})
+  @ManyToMany(() => Transaction, message => message.tags)
   transactions?: Transaction[];
 
   constructor();
