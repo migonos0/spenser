@@ -3,38 +3,31 @@ import {Account} from '../entities/account';
 import {dataSource} from '../utilities/data-source';
 import {Tag} from '../entities/tag';
 
-export const createTransaction = async (transaction: Transaction) => {
-  if (transaction.account) {
-    transaction.account.updatedAt = new Date();
-    await dataSource.getRepository(Account).save(transaction.account);
-  }
-  return await dataSource.manager.save(new Transaction(transaction));
+export const createTransaction = async (transaction: Transaction) =>
+  await dataSource.manager.save(new Transaction(transaction));
+
+export const deleteTransaction = async (transaction: Transaction) => {
+  const updatedTransaction = await dataSource.manager.save(
+    new Transaction({...transaction, tags: []}),
+  );
+  return await dataSource.manager.remove(updatedTransaction);
 };
+
 export const deleteTransactionById = async (
   transactionId: Transaction['id'],
 ) => {
   const foundTransaction = await dataSource.manager.findOne(Transaction, {
-    relations: {tags: true, account: true},
     where: {id: transactionId},
   });
-
   if (!foundTransaction) {
-    return;
+    throw new Error('The given Transaction Id does not exist.');
   }
-
-  const deletedTransaction = await dataSource.manager.remove(foundTransaction);
-
-  if (foundTransaction.account) {
-    foundTransaction.account.updatedAt = new Date();
-    await dataSource.getRepository(Account).save(foundTransaction.account);
-  }
-
-  return {...deletedTransaction, id: transactionId};
+  return await deleteTransaction(foundTransaction);
 };
 
 export const findAllTransactionsByAccount = async (account: Account) =>
   await dataSource.manager.find(Transaction, {
-    where: {account: account},
+    where: {account},
     order: {id: 'DESC'},
     relations: {tags: true, account: true},
   });
