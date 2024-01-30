@@ -1,3 +1,5 @@
+import {Group} from '../entities/group';
+import {findBalanceByGroupId} from '../services/group.service';
 import {AccountDto} from './account.dto';
 
 export type GroupDtoInput = {
@@ -33,5 +35,9 @@ export class GroupDto {
         (accumulator, accountDto) => accumulator + (accountDto.balance ?? 0),
         0,
       );
+  }
+
+  static async build(obj: Group) {
+    return new GroupDto({...obj, balance: await findBalanceByGroupId(obj.id)});
   }
 }
