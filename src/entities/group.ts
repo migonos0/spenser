@@ -45,5 +45,6 @@ export class Group {
     this.description = obj?.description ?? '';
     this.createdAt = obj?.createdAt ?? new Date();
     this.updatedAt = obj?.updatedAt ?? new Date();
+    this.accounts = obj?.accounts;
   }
 }
