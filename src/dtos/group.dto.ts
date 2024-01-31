@@ -38,6 +38,10 @@ export class GroupDto {
   }
 
   static async build(obj: Group) {
-    return new GroupDto({...obj, balance: await findBalanceByGroupId(obj.id)});
+    return new GroupDto({
+      ...obj,
+      balance: await findBalanceByGroupId(obj.id),
+      accountDtos: obj.accounts,
+    });
   }
 }
