@@ -8,7 +8,7 @@ export const deleteTag = async (tag: Tag) => {
   const updatedTag = dataSource.manager.save(
     new Tag({...tag, transactions: []}),
   );
-  return await dataSource.manager.remove(updatedTag);
+  return {...(await dataSource.manager.remove(updatedTag)), id: tag.id};
 };
 
 export const deleteTagById = async (tagId: Tag['id']) => {

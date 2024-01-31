@@ -10,7 +10,10 @@ export const deleteTransaction = async (transaction: Transaction) => {
   const updatedTransaction = await dataSource.manager.save(
     new Transaction({...transaction, tags: []}),
   );
-  return await dataSource.manager.remove(updatedTransaction);
+  return {
+    ...(await dataSource.manager.remove(updatedTransaction)),
+    id: transaction.id,
+  };
 };
 
 export const deleteTransactionById = async (
