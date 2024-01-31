@@ -1,10 +1,16 @@
 import {number, safeParse} from 'valibot';
-import {GroupDto} from '../dtos/group.dto';
+import {GroupDto, GroupDtoInput} from '../dtos/group.dto';
 import {Group, GroupInput} from '../entities/group';
 import {dataSource} from '../utilities/data-source';
 
 export const createGroup = async (input: GroupInput) =>
   await dataSource.manager.save(new Group({...input}));
+
+export const createGroupDto = async (input: GroupDtoInput) =>
+  new GroupDto({
+    ...(await createGroup({...input, accounts: input.accountDtos})),
+    accountDtos: input.accountDtos,
+  });
 
 export const findBalanceByGroupId = async (groupId: Group['id']) => {
   const {balance} = await dataSource
@@ -34,12 +40,12 @@ export const findAllGroups = async () =>
 export const findAllGroupDtos = async () =>
   Promise.all((await findAllGroups()).map(group => GroupDto.build(group)));
 
-export const deleteGroup = async (group: GroupInput) => {
+export const deleteGroup = async (group: Group) => {
   const modifiedGroup = await dataSource.manager.save(
     new Group({
       ...group,
       accounts: [],
     }),
   );
-  return await dataSource.manager.remove(modifiedGroup);
+  return {...(await dataSource.manager.remove(modifiedGroup)), id: group.id};
 };
