@@ -1,64 +1,51 @@
-import {AccountDto} from '../dtos/account.dto';
+import {number, safeParse} from 'valibot';
 import {GroupDto, GroupDtoInput} from '../dtos/group.dto';
 import {Group, GroupInput} from '../entities/group';
 import {dataSource} from '../utilities/data-source';
 
-export const findAllGroups = async () => {
-  return await dataSource.manager.find(Group, {
-    order: {updatedAt: 'desc'},
-    relations: {accounts: true},
-  });
-};
+export const createGroup = async (input: GroupInput) =>
+  await dataSource.manager.save(new Group({...input}));
 
-export const createGroup = async (input: GroupDtoInput) =>
+export const createGroupDto = async (input: GroupDtoInput) =>
   new GroupDto({
-    ...(await dataSource.manager.save(
-      new Group({...input, accounts: input.accountDtos}),
-    )),
+    ...(await createGroup({...input, accounts: input.accountDtos})),
     accountDtos: input.accountDtos,
   });
 
 export const findBalanceByGroupId = async (groupId: Group['id']) => {
-  const foundGroup = await dataSource.manager.findOne(Group, {
-    relations: {accounts: true},
-    where: {id: groupId},
-  });
-  if (!foundGroup) {
+  const {balance} = await dataSource
+    .createQueryBuilder()
+    .from(Group, 'group')
+    .innerJoin('group.accounts', 'account')
+    .innerJoin('account.transactions', 'transaction')
+    .where('group.id = :groupId', {groupId})
+    .select('SUM(transaction.amount)', 'balance')
+    .getRawOne();
+
+  const parsedBalance = safeParse(number(), balance);
+
+  if (!parsedBalance.success) {
     return;
   }
-  return (
-    await Promise.all(
-      (foundGroup.accounts ?? []).map(account => AccountDto.build(account)),
-    )
-  ).reduce(
-    (accumulator, currentAccountDto) =>
-      accumulator + (currentAccountDto.balance ?? 0),
-    0,
-  );
+
+  return parsedBalance.output;
 };
 
-export const findAllGroupDtos = async () =>
-  Promise.all(
-    (await findAllGroups()).map(
-      async group =>
-        new GroupDto({
-          ...group,
-          accountDtos: await Promise.all(
-            (group.accounts ?? []).map(account => AccountDto.build(account)),
-          ),
-        }),
-    ),
-  );
-
-export const deleteGroup = async (group: GroupInput) => {
-  const deletableGroup = new Group({
-    ...group,
-    accounts: [],
+export const findAllGroups = async () =>
+  await dataSource.manager.find(Group, {
+    order: {updatedAt: 'desc'},
+    relations: {accounts: true},
   });
-  await dataSource.manager.save(deletableGroup);
-  const result = await dataSource.manager.delete(Group, group.id);
-  if (result.affected && !(result.affected > 0)) {
-    throw new Error('An error occured while deleting the group.');
-  }
-  return group;
+
+export const findAllGroupDtos = async () =>
+  Promise.all((await findAllGroups()).map(group => GroupDto.build(group)));
+
+export const deleteGroup = async (group: Group) => {
+  const modifiedGroup = await dataSource.manager.save(
+    new Group({
+      ...group,
+      accounts: [],
+    }),
+  );
+  return {...(await dataSource.manager.remove(modifiedGroup)), id: group.id};
 };

@@ -11,13 +11,13 @@ export class Tag {
   name: string;
 
   @ManyToMany(() => Transaction, message => message.tags)
-  messages?: Transaction[];
+  transactions?: Transaction[];
 
   constructor();
   constructor(obj: Tag);
   constructor(obj?: Tag) {
     this.id = obj?.id;
     this.name = obj?.name ?? '';
-    this.messages = obj?.messages;
+    this.transactions = obj?.transactions;
   }
 }

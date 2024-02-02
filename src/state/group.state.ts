@@ -5,7 +5,7 @@ import {
   useSWRMutationOnInitializedDS,
 } from '../hooks/use-swr';
 import {
-  createGroup,
+  createGroupDto,
   deleteGroup,
   findAllGroupDtos,
 } from '../services/group.service';
@@ -24,7 +24,7 @@ export const useGroupDtos = () => {
 export const useCreateGroup = () => {
   const {trigger} = useSWRMutationOnInitializedDS(
     swrKeyGetters.getUseGroupDtosKey(),
-    createGroup,
+    createGroupDto,
     (createdGroup, currentData: GroupDto[] | undefined) => {
       if (!createdGroup) {
         return currentData;
@@ -52,9 +52,10 @@ export const useDeleteGroup = () => {
     swrKeyGetters.getUseGroupDtosKey(),
     deleteGroup,
     (deletedGroup, currentData: GroupDto[] | undefined) => {
-      if (!deleteGroup) {
+      if (!deletedGroup) {
         return currentData;
       }
+
       return currentData?.filter(groupDto => groupDto.id !== deletedGroup?.id);
     },
   );
