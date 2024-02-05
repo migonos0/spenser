@@ -1,4 +1,4 @@
-import swrHook, {BareFetcher, Key, SWRConfiguration} from 'swr';
+import swrHook, {BareFetcher, Key} from 'swr';
 import swrImmutableHook from 'swr/immutable';
 import swrMutationHook, {
   MutationFetcher,
@@ -6,68 +6,74 @@ import swrMutationHook, {
 } from 'swr/mutation';
 
 import {useIsDataSourceInitialized} from '../state/data-source.state';
+import {SWRConfiguration} from 'swr/_internal';
 
-export const useSWRImmutable = <Data>(
+export const useSWRImmutable = <OutputData>(
   key: Key,
-  fetcher: BareFetcher<Data>,
-  config?: SWRConfiguration<Data, Error, BareFetcher<Data>>,
+  fetcher: BareFetcher<OutputData>,
+  config?: SWRConfiguration<OutputData, Error, BareFetcher<OutputData>>,
 ) => {
   const result = swrImmutableHook(key, fetcher, config);
   result.error && console.error(result.error);
   return result;
 };
 
-export const useSWR = <Data>(
+export const useSWR = <OutputData>(
   key: Key,
-  fetcher: BareFetcher<Data>,
-  config?: SWRConfiguration<Data, Error, BareFetcher<Data>>,
+  fetcher: BareFetcher<OutputData>,
+  config?: SWRConfiguration<OutputData, Error, BareFetcher<OutputData>>,
 ) => {
   const result = swrHook(key, fetcher, config);
   result.error && console.error(result.error);
   return result;
 };
 
-export const useSWRMutation = <Data, ExtraArg = never>(
+export const useSWRMutation = <InputData, OutputData>(
   key: Key,
-  fetcher: MutationFetcher<Data, Key, ExtraArg>,
-  options?: SWRMutationConfiguration<Data, Error, Key, ExtraArg>,
+  fetcher: MutationFetcher<InputData, Key, OutputData>,
+  options?: SWRMutationConfiguration<InputData, Error, Key, OutputData>,
 ) => {
   const result = swrMutationHook(key, fetcher, options);
   result.error && console.error(result.error);
   return result;
 };
 
-export const useSWROnInitializedDS = <Data>(
+export const useSWROnInitializedDS = <OutputData>(
   key: Key,
-  fetcher: () => Data | Promise<Data>,
+  fetcher: () => OutputData | Promise<OutputData>,
+  config?: SWRConfiguration<OutputData, Error, BareFetcher<OutputData>>,
 ) => {
   const isDataSourceInitialized = useIsDataSourceInitialized();
 
   const key2 = isDataSourceInitialized ? key : undefined;
 
-  return useSWR(key2, fetcher);
+  return useSWR(key2, fetcher, config);
 };
 
-export const useSWRImmutableOnInitializedDS = <Data>(
+export const useSWRImmutableOnInitializedDS = <OutputData>(
   key: Key,
-  fetcher: () => Data | Promise<Data>,
+  fetcher: () => OutputData | Promise<OutputData>,
+  config?: SWRConfiguration<OutputData, Error, BareFetcher<OutputData>>,
 ) => {
   const dataSource = useIsDataSourceInitialized();
 
   const key2 = dataSource ? key : undefined;
 
-  return useSWRImmutable(key2, fetcher);
+  return useSWRImmutable(key2, fetcher, config);
 };
 
-export const useSWRMutationOnInitializedDS = <T, U, V = any>(
+export const useSWRMutationOnInitializedDS = <InputData, OutputData>(
   key: Key,
-  fetcher: (input: T) => U | Promise<U>,
-  populateCache?: (result: U | undefined, currentData: V) => V,
+  fetcher: (input: InputData) => OutputData | Promise<OutputData>,
+  options?: Omit<
+    SWRMutationConfiguration<OutputData | undefined, Error, Key, InputData>,
+    'revalidate'
+  >,
 ) => {
   const isDataSourceInitialized = useIsDataSourceInitialized();
 
   const key2 = isDataSourceInitialized ? key : undefined;
-  const fetcher2 = async (_: unknown, {arg}: {arg: T}) => {
+  const fetcher2 = async (_: unknown, {arg}: {arg: InputData}) => {
     if (!isDataSourceInitialized) {
       return;
     }
@@ -76,7 +82,7 @@ export const useSWRMutationOnInitializedDS = <T, U, V = any>(
 
   const result = useSWRMutation(key2, fetcher2, {
     revalidate: false,
-    populateCache,
+    ...options,
   });
 
   return result;
