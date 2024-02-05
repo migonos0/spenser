@@ -38,10 +38,11 @@ export const useDeleteTransactionByAccount = (account?: Account) => {
     [account],
   );
 
-  const {trigger} = useSWRMutationOnInitializedDS(
-    key,
-    deleteTransactionById,
-    (deletedTransaction, currentData: Transaction[] | undefined) => {
+  const {trigger} = useSWRMutationOnInitializedDS(key, deleteTransactionById, {
+    populateCache: (
+      deletedTransaction,
+      currentData: Transaction[] | undefined,
+    ) => {
       if (!deletedTransaction) {
         return currentData;
       }
@@ -104,7 +105,7 @@ export const useDeleteTransactionByAccount = (account?: Account) => {
         transaction => transaction.id !== deletedTransaction.id,
       );
     },
-  );
+  });
 
   return {deleteTransactionTrigger: trigger};
 };
@@ -119,10 +120,11 @@ export const useCreateTransactionByAccount = (account?: Account) => {
     [account],
   );
 
-  const {trigger} = useSWRMutationOnInitializedDS(
-    key,
-    createTransaction,
-    (createdTransaction, currentData: Transaction[] | undefined) => {
+  const {trigger} = useSWRMutationOnInitializedDS(key, createTransaction, {
+    populateCache: (
+      createdTransaction,
+      currentData: Transaction[] | undefined,
+    ) => {
       if (!createdTransaction) {
         return currentData;
       }
@@ -183,7 +185,7 @@ export const useCreateTransactionByAccount = (account?: Account) => {
 
       return [createdTransaction, ...(currentData ?? [])];
     },
-  );
+  });
 
   return {createTransactionTrigger: trigger};
 };

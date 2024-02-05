@@ -41,3 +41,8 @@ export const findAccountById = async (accountId: Account['id']) =>
       relations: {groups: true},
     })
   ).at(0);
+
+export const updateAccountModificationDate = (account: Account, date?: Date) =>
+  dataSource.manager.save(
+    new Account({...account, updatedAt: date ?? new Date()}),
+  );

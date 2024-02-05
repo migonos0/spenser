@@ -24,11 +24,13 @@ export const useCreateAccount = () => {
   const {trigger} = useSWRMutationOnInitializedDS(
     swrKeyGetters.getUseAccountDtosKey(),
     createAccount,
-    (createdAccount, currentData: Account[] | undefined) => {
-      if (!createdAccount) {
-        return currentData;
-      }
-      return [createdAccount, ...(currentData ?? [])];
+    {
+      populateCache: (createdAccount, currentData: Account[] | undefined) => {
+        if (!createdAccount) {
+          return currentData;
+        }
+        return [createdAccount, ...(currentData ?? [])];
+      },
     },
   );
 

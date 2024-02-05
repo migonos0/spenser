@@ -49,3 +49,6 @@ export const deleteGroup = async (group: Group) => {
   );
   return {...(await dataSource.manager.remove(modifiedGroup)), id: group.id};
 };
+
+export const updateGroupModificationDate = (group: Group, date?: Date) =>
+  dataSource.manager.save(new Group({...group, updatedAt: date ?? new Date()}));
