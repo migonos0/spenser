@@ -25,11 +25,13 @@ export const useCreateGroup = () => {
   const {trigger} = useSWRMutationOnInitializedDS(
     swrKeyGetters.getUseGroupDtosKey(),
     createGroupDto,
-    (createdGroup, currentData: GroupDto[] | undefined) => {
-      if (!createdGroup) {
-        return currentData;
-      }
-      return [createdGroup, ...(currentData ?? [])];
+    {
+      populateCache: (createdGroup, currentData: GroupDto[] | undefined) => {
+        if (!createdGroup) {
+          return currentData;
+        }
+        return [createdGroup, ...(currentData ?? [])];
+      },
     },
   );
 
@@ -51,12 +53,16 @@ export const useDeleteGroup = () => {
   const {trigger} = useSWRMutationOnInitializedDS(
     swrKeyGetters.getUseGroupDtosKey(),
     deleteGroup,
-    (deletedGroup, currentData: GroupDto[] | undefined) => {
-      if (!deletedGroup) {
-        return currentData;
-      }
+    {
+      populateCache: (deletedGroup, currentData: GroupDto[] | undefined) => {
+        if (!deletedGroup) {
+          return currentData;
+        }
 
-      return currentData?.filter(groupDto => groupDto.id !== deletedGroup?.id);
+        return currentData?.filter(
+          groupDto => groupDto.id !== deletedGroup?.id,
+        );
+      },
     },
   );
 

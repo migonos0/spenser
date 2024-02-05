@@ -39,11 +39,13 @@ export const useCreateTags = () => {
   const {trigger} = useSWRMutationOnInitializedDS(
     swrKeyGetters.getUseTagsKey(),
     createTags,
-    (createdTags, currentData: Tag[] | undefined) => {
-      if (!createdTags) {
-        return currentData;
-      }
-      return [...(currentData ?? []), ...createdTags];
+    {
+      populateCache: (createdTags, currentData: Tag[] | undefined) => {
+        if (!createdTags) {
+          return currentData;
+        }
+        return [...(currentData ?? []), ...createdTags];
+      },
     },
   );
 
