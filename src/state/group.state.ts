@@ -8,9 +8,11 @@ import {
   createGroupDto,
   deleteGroup,
   findAllGroupDtos,
+  findAllGroupsByAccountId,
 } from '../services/group.service';
 import {swrKeyGetters} from '../utilities/swr-key-getters';
 import {GroupDto} from '../dtos/group.dto';
+import {Account} from '../entities/account';
 
 export const useGroupDtos = () => {
   const {data} = useSWRImmutableOnInitializedDS(
@@ -67,4 +69,17 @@ export const useDeleteGroup = () => {
   );
 
   return {deleteGroupTrigger: trigger};
+};
+
+export const useGroupsByAccountId = (accountId: Account['id']) => {
+  const key = accountId
+    ? swrKeyGetters.getUseGroupsByAccountIdKey(accountId)
+    : undefined;
+  const fetcher = accountId
+    ? () => findAllGroupsByAccountId(accountId)
+    : () => undefined;
+
+  const {data} = useSWRImmutableOnInitializedDS(key, fetcher);
+
+  return {groups: data};
 };

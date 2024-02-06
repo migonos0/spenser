@@ -32,4 +32,9 @@ export const swrKeyGetters = {
     SWR_KEY_COMPONENTS.GROUPS,
     SWR_KEY_COMPONENTS.DTOS,
   ],
+  getUseGroupsByAccountIdKey: (accountId: Account['id']) => [
+    SWR_KEY_COMPONENTS.ACCOUNT,
+    accountId,
+    SWR_KEY_COMPONENTS.GROUPS,
+  ],
 };
