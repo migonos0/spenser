@@ -2,6 +2,9 @@ import {Transaction} from '../entities/transaction';
 import {Account} from '../entities/account';
 import {dataSource} from '../utilities/data-source';
 import {Tag} from '../entities/tag';
+import {Group} from '../entities/group';
+import {updateAccountModificationDate} from './account.service';
+import {updateGroupModificationDate} from './group.service';
 
 export const createTransaction = async (transaction: Transaction) =>
   await dataSource.manager.save(new Transaction(transaction));
@@ -47,3 +50,21 @@ export const findTransactionsByAccountAndTagIds = async (
     .andWhere('tag.id = tagId', {tagId})
     .orderBy('transaction.id', 'DESC')
     .getMany();
+
+export const createTransactionUpdatingAccountAndGroupsModificationDates =
+  (account: Account, groups: Group[]) => async (transaction: Transaction) => ({
+    transaction: await createTransaction(transaction),
+    account: await updateAccountModificationDate(account),
+    groups: await Promise.all(
+      groups.map(group => updateGroupModificationDate(group)),
+    ),
+  });
+
+export const deleteTransactionUpdatingAccountAndGroupsModificationDates =
+  (account: Account, groups: Group[]) => async (transaction: Transaction) => ({
+    transaction: await deleteTransaction(transaction),
+    account: await updateAccountModificationDate(account),
+    groups: await Promise.all(
+      groups.map(group => updateGroupModificationDate(group)),
+    ),
+  });
