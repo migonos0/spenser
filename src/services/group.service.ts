@@ -2,6 +2,7 @@ import {number, safeParse} from 'valibot';
 import {GroupDto, GroupDtoInput} from '../dtos/group.dto';
 import {Group, GroupInput} from '../entities/group';
 import {dataSource} from '../utilities/data-source';
+import {Account} from '../entities/account';
 
 export const createGroup = async (input: GroupInput) =>
   await dataSource.manager.save(new Group({...input}));
@@ -52,3 +53,11 @@ export const deleteGroup = async (group: Group) => {
 
 export const updateGroupModificationDate = (group: Group, date?: Date) =>
   dataSource.manager.save(new Group({...group, updatedAt: date ?? new Date()}));
+
+export const findAllGroupsByAccountId = (accountId: Account['id']) =>
+  dataSource
+    .getRepository(Group)
+    .createQueryBuilder('group')
+    .innerJoin('group.accounts', 'account')
+    .where('account.id = :accountId', {accountId})
+    .getMany();
