@@ -1,17 +1,10 @@
+import { useTransactions } from "@/hooks/data/use-transactions";
 import { useTransactionsService } from "@/hooks/services/use-transactions-service";
-import { Transaction } from "@/modules/transactions/domain/transaction";
-import { useEffect, useState } from "react";
 import { Button, Text } from "react-native";
 
 const HomeScreen = () => {
+  const { transactions, mutateTransactions } = useTransactions();
   const transactionsService = useTransactionsService();
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-
-  useEffect(() => {
-    transactionsService
-      ?.findAllTransactions()
-      .then((transactions) => setTransactions(transactions));
-  }, []);
 
   return (
     <>
@@ -20,18 +13,20 @@ const HomeScreen = () => {
         title="Create"
         onPress={() => {
           transactionsService
-            ?.createTransaction({
+            .createTransaction({
               amount: Math.random(),
               description: Math.random().toString(36).substr(2, 6),
               isExpense: true,
             })
-            .then((ct) => {
-              setTransactions((t) => [...t, ct]);
-            });
+            .then((ct) =>
+              mutateTransactions((t) => [...(t ?? []), ct], {
+                revalidate: false,
+              })
+            );
         }}
       ></Button>
       <Button title="Read"></Button>
-      {transactions.map((transaction, index) => (
+      {transactions?.map((transaction, index) => (
         <Text
           style={{ color: "red" }}
           key={index}
