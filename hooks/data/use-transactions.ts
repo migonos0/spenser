@@ -1,11 +1,14 @@
-import useSWR from "swr";
+import { useQuery } from "@tanstack/react-query";
 import { useTransactionsService } from "../services/use-transactions-service";
+import { queryKeys } from "@/constants/query-keys";
 
 export const useTransactions = () => {
   const transactionsService = useTransactionsService();
-  const { data, mutate } = useSWR(
-    [transactionsService.findAllTransactions],
-    transactionsService.findAllTransactions
-  );
-  return { transactions: data, mutateTransactions: mutate };
+
+  const { data } = useQuery({
+    queryKey: queryKeys.transactions,
+    queryFn: transactionsService.findAllTransactions,
+  });
+
+  return { transactions: data };
 };
