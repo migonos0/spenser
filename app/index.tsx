@@ -4,9 +4,9 @@ import {useEffect} from 'react';
 import 'react-native-reanimated';
 import {DepsProvider} from '@/providers/deps-provider';
 import {MigrationsProvider} from '@/providers/migrations-provider';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {PaperProvider} from '@/providers/paper-provider';
 import {Text} from 'react-native-paper';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

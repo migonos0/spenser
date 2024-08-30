@@ -20,6 +20,7 @@ export default [
       'unused-imports': unusedImports,
     },
     rules: {
+      'import/namespace': 'off',
       'no-unused-vars': 'off', // or "@typescript-eslint/no-unused-vars": "off",
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': [
