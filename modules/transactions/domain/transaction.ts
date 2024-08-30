@@ -6,7 +6,7 @@ export type Transaction = {
 };
 
 export type TransactionInput = {
-  description: Transaction["description"];
-  isExpense: Transaction["isExpense"];
-  amount?: Transaction["amount"];
+  description: Transaction['description'];
+  isExpense: Transaction['isExpense'];
+  amount?: Transaction['amount'];
 };

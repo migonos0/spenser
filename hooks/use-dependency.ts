@@ -1,9 +1,9 @@
-import { useMemo, useRef } from "react";
-import { useDepsContext } from "./use-deps-context";
-import { DepNames } from "@/infra/deps-container";
+import {useMemo, useRef} from 'react';
+import {useDepsContext} from './use-deps-context';
+import {DepNames} from '@/infra/deps-container';
 
 export const useDependency = <T = unknown>(dependencyName: DepNames): T => {
-  const { depsContainer, version: containerVersion } = useDepsContext();
+  const {depsContainer, version: containerVersion} = useDepsContext();
   const dependencyVersion = useRef<number>();
   const cachedDependency = useRef<T>();
 
@@ -27,7 +27,7 @@ export const useDependency = <T = unknown>(dependencyName: DepNames): T => {
 
   if (!dependency) {
     throw new Error(
-      `Dependency is not available. {${dependencyName}:${dependency}}`
+      `Dependency is not available. {${dependencyName}:${dependency}}`,
     );
   }
 
