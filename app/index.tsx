@@ -1,25 +1,12 @@
-import {useFonts} from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import {useEffect} from 'react';
-import {Text} from 'react-native';
+import {ChatButtonBox} from '@/common/components/chat-button-box';
+import {View} from 'react-native';
+import {Text} from 'react-native-paper';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <Text>Hello World!</Text>;
+export default function Index() {
+  return (
+    <View>
+      <Text className="bg-red-400">Hello World!</Text>
+      <ChatButtonBox />
+    </View>
+  );
 }
