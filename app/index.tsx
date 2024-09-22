@@ -1,12 +1,10 @@
-import {ChatButtonBox} from '@/common/components/chat-button-box';
+import {CreateTransactionChatBox} from '@/features/transactions/features/create-transaction/create-transaction-chat-box';
 import {View} from 'react-native';
-import {Text} from 'react-native-paper';
 
 export default function Index() {
   return (
     <View>
-      <Text className="bg-red-400">Hello World!</Text>
-      <ChatButtonBox />
+      <CreateTransactionChatBox />
     </View>
   );
 }

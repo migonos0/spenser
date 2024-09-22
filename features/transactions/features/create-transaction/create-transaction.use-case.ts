@@ -1,5 +1,5 @@
+import {TransactionsRepo} from '../../common/infra/transactions-repo';
 import {TransactionInput} from '../../domain/transaction';
-import {TransactionsRepo} from '../../infra/transactions-repo';
 
 type Dependencies = {
   transactionsRepo: TransactionsRepo;

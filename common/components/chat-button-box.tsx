@@ -1,14 +1,35 @@
+import {FC} from 'react';
 import {View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 
-export const ChatButtonBox = () => {
+type ChatButtonBoxProps = {
+  onSendButtonPress?: () => void;
+  value?: string;
+  onChangeText?: (newText: string) => void;
+};
+
+export const ChatButtonBox: FC<ChatButtonBoxProps> = ({
+  onSendButtonPress: onSendButtonClick,
+  onChangeText,
+  value,
+}) => {
   return (
-    <View className="bg-blue-400 flex-row items-center">
-      <View className="flex-1 flex justify-center content-center pb-2 mr-2">
-        <TextInput multiline mode="outlined" />
+    <View className="flex-row items-center justify-between gap-x-2">
+      {/* Chatbox */}
+      <View className="flex-1 flex justify-center items-center">
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          className="w-full"
+          multiline
+          mode="outlined"
+          numberOfLines={2}
+        />
       </View>
-      <View className="flex justify-center">
-        <Button icon="send" mode="contained">
+
+      {/* Send button */}
+      <View className="flex justify-center items-center">
+        <Button icon="send" mode="contained" onPress={onSendButtonClick}>
           Enviar
         </Button>
       </View>
