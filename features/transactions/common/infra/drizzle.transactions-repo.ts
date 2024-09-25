@@ -4,7 +4,9 @@ import {drizzleDB} from '@/common/infra/drizzle/drizzle-db';
 
 export const makeDrizzleTransactionsRepo = (): TransactionsRepo => ({
   findAllTransactions() {
-    return drizzleDB.query.transactions.findMany();
+    return drizzleDB.query.transactions.findMany({
+      orderBy: (transactions, {desc}) => [desc(transactions.id)],
+    });
   },
 
   async createTransaction(input) {
@@ -14,7 +16,7 @@ export const makeDrizzleTransactionsRepo = (): TransactionsRepo => ({
 
     if (!createdTransaction) {
       throw new Error(
-        `An error occured while creating the transaction:. transaction: ${input}`,
+        `An error occured while creating the transaction:.\ntransaction: ${input}`,
       );
     }
 

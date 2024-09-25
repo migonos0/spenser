@@ -14,8 +14,8 @@ export const useCreateTransaction = () => {
     mutationFn: createTransactionUseCase.execute,
     onSuccess(data) {
       queryClient.setQueryData<Transaction[]>(queryKeys.transactions, state => [
-        ...(state ?? []),
         data,
+        ...(state ?? []),
       ]);
     },
   });
