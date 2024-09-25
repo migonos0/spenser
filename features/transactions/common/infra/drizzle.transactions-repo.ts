@@ -1,6 +1,7 @@
 import {transactions} from '@/common/infra/drizzle/drizzle-schema';
 import {TransactionsRepo} from './transactions-repo';
 import {drizzleDB} from '@/common/infra/drizzle/drizzle-db';
+import {eq} from 'drizzle-orm';
 
 export const makeDrizzleTransactionsRepo = (): TransactionsRepo => ({
   findAllTransactions() {
@@ -16,10 +17,27 @@ export const makeDrizzleTransactionsRepo = (): TransactionsRepo => ({
 
     if (!createdTransaction) {
       throw new Error(
-        `An error occured while creating the transaction:.\ntransaction: ${input}`,
+        `An error occured while creating the transaction:\ntransaction: ${input}`,
       );
     }
 
     return createdTransaction;
+  },
+
+  async deleteTransaction(input) {
+    const deletedTransaction = (
+      await drizzleDB
+        .delete(transactions)
+        .where(eq(transactions.id, input.id))
+        .returning()
+    ).at(0);
+
+    if (!deletedTransaction) {
+      throw Error(
+        `An error occured while deleting the transaction.\n{\"transactionId\": ${input.id}}`,
+      );
+    }
+
+    return deletedTransaction;
   },
 });
