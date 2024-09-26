@@ -3,13 +3,11 @@ import * as MESSAGE_PATTERNS from '../../assets/message-patterns.json';
 const EXPENSE_MESSAGE_PATTERNS = MESSAGE_PATTERNS.expenseMessagePatterns;
 const INCOME_MESSAGE_PATTERNS = MESSAGE_PATTERNS.incomeMessagePatterns;
 
-const findAmount = (transaction: string) => {
+const findStringifiedAmount = (transaction: string) => {
   const stringifiedAmount = transaction
     .match(/(\d+(\.\d{1,2}))|(\.\d{1,2})|(\d+)/)
     ?.find(match => match);
-  return !stringifiedAmount || isNaN(+stringifiedAmount)
-    ? 0
-    : +stringifiedAmount;
+  return stringifiedAmount;
 };
 
 const findTags = (transaction: string) =>
@@ -27,9 +25,11 @@ export const findTransactionValuesFromMessage = (message: string) => {
     ? message.replace(foundExpensePattern, '')
     : message.replace(foundIncomePattern ?? '', '');
 
-  const amount = findAmount(message);
+  const stringifiedAmount = findStringifiedAmount(message);
+  const amount =
+    !stringifiedAmount || isNaN(+stringifiedAmount) ? 0 : +stringifiedAmount;
   const messageWithoutAmount = messageWithoutExpenseOrIncomePattern.replace(
-    amount.toString(),
+    stringifiedAmount ?? '',
     '',
   );
 
@@ -40,5 +40,10 @@ export const findTransactionValuesFromMessage = (message: string) => {
 
   const description = messageWithoutTags.trim();
 
-  return {amount, isExpense, tags, description};
+  return {
+    amount,
+    isExpense,
+    tags,
+    description,
+  };
 };
