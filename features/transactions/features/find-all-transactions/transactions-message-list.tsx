@@ -4,14 +4,20 @@ import {TransactionCard} from '@/common/components/transaction-card';
 import {useTheme} from 'react-native-paper';
 import {useDeleteTransaction} from '../delete-transaction/use-delete-transaction';
 import {Transaction} from '../../domain/transaction';
+import {useBalance} from '../find-balance/use-balance';
 
 export const TransactionsMessageList = () => {
   const {transactions} = useTransactions();
   const {colors} = useTheme();
   const {deleteTransaction} = useDeleteTransaction();
+  const {removeTransaction} = useBalance();
 
   const makeHandleDeleteDialogItemPress = (item: Transaction) => () =>
-    deleteTransaction(item);
+    deleteTransaction(item, {
+      onSuccess(data) {
+        removeTransaction(data);
+      },
+    });
 
   return (
     <FlatList

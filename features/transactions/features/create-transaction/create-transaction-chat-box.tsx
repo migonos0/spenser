@@ -2,12 +2,18 @@ import {ChatButtonBox} from '@/common/components/chat-button-box';
 import {useCreateTransaction} from './use-create-transaction';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {findTransactionValuesFromMessage} from '@/common/utilities/transaction-pattern-finders';
+import {useBalance} from '../find-balance/use-balance';
+import {Transaction} from '../../domain/transaction';
 
 export const CreateTransactionChatBox = () => {
   const {createTransaction} = useCreateTransaction();
   const {control, handleSubmit, setValue} = useForm<{message: string}>();
+  const {addTransaction} = useBalance();
 
-  const cleanMessageTextField = () => setValue('message', '');
+  const handleOnCreateTransactionSuccess = (transaction: Transaction) => {
+    setValue('message', '');
+    addTransaction(transaction);
+  };
 
   const messageSubmitHandler: SubmitHandler<{message: string}> = ({
     message,
@@ -19,7 +25,7 @@ export const CreateTransactionChatBox = () => {
         description: transactionValues.description,
         amount: transactionValues.amount,
       },
-      {onSuccess: cleanMessageTextField},
+      {onSuccess: handleOnCreateTransactionSuccess},
     );
   };
 

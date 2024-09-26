@@ -21,9 +21,8 @@ export const ChatButtonBox: FC<ChatButtonBoxProps> = ({
           value={value}
           onChangeText={onChangeText}
           className="w-full"
-          multiline
           mode="outlined"
-          numberOfLines={2}
+          multiline
         />
       </View>
 
