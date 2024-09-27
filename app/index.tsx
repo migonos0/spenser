@@ -1,25 +1,25 @@
-import {useFonts} from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import {useEffect} from 'react';
-import {Text} from 'react-native';
+import {CreateTransactionChatBox} from '@/features/transactions/features/create-transaction/create-transaction-chat-box';
+import {TransactionsMessageList} from '@/features/transactions/features/find-all-transactions/transactions-message-list';
+import {useContext, useEffect} from 'react';
+import {View} from 'react-native';
+import {AppBarContext} from './_layout';
+import {useBalance} from '@/features/transactions/features/find-balance/use-balance';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+export default function Index() {
+  const {balance} = useBalance();
+  const appbarContext = useContext(AppBarContext);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    if (!balance || balance === 0) {
+      return;
     }
-  }, [loaded]);
+    appbarContext?.setTitle && appbarContext.setTitle(balance.toString());
+  }, [balance]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  return <Text>Hello World!</Text>;
+  return (
+    <View className="h-full px-4 pb-4">
+      <TransactionsMessageList />
+      <CreateTransactionChatBox />
+    </View>
+  );
 }

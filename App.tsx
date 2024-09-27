@@ -1,8 +1,12 @@
-import {FC, ReactNode} from 'react';
+import {FC, ReactNode, useEffect} from 'react';
 import {DepsProvider} from './providers/deps-provider';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {PaperProvider} from 'react-native-paper';
 import {MigrationsProvider} from './providers/migrations-provider';
+import * as SplashScreen from 'expo-splash-screen';
+import {useFonts} from 'expo-font';
+
+SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
@@ -10,6 +14,20 @@ type AppProps = {
   children?: ReactNode;
 };
 export const App: FC<AppProps> = ({children}) => {
+  const [loaded] = useFonts({
+    SpaceMono: require('./assets/fonts/SpaceMono-Regular.ttf'),
+  });
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <MigrationsProvider>
       <DepsProvider>

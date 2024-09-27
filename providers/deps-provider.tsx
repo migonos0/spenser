@@ -1,4 +1,4 @@
-import {makeDepsContainer} from '@/infra/deps-container';
+import {makeDepsContainer} from '@/common/infra/deps-container';
 import {AwilixContainer} from 'awilix';
 import {
   FC,
