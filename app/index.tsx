@@ -10,11 +10,11 @@ export default function Index() {
   const appbarContext = useContext(AppBarContext);
 
   useEffect(() => {
-    if (!balance || balance === 0) {
+    if (!balance || balance === 0 || !appbarContext) {
       return;
     }
-    appbarContext?.setTitle && appbarContext.setTitle(balance.toString());
-  }, [balance]);
+    appbarContext.setTitle(balance.toString());
+  }, [appbarContext, balance]);
 
   return (
     <View className="h-full px-4 pb-4">

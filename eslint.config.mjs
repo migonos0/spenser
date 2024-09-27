@@ -1,38 +1,23 @@
-import path from 'node:path';
-import {fileURLToPath} from 'node:url';
-import js from '@eslint/js';
-import {FlatCompat} from '@eslint/eslintrc';
-import unusedImports from 'eslint-plugin-unused-imports';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
+import pluginJs from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
+import {fixupPluginRules} from '@eslint/compat';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default [
-  ...compat.extends('expo', 'prettier'),
+  {files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}']},
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
+  pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat['jsx-runtime'],
   {
     plugins: {
-      'unused-imports': unusedImports,
+      'react-hooks': fixupPluginRules(pluginReactHooks),
     },
     rules: {
-      'import/namespace': 'off',
-      'no-unused-vars': 'off', // or "@typescript-eslint/no-unused-vars": "off",
-      'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': [
-        'warn',
-        {
-          vars: 'all',
-          varsIgnorePattern: '^_',
-          args: 'after-used',
-          argsIgnorePattern: '^_',
-        },
-      ],
+      ...pluginReactHooks.configs.recommended.rules,
     },
   },
-  eslintPluginPrettierRecommended,
+  eslintConfigPrettier,
 ];
