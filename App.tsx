@@ -1,23 +1,40 @@
-import {NavigationContainer} from '@react-navigation/native';
-import {DataSourceProvider} from './src/app/providers/data-source.provider';
-import {ReactNativePaperProvider} from './src/app/providers/react-native-paper.provider';
-import {SnackbarProvider} from './src/app/providers/snackbar.provider';
-import {AppbarProvider} from './src/app/providers/appbar.provider';
-import {Navigator} from './src/app/navigators/navigator';
+import {FC, ReactNode, useEffect} from 'react';
+import {DepsProvider} from './providers/deps-provider';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {PaperProvider} from 'react-native-paper';
+import {MigrationsProvider} from './providers/migrations-provider';
+import * as SplashScreen from 'expo-splash-screen';
+import {useFonts} from 'expo-font';
 
-function App(): JSX.Element {
+SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient();
+
+type AppProps = {
+  children?: ReactNode;
+};
+export const App: FC<AppProps> = ({children}) => {
+  const [loaded] = useFonts({
+    SpaceMono: require('./assets/fonts/SpaceMono-Regular.ttf'),
+  });
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
-    <DataSourceProvider>
-      <ReactNativePaperProvider>
-        <AppbarProvider />
-        <SnackbarProvider>
-          <NavigationContainer>
-            <Navigator />
-          </NavigationContainer>
-        </SnackbarProvider>
-      </ReactNativePaperProvider>
-    </DataSourceProvider>
+    <MigrationsProvider>
+      <DepsProvider>
+        <QueryClientProvider client={queryClient}>
+          <PaperProvider>{children}</PaperProvider>
+        </QueryClientProvider>
+      </DepsProvider>
+    </MigrationsProvider>
   );
-}
-
-export default App;
+};
