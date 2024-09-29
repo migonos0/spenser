@@ -1,5 +1,8 @@
 {
     "common": {
-        "send": "Enviar"
+        "send": "Enviar",
+        "delete": "Eliminar",
+        "update": "Actualizar",
+        "dismiss": "Cancelar"
     }
 }
