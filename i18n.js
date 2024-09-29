@@ -4,6 +4,10 @@ import {initReactI18next} from 'react-i18next';
 
 import en from './assets/locales/en/translations.json';
 import es from './assets/locales/es/translations.json';
+import {
+    localizationStore,
+    localizationStoreActions,
+} from './stores/localization.store';
 
 const resources = {
     en: {translation: en},
@@ -13,24 +17,22 @@ const resources = {
 const languageDetector = {
     type: 'languageDetector',
     async: true,
-    detect: async (callback) => {
-        // const storedLanguage = await AsyncStorage.getItem('@AppIntl:language');
-        // if (storedLanguage) {
-        //     return callback(storedLanguage);
-        // }
-
-        let languageCode = Localization.getLocales().at(0)?.languageCode;
-
-        return callback(languageCode);
+    detect: (callback) => {
+        localizationStore.subscribe(({languageCode: storedLanguageCode}) => {
+            let languageCode = Localization.getLocales().at(0)?.languageCode;
+            callback(storedLanguageCode ?? languageCode);
+        });
     },
-    init: () => {},
-    // cacheUserLanguage: (language) => {
-    //     // Essa função sera chamada assim que o callback
-    //     // da função 'detect' for executado. Aqui podemos
-    //     // salvar o idioma do usuário no AsyncStorage para
-    //     // persistirmos sua escolha nas próximas execuções do app
-    //     AsyncStorage.setItem('@AppIntl:language', language);
-    // },
+    cacheUserLanguage: (language) => {
+        const {languageCode: storedLanguageCode} = localizationStore.getState();
+        if (typeof language !== 'string') {
+            return;
+        }
+        if (language === storedLanguageCode) {
+            return;
+        }
+        localizationStoreActions.setLanguageCode(language);
+    },
 };
 
 i18n.use(languageDetector).use(initReactI18next).init({
