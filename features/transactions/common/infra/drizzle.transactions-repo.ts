@@ -40,4 +40,25 @@ export const makeDrizzleTransactionsRepo = (): TransactionsRepo => ({
 
         return deletedTransaction;
     },
+
+    async updateTransaction(input) {
+        // const updatedTransaction = await drizzleDB.update(transactions).set;
+        const updatedTransacion = (
+            await drizzleDB
+                .update(transactions)
+                .set({
+                    amount: input.amount,
+                    description: input.description,
+                    isExpense: input.isExpense,
+                })
+                .where(eq(transactions.id, input.id))
+                .returning()
+        ).at(0);
+        if (!updatedTransacion) {
+            throw Error(
+                `An error occured while updating the transaction.\n{"transaction": ${input}}`,
+            );
+        }
+        return updatedTransacion;
+    },
 });

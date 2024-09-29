@@ -40,6 +40,7 @@ export const CreateTransactionChatBox: FC<CreateTransactionChatBoxProps> = ({
         <Controller
             control={control}
             name="message"
+            rules={{required: true, minLength: 1}}
             render={({field: {onChange, value}}) => (
                 <ChatButtonBox
                     sendButtonLabel={sendButtonLabel}
