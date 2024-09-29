@@ -1,40 +1,46 @@
 import {makeDepsContainer} from '@/common/infra/deps-container';
 import {AwilixContainer} from 'awilix';
 import {
-  FC,
-  ReactNode,
-  createContext,
-  useCallback,
-  useMemo,
-  useState,
+    FC,
+    ReactNode,
+    createContext,
+    useCallback,
+    useMemo,
+    useState,
 } from 'react';
 
 type DepsContextActions = {
-  disposeCachedDependencies: () => void;
+    disposeCachedDependencies: () => void;
 };
 export const DepsContext = createContext<{
-  depsContainer: AwilixContainer;
-  version: number;
-  actions: DepsContextActions;
+    depsContainer: AwilixContainer;
+    version: number;
+    actions: DepsContextActions;
 } | null>(null);
 
 type DepsProviderProps = {
-  children?: ReactNode;
+    children?: ReactNode;
 };
 export const DepsProvider: FC<DepsProviderProps> = ({children}) => {
-  const [version, setVersion] = useState(0);
-  const depsContainer = useMemo(() => makeDepsContainer(), []);
+    const [version, setVersion] = useState(0);
+    const depsContainer = useMemo(() => makeDepsContainer(), []);
 
-  const disposeCachedDependencies = useCallback(
-    () =>
-      depsContainer.dispose().then(() => setVersion(version => version + 1)),
-    [],
-  );
+    const disposeCachedDependencies = useCallback(
+        () =>
+            depsContainer
+                .dispose()
+                .then(() => setVersion((version) => version + 1)),
+        [depsContainer],
+    );
 
-  return (
-    <DepsContext.Provider
-      value={{depsContainer, version, actions: {disposeCachedDependencies}}}>
-      {children}
-    </DepsContext.Provider>
-  );
+    return (
+        <DepsContext.Provider
+            value={{
+                depsContainer,
+                version,
+                actions: {disposeCachedDependencies},
+            }}>
+            {children}
+        </DepsContext.Provider>
+    );
 };
