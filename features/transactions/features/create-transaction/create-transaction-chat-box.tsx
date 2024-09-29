@@ -4,42 +4,50 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {findTransactionValuesFromMessage} from '@/common/utilities/transaction-pattern-finders';
 import {useBalance} from '../find-balance/use-balance';
 import {Transaction} from '../../domain/transaction';
+import {FC} from 'react';
 
-export const CreateTransactionChatBox = () => {
-  const {createTransaction} = useCreateTransaction();
-  const {control, handleSubmit, setValue} = useForm<{message: string}>();
-  const {addTransaction} = useBalance();
+type CreateTransactionChatBoxProps = {
+    sendButtonLabel: string;
+};
 
-  const handleOnCreateTransactionSuccess = (transaction: Transaction) => {
-    setValue('message', '');
-    addTransaction(transaction);
-  };
+export const CreateTransactionChatBox: FC<CreateTransactionChatBoxProps> = ({
+    sendButtonLabel,
+}) => {
+    const {createTransaction} = useCreateTransaction();
+    const {control, handleSubmit, setValue} = useForm<{message: string}>();
+    const {addTransaction} = useBalance();
 
-  const messageSubmitHandler: SubmitHandler<{message: string}> = ({
-    message,
-  }) => {
-    const transactionValues = findTransactionValuesFromMessage(message);
-    createTransaction(
-      {
-        isExpense: transactionValues.isExpense,
-        description: transactionValues.description,
-        amount: transactionValues.amount,
-      },
-      {onSuccess: handleOnCreateTransactionSuccess},
-    );
-  };
+    const handleOnCreateTransactionSuccess = (transaction: Transaction) => {
+        setValue('message', '');
+        addTransaction(transaction);
+    };
 
-  return (
-    <Controller
-      control={control}
-      name="message"
-      render={({field: {onChange, value}}) => (
-        <ChatButtonBox
-          value={value}
-          onChangeText={onChange}
-          onSendButtonPress={handleSubmit(messageSubmitHandler)}
+    const messageSubmitHandler: SubmitHandler<{message: string}> = ({
+        message,
+    }) => {
+        const transactionValues = findTransactionValuesFromMessage(message);
+        createTransaction(
+            {
+                isExpense: transactionValues.isExpense,
+                description: transactionValues.description,
+                amount: transactionValues.amount,
+            },
+            {onSuccess: handleOnCreateTransactionSuccess},
+        );
+    };
+
+    return (
+        <Controller
+            control={control}
+            name="message"
+            render={({field: {onChange, value}}) => (
+                <ChatButtonBox
+                    sendButtonLabel={sendButtonLabel}
+                    value={value}
+                    onChangeText={onChange}
+                    onSendButtonPress={handleSubmit(messageSubmitHandler)}
+                />
+            )}
         />
-      )}
-    />
-  );
+    );
 };

@@ -4,14 +4,13 @@ import {useQuery} from '@tanstack/react-query';
 import {queryKeys} from '@/common/constants/query-keys';
 
 export const useTransactions = () => {
-  const findAllTransactionsUseCase = useDependency<FindAllTransactionsUseCase>(
-    'findAllTransactionsUseCase',
-  );
+    const findAllTransactionsUseCase =
+        useDependency<FindAllTransactionsUseCase>('findAllTransactionsUseCase');
 
-  const {data} = useQuery({
-    queryKey: queryKeys.transactions,
-    queryFn: findAllTransactionsUseCase.execute,
-  });
+    const {data} = useQuery({
+        queryKey: queryKeys.transactions,
+        queryFn: findAllTransactionsUseCase.execute,
+    });
 
-  return {transactions: data};
+    return {transactions: data};
 };
