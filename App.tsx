@@ -5,36 +5,38 @@ import {PaperProvider} from 'react-native-paper';
 import {MigrationsProvider} from './providers/migrations-provider';
 import * as SplashScreen from 'expo-splash-screen';
 import {useFonts} from 'expo-font';
+import './i18n';
 
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
 type AppProps = {
-  children?: ReactNode;
+    children?: ReactNode;
 };
 export const App: FC<AppProps> = ({children}) => {
-  const [loaded] = useFonts({
-    SpaceMono: require('./assets/fonts/SpaceMono-Regular.ttf'),
-  });
+    const [loaded] = useFonts({
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        SpaceMono: require('./assets/fonts/SpaceMono-Regular.ttf'),
+    });
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    useEffect(() => {
+        if (loaded) {
+            SplashScreen.hideAsync();
+        }
+    }, [loaded]);
+
+    if (!loaded) {
+        return null;
     }
-  }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  return (
-    <MigrationsProvider>
-      <DepsProvider>
-        <QueryClientProvider client={queryClient}>
-          <PaperProvider>{children}</PaperProvider>
-        </QueryClientProvider>
-      </DepsProvider>
-    </MigrationsProvider>
-  );
+    return (
+        <MigrationsProvider>
+            <DepsProvider>
+                <QueryClientProvider client={queryClient}>
+                    <PaperProvider>{children}</PaperProvider>
+                </QueryClientProvider>
+            </DepsProvider>
+        </MigrationsProvider>
+    );
 };

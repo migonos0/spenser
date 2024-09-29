@@ -1,15 +1,15 @@
 import {TransactionsRepo} from '../../common/infra/transactions-repo';
 
 type Dependencies = {
-  transactionsRepo: TransactionsRepo;
+    transactionsRepo: TransactionsRepo;
 };
 export const makeFindAllTransactionsUseCase = ({
-  transactionsRepo: repo,
+    transactionsRepo: repo,
 }: Dependencies) => ({
-  execute() {
-    return repo.findAllTransactions();
-  },
+    execute() {
+        return repo.findAllTransactions();
+    },
 });
 export type FindAllTransactionsUseCase = ReturnType<
-  typeof makeFindAllTransactionsUseCase
+    typeof makeFindAllTransactionsUseCase
 >;
