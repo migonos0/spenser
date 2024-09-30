@@ -16,7 +16,7 @@ export default function Index() {
     const {balance} = useBalance();
 
     useEffect(() => {
-        if (!balance || balance === 0 || !appbarContext) {
+        if (!appbarContext || balance === undefined) {
             return;
         }
         appbarContext.setTitle(balance.toString());
