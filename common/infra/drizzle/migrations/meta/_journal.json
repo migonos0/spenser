@@ -22,6 +22,13 @@
       "when": 1727743355654,
       "tag": "0002_strong_blink",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1727748075484,
+      "tag": "0003_volatile_slipstream",
+      "breakpoints": true
     }
   ]
 }

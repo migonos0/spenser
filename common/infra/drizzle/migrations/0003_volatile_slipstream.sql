@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `tags_value_unique` ON `tags` (`value`);

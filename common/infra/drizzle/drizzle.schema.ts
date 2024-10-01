@@ -15,7 +15,7 @@ export const transactions = sqliteTable('transactions', {
 });
 export const tags = sqliteTable('tags', {
     id: integer('id').primaryKey({autoIncrement: true}),
-    value: text('value').notNull(),
+    value: text('value').notNull().unique(),
 });
 export const tagsToTransactions = sqliteTable(
     'tags_to_transactions',
