@@ -8,6 +8,20 @@
       "when": 1719676729960,
       "tag": "0000_secret_xavin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1727740137881,
+      "tag": "0001_flat_glorian",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1727743355654,
+      "tag": "0002_strong_blink",
+      "breakpoints": true
     }
   ]
 }

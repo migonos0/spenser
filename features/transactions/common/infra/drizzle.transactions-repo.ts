@@ -1,6 +1,6 @@
-import {transactions} from '@/common/infra/drizzle/drizzle-schema';
-import {TransactionsRepo} from './transactions-repo';
 import {drizzleDB} from '@/common/infra/drizzle/drizzle-db';
+import {transactions} from '@/common/infra/drizzle/drizzle.schema';
+import {TransactionsRepo} from './transactions-repo';
 import {eq} from 'drizzle-orm';
 
 export const makeDrizzleTransactionsRepo = (): TransactionsRepo => ({
