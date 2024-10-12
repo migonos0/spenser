@@ -4,7 +4,10 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {findTransactionValuesFromMessage} from '@/common/utilities/transaction-pattern-finders';
 import {useBalance} from '../find-balance/use-balance';
 import {Transaction} from '../../domain/transaction';
-import {FC} from 'react';
+import {FC, useEffect, useState} from 'react';
+import {useRelateTagsToTransaction} from '@/features/tags/features/relate-tags-to-transaction/use-relate-tags-to-transaction';
+import {Tag} from '@/features/tags/domain/tag';
+import {useFindTagsByValueOrCreate} from '@/features/tags/features/find-tags-by-value-or-create/use-find-tags-by-value-or-create';
 
 type CreateTransactionChatBoxProps = {
     sendButtonLabel: string;
@@ -16,10 +19,23 @@ export const CreateTransactionChatBox: FC<CreateTransactionChatBoxProps> = ({
     const {createTransaction} = useCreateTransaction();
     const {control, handleSubmit, setValue} = useForm<{message: string}>();
     const {addTransaction} = useBalance();
+    const {findTagsByValueOrCreate} = useFindTagsByValueOrCreate();
+    const {relateTagsToTransaction} = useRelateTagsToTransaction();
+    const [createdTransaction, setCreatedTransaction] = useState<
+        Transaction | undefined
+    >();
+    const [foundOrCreatedTags, setFoundOrCreatedTags] = useState<
+        Tag[] | undefined
+    >();
 
-    const handleOnCreateTransactionSuccess = (transaction: Transaction) => {
+    const handleCreateTransactionSuccess = (transaction: Transaction) => {
         setValue('message', '');
         addTransaction(transaction);
+        setCreatedTransaction(transaction);
+    };
+    const handleRelateTagsToTransactionSuccess = () => {
+        setFoundOrCreatedTags(undefined);
+        setCreatedTransaction(undefined);
     };
 
     const messageSubmitHandler: SubmitHandler<{message: string}> = ({
@@ -32,9 +48,26 @@ export const CreateTransactionChatBox: FC<CreateTransactionChatBoxProps> = ({
                 description: transactionValues.description,
                 amount: transactionValues.amount,
             },
-            {onSuccess: handleOnCreateTransactionSuccess},
+            {onSuccess: handleCreateTransactionSuccess},
+        );
+        findTagsByValueOrCreate(
+            transactionValues.tags.map((tag) => ({value: tag})),
+            {onSuccess: setFoundOrCreatedTags},
         );
     };
+
+    useEffect(() => {
+        if (!foundOrCreatedTags || !createdTransaction) {
+            return;
+        }
+        relateTagsToTransaction(
+            {
+                transaction: createdTransaction,
+                tags: foundOrCreatedTags,
+            },
+            {onSuccess: handleRelateTagsToTransactionSuccess},
+        );
+    }, [foundOrCreatedTags, createdTransaction, relateTagsToTransaction]);
 
     return (
         <Controller

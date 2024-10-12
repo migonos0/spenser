@@ -1,4 +1,5 @@
 export const queryKeys = {
-  transactions: ['transactions'],
-  balance: ['balance'],
+    transactions: ['transactions'],
+    balance: ['balance'],
+    tags: ['tags'],
 };

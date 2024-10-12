@@ -95,7 +95,9 @@ export const TransactionsMessageList: FC<TransactionsMessageListProps> = ({
                             transaction.amount.toString()
                         }
                         body={transaction.description}
-                        tags={[]}
+                        tags={transaction.tags?.map((tag) => ({
+                            label: tag.value,
+                        }))}
                     />
                 )}
             />

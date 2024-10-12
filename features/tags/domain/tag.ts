@@ -5,3 +5,7 @@ export type Tag = {
     value: string;
     transactions?: Transaction[];
 };
+
+export type TagInput = {
+    value: Tag['value'];
+};
