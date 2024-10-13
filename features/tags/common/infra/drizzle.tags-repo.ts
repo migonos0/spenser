@@ -3,6 +3,7 @@ import {TagsRepo} from './tags-repo';
 import {tags, tagsToTransactions} from '@/common/infra/drizzle/drizzle.schema';
 import {Tag} from '../../domain/tag';
 import {Transaction} from '@/features/transactions/domain/transaction';
+import {and, eq} from 'drizzle-orm';
 
 export const makeDrizzleTagsRepo = (): TagsRepo => ({
     async findAllTags() {
@@ -106,7 +107,10 @@ export const makeDrizzleTagsRepo = (): TagsRepo => ({
             },
         });
         const indexedFoundTags = foundTags.reduce(
-            (indexedFoundTags: Record<string, Tag | undefined>, foundTag) => ({
+            (
+                indexedFoundTags: Record<Tag['value'], Tag | undefined>,
+                foundTag,
+            ) => ({
                 ...indexedFoundTags,
                 [foundTag.value]: foundTag,
             }),
@@ -116,5 +120,63 @@ export const makeDrizzleTagsRepo = (): TagsRepo => ({
             (input) => !indexedFoundTags[input.value],
         );
         return [...(await this.createTags(yetToCreateTags)), ...foundTags];
+    },
+    async unrelateTagToTransaction(input) {
+        const unrelatedTagToTransaction = (
+            await drizzleDB
+                .delete(tagsToTransactions)
+                .where(
+                    and(
+                        eq(tagsToTransactions.tagId, input.tag.id),
+                        eq(
+                            tagsToTransactions.transactionId,
+                            input.transaction.id,
+                        ),
+                    ),
+                )
+                .returning()
+        ).at(0);
+
+        if (!unrelatedTagToTransaction) {
+            throw new Error(
+                `An error occured while unrelating the tag to the transaction.\n${JSON.stringify(input)}`,
+            );
+        }
+
+        return input;
+    },
+    async unrelateTagsToTransaction(input) {
+        const unrelatedTagsToTransaction = (
+            await Promise.allSettled(
+                input.tags.map((tag) =>
+                    this.unrelateTagToTransaction({
+                        tag,
+                        transaction: input.transaction,
+                    }),
+                ),
+            )
+        ).reduce(
+            (
+                unrelatedTagsToTransaction: {
+                    tag: Tag;
+                    transaction: Transaction;
+                }[],
+                promiseSettledTagToTransaction,
+            ) =>
+                promiseSettledTagToTransaction.status === 'fulfilled'
+                    ? [
+                          promiseSettledTagToTransaction.value,
+                          ...unrelatedTagsToTransaction,
+                      ]
+                    : unrelatedTagsToTransaction,
+            [],
+        );
+        const unrelatedTags = unrelatedTagsToTransaction.map(
+            (unrelatedTagToTransaction) => unrelatedTagToTransaction.tag,
+        );
+        return {
+            tags: unrelatedTags,
+            transaction: {...input.transaction, tags: unrelatedTags},
+        };
     },
 });

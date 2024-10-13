@@ -15,7 +15,10 @@ export const useRelateTagsToTransaction = () => {
         mutationFn: useCase.execute,
         onSuccess(relatedTagsToTransaction) {
             const indexedRelatedTags = relatedTagsToTransaction.tags.reduce(
-                (indexedRelatedTags: Record<number, Tag | undefined>, tag) => ({
+                (
+                    indexedRelatedTags: Record<Tag['id'], Tag | undefined>,
+                    tag,
+                ) => ({
                     [tag.id]: tag,
                     ...indexedRelatedTags,
                 }),

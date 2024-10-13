@@ -28,7 +28,7 @@ export const UpdateTransactionDialog: FC<UpdateTransactionDialogProps> = ({
         () =>
             setValue(
                 'input',
-                `${transaction.isExpense ? '-' : '+'}${transaction.amount} ${transaction.description}`,
+                `${transaction.isExpense ? '-' : '+'}${transaction.amount} ${transaction.description} ${transaction.tags?.map((tag) => `#${tag.value}`).join(' ')}`,
             ),
         [setValue, transaction],
     );

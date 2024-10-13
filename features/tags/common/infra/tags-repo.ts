@@ -15,4 +15,15 @@ export type TagsRepo = {
     }): Promise<{tags: Tag[]; transaction: Transaction}>;
     findTagByValueOrCreate(input: TagInput): Promise<Tag>;
     findTagsByValueOrCreate(inputs: TagInput[]): Promise<Tag[]>;
+    unrelateTagToTransaction(input: {
+        tag: Tag;
+        transaction: Transaction;
+    }): Promise<{tag: Tag; transaction: Transaction}>;
+    unrelateTagsToTransaction(input: {
+        tags: Tag[];
+        transaction: Transaction;
+    }): Promise<{
+        tags: Tag[];
+        transaction: Transaction;
+    }>;
 };

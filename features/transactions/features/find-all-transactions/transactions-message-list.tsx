@@ -6,6 +6,7 @@ import {FC, useState} from 'react';
 import {useDeleteTransaction} from '../delete-transaction/use-delete-transaction';
 import {useBalance} from '../find-balance/use-balance';
 import {UpdateTransactionDialog} from '../update-transaction/update-transaction-dialog';
+import {useUnrelateTagsToTransaction} from '@/features/tags/features/unrelate-tags-to-transaction/use-unrelate-tags-to-transaction';
 
 type TransactionsMessageListProps = {
     deleteButtonLabel: string;
@@ -25,18 +26,26 @@ export const TransactionsMessageList: FC<TransactionsMessageListProps> = ({
     const {transactions} = useTransactions();
     const {removeTransaction} = useBalance();
     const {deleteTransaction} = useDeleteTransaction();
+    const {unrelateTagsToTransaction} = useUnrelateTagsToTransaction();
 
     const [isUpdateDialogOpen, setIsUpdateDialogVisibility] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState<
         Transaction | undefined
     >();
 
-    const handleOnUpdateTransactionDialogDismiss = () =>
+    const handleUpdateTransactionDialogDismiss = () =>
         setIsUpdateDialogVisibility(false);
+    const handleDeleteTransactionSuccess = (transaction: Transaction) => {
+        removeTransaction(transaction);
+        unrelateTagsToTransaction({
+            tags: transaction.tags ?? [],
+            transaction: transaction,
+        });
+    };
 
     const makeHandleDeleteDialogItemPress = (item: Transaction) => () =>
         deleteTransaction(item, {
-            onSuccess: removeTransaction as (transaction: Transaction) => void,
+            onSuccess: handleDeleteTransactionSuccess,
         });
     const makeHandleUpdateDialogItemPress = (item: Transaction) => () => {
         setIsUpdateDialogVisibility(true);
@@ -51,7 +60,7 @@ export const TransactionsMessageList: FC<TransactionsMessageListProps> = ({
             <UpdateTransactionDialog
                 isVisible={isUpdateDialogOpen}
                 transaction={selectedTransaction}
-                onDismiss={handleOnUpdateTransactionDialogDismiss}
+                onDismiss={handleUpdateTransactionDialogDismiss}
                 updateLabel={updateButtonLabel}
                 dismissLabel={dismissButtonLabel}
             />

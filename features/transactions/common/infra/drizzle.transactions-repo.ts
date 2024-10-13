@@ -4,10 +4,18 @@ import {TransactionsRepo} from './transactions-repo';
 import {eq} from 'drizzle-orm';
 
 export const makeDrizzleTransactionsRepo = (): TransactionsRepo => ({
-    findAllTransactions() {
-        return drizzleDB.query.transactions.findMany({
-            orderBy: (transactions, {desc}) => [desc(transactions.id)],
-        });
+    async findAllTransactions() {
+        return (
+            await drizzleDB.query.transactions.findMany({
+                orderBy: (transactions, {desc}) => [desc(transactions.id)],
+                with: {tagsToTransactions: {with: {tag: true}}},
+            })
+        ).map((foundTransaction) => ({
+            ...foundTransaction,
+            tags: foundTransaction.tagsToTransactions.map(
+                (tagToTransaction) => tagToTransaction.tag,
+            ),
+        }));
     },
 
     async createTransaction(input) {
@@ -38,7 +46,7 @@ export const makeDrizzleTransactionsRepo = (): TransactionsRepo => ({
             );
         }
 
-        return deletedTransaction;
+        return {...deletedTransaction, tags: input.tags};
     },
 
     async updateTransaction(input) {

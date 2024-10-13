@@ -16,7 +16,7 @@ export const useFindTagsByValueOrCreate = () => {
             queryClient.setQueryData<Tag[]>(queryKeys.tags, (cachedTags) => {
                 const indexedCachedTags = foundOrCreatedTags.reduce(
                     (
-                        indexedCachedTags: Record<number, Tag | undefined>,
+                        indexedCachedTags: Record<Tag['id'], Tag | undefined>,
                         foundOrCreatedTag,
                     ) => ({
                         ...indexedCachedTags,
