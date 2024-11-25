@@ -50,7 +50,6 @@ export const makeDrizzleTransactionsRepo = (): TransactionsRepo => ({
     },
 
     async updateTransaction(input) {
-        // const updatedTransaction = await drizzleDB.update(transactions).set;
         const updatedTransacion = (
             await drizzleDB
                 .update(transactions)
@@ -67,6 +66,6 @@ export const makeDrizzleTransactionsRepo = (): TransactionsRepo => ({
                 `An error occured while updating the transaction.\n{"transaction": ${input}}`,
             );
         }
-        return updatedTransacion;
+        return {...updatedTransacion, tags: input.tags};
     },
 });
