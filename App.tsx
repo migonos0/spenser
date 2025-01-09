@@ -1,6 +1,11 @@
 import {FC, ReactNode, useEffect} from 'react';
 import {DepsProvider} from './providers/deps-provider';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {
+    MutationCache,
+    QueryCache,
+    QueryClient,
+    QueryClientProvider,
+} from '@tanstack/react-query';
 import {PaperProvider} from 'react-native-paper';
 import {MigrationsProvider} from './providers/migrations-provider';
 import * as SplashScreen from 'expo-splash-screen';
@@ -9,7 +14,18 @@ import './i18n';
 
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    queryCache: new QueryCache({
+        onError(error) {
+            console.error(error);
+        },
+    }),
+    mutationCache: new MutationCache({
+        onError(error) {
+            console.error(error);
+        },
+    }),
+});
 
 type AppProps = {
     children?: ReactNode;
